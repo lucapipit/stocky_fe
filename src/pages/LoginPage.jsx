@@ -3,9 +3,9 @@ import _Login from '../components/_Login';
 
 const LoginPage = () => {
     return (
-        <>
+        <div>
             <_Login />
-        </>
+        </div>
     )
 }
 

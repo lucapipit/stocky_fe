@@ -3,9 +3,9 @@ import _Signin from '../components/_Signin';
 
 const SigninPage = () => {
     return (
-        <>
+        <div>
             <_Signin />
-        </>
+        </div>
     )
 }
 
