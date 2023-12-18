@@ -1,7 +1,12 @@
+import _Signin from "./components/_Signin";
 
 function App() {
   return (
-    <div>Hello</div>
+    <>
+      <div>
+        <_Signin/>
+      </div>
+    </>
   );
 }
 
