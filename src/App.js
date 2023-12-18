@@ -1,27 +1,21 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import _Signin from "./components/_Signin";
-
 import React from 'react';
-import Login from './components/_Login';
+import _Login from './components/_Login';
 import Home from './components/_Home';
-import{ BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ErrorPage from "./pages/ErrorPage";
 
 
 function App() {
   return (
-<<<<<<< HEAD
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route exact path="/" element={<Home />} />
+        <Route path="/login" element={<_Login />} />
+        <Route path="/signin" element={<_Signin />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
-    </Router>
-=======
-    <>
-      <div>
-        <_Signin/>
-      </div>
-    </>
->>>>>>> refs/remotes/origin/main
+    </BrowserRouter>
   );
 }
 
