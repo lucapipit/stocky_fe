@@ -10,6 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        
         <Route exact path="/" element={<Home />} />
         <Route path="/login" element={<_Login />} />
         <Route path="/signin" element={<_Signin />} />
