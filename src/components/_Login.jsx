@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import {useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { PostLogin } from '../states/apiSlice';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { set } from 'mongoose';
+
 
 const _Login = () => {
     const [email, setEmail] = useState('')
@@ -13,26 +13,7 @@ const _Login = () => {
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
-        // try {
-        //     const response = await fetch('http://localhost:5050/login', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({ email, pssw }),
-        //     });
-        //     const data = await response.json();
-
-        //     if (data.statusCode === 200) {
-        //         localStorage.setItem('token', data.token);
-        //         localStorage.setItem('user', JSON.stringify(data.user));
-        //         navigate('/');
-        //     } else {
-        //         throw new Error('error during login');
-        //     }
-        // } catch (error) {
-        //     console.error('error di fetching', error);
-        // }
+       
         e.preventDefault();
         const loginPayload = {
             email: email,

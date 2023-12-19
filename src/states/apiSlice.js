@@ -1,12 +1,14 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 
 const initialState = {
+    Data: [],
     token: localStorage.getItem('token') || null,
     announcements: [],
+    search:'',
     loading: false,
     error: false,
-    
+
 };
 
 export const PostLogin = createAsyncThunk(
@@ -29,26 +31,30 @@ const apiSlice = createSlice({
     name: 'api',
     initialState,
     reducers: {
-        
+        setSearch(state, action) {
+            state.search = action.payload;
+            state.Data = state.Data.filter((data) => data.name.toLowerCase().includes(state.search.toLowerCase()));
+        },
+
     },
-    extraReducers:(builder) => {
+    extraReducers: (builder) => {
         builder.addCase(PostLogin.pending, (state) => {
             state.loading = true;
         });
         builder.addCase(PostLogin.fulfilled, (state, action) => {
-           if(action.payload.token){
-               state.token = action.payload.token;
-               localStorage.setItem('token', action.payload.token);
-              
-              }
-                state.loading = false;
-                   
+            if (action.payload.token) {
+                state.token = action.payload.token;
+                localStorage.setItem('token', action.payload.token);
+
+            }
+            state.loading = false;
+
         });
         builder.addCase(PostLogin.rejected, (state) => {
             state.loading = false;
             state.error = true;
         });
-        
+
     },
 });
 
