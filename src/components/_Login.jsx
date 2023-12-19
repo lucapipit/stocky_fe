@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import {useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { PostLogin } from '../states/apiSlice';
+import { postLoginFunc } from '../states/loginState';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
@@ -12,14 +12,13 @@ const _Login = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const handleSubmit = async (e) => {
-       
-        e.preventDefault();
+    const handleSubmit = async () => {
+        
         const loginPayload = {
             email: email,
-            password: pssw
+            pssw: pssw
         }
-        dispatch(PostLogin(loginPayload))
+        dispatch(postLoginFunc(loginPayload))
             .then((res) => {
                 if (res.payload.statusCode === 200) {
                     localStorage.setItem('token', res.payload.token);
@@ -36,6 +35,7 @@ const _Login = () => {
         setPssw('');
 
     };
+
     return (
         <div className='d-flex align-items-center justify-content-center' style={{ height: "100vh" }}>
             <div className='bg-light border w-50 p-3 rounded-5'>

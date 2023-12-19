@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import { useDispatch } from 'react-redux'
-import {setSearch} from '../states/apiSlice'
+import {setSearch} from '../states/loginState'
 import {Form, Button, inputGroup, InputGroup} from 'react-bootstrap'
 
 
