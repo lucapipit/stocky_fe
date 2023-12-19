@@ -39,8 +39,8 @@ const _Login = () => {
 
 
     return (
-        <div className='d-flex align-content-center bg-seconary vh-100 '>
-            <div className='bg-white p-3 rounded w-25 '>
+        <div className='d-flex align-content-center justify-content-center bg-seconary vh-100 '>
+            <div className='bg-light border w-50 p-3 rounded-5'>
                 <h2>Login</h2>
 
                 <Form onSubmit={handleSubmit}>
@@ -58,7 +58,7 @@ const _Login = () => {
                             onChange={(e) => setPssw(e.target.value)}
                         />
                     </InputGroup>
-                    <Link to='/home'>  <button type="submit" className="btn btn-primary">Login</button></Link>
+                    <Link to='/home'>  <button type="submit" className="btn btn-primary w-100">Login</button></Link>
 
                 </Form>
                 <p>Already have a account</p>
