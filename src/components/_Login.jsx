@@ -8,9 +8,7 @@ const _Login = () => {
     const [pssw, setPssw] = useState('')
     const navigate = useNavigate()
 
-    const handleSubmit = async (e) => {
-        // e.preventDefault();
-
+    const handleSubmit = async () => {
         try {
             const response = await fetch('http://localhost:5050/login', {
                 method: 'POST',
@@ -19,17 +17,14 @@ const _Login = () => {
                 },
                 body: JSON.stringify({ email, pssw }),
             });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-                if (data.status === 'success') {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    navigate('/home');
-                }
+            const data = await response.json();
+            
+            if (data.statusCode === 200) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                navigate('/');
             } else {
-                throw new Error('eror during login');
+                throw new Error('error during login');
             }
         } catch (error) {
             console.error('error di fetching', error);
@@ -39,30 +34,22 @@ const _Login = () => {
 
 
     return (
-        <div className='d-flex align-content-center justify-content-center bg-seconary vh-100 '>
+        <div className='d-flex align-items-center justify-content-center' style={{ height: "100vh" }}>
             <div className='bg-light border w-50 p-3 rounded-5'>
                 <h2>Login</h2>
-
-                <Form onSubmit={handleSubmit}>
-                    <InputGroup className="mb-3">
-                        <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
-                        <Form.Control placeholder="Email" aria-label="Email" aria-describedby="basic-addon1"
-
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                        <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
-                        <Form.Control type='password' placeholder="Password" aria-label="Password" aria-describedby="basic-addon1"
-
-                            onChange={(e) => setPssw(e.target.value)}
-                        />
-                    </InputGroup>
-                    <Link to='/home'>  <button type="submit" className="btn btn-primary w-100">Login</button></Link>
-
-                </Form>
-                <p>Already have a account</p>
-
+                <InputGroup className="mb-3">
+                    <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+                    <Form.Control placeholder="Email" aria-label="Email" aria-describedby="basic-addon1"
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                    <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+                    <Form.Control type='password' placeholder="Password" aria-label="Password" aria-describedby="basic-addon1"
+                        onChange={(e) => setPssw(e.target.value)}
+                    />
+                </InputGroup>
+                <button className="btn btn-primary w-100" onClick={() => { handleSubmit() }}>Login</button>
             </div>
         </div>
     )

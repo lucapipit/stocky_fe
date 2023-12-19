@@ -19,9 +19,7 @@ const _Signin = () => {
 
 
     const registerUser = async () => {
-    
         try {
-
             const payload = {
                 companyName: companyName,
                 email: email,
