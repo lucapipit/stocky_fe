@@ -20,7 +20,7 @@ const _Search = () => {
         <Form onSubmit={handleSearch}>
             <InputGroup>
                 <Form.Control type="text" placeholder="Search" onChange={(e) => setSearch(e.target.value)} />
-                <Button variant="outline-secondary" onClick={() => dispatch(setSearch(search))}>Search</Button>
+                <Button variant="outline-secondary" onClick={() => dispatch(setSearch(searchText))}>Search</Button>
             </InputGroup>
         </Form>
 
