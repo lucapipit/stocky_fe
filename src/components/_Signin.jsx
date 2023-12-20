@@ -6,6 +6,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 import { postSigninFunc } from '../states/signinState';
+import { useNavigate } from 'react-router-dom';
 
 const _Signin = () => {
 
@@ -19,6 +20,7 @@ const _Signin = () => {
     const [zipCode, setZipCode] = useState("");
     const [phone, setPhone] = useState("");
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     const registerUser = async () => {
@@ -43,7 +45,7 @@ const _Signin = () => {
                     if (res.payload.statusCode === 200) {
                         localStorage.setItem('token', res.payload.token);
                         localStorage.setItem('user', JSON.stringify(res.payload.user));
-                        // navigate('/');
+                        navigate('/');
                     } else {
                         console.error('la risposta non contiene il token valido');
                     }
