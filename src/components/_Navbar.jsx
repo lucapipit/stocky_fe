@@ -1,22 +1,24 @@
-import {React, useState} from 'react'
+import { React, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Logo from '../assets/zeus2.jpg'
 import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import '../styles/navbar.css'
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsLogged } from '../states/loginState';
 
 
 const _Navbar = () => {
     const [isHamMenuOpen, setIsHamMenuOpen] = useState(false);
+    const isLogged = useSelector((state) => state.login.isLogged);
+    const dispatch = useDispatch();
+
     return (
         <>
             <div className='position-fixed w-100 border bg-light' expand="lg" style={{ zIndex: "9", height: "70px" }}>
                 <Container >
                     <div className='d-flex align-items-center justify-content-between py-1' >
-                        <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo}/></Link> <i>Infodent Srl</i></div>
-                        <div className=""><i className='bi bi-grid-fill m-2' onClick={() => setIsHamMenuOpen(!isHamMenuOpen)} style={{fontSize: "30px"}}></i></div>
+                        <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} /></Link> <i>Infodent Srl</i></div>
+                        <div className=""><i className='bi bi-grid-fill m-2' onClick={() => setIsHamMenuOpen(!isHamMenuOpen)} style={{ fontSize: "30px" }}></i></div>
                     </div>
                 </Container>
             </div>
@@ -26,14 +28,22 @@ const _Navbar = () => {
             {
                 isHamMenuOpen ?
 
-                    <div className='d-flex justify-content-end hamMenu bg-light position-absolute w-100 mt-5 pt-2 top-0 ' style={{ overflowY: "scroll", height: "calc(100vh - 59px)" }} >
-                        <div className='myScroll w-100' style={{ minHeight: "calc(100vh - 59px)" }}>
+                    <div className='d-flex justify-content-end hamMenu bg-light position-absolute w-100 mt-5 pt-2 top-0 ' style={{ /* overflowY: "scroll", */ height: "calc(100vh - 59px)" }} >
+                        <div className=' w-100' style={{ minHeight: "calc(100vh - 59px)" }}>
 
                             <div className='pb-5'>
                                 <div >
                                     <ul className='pt-4 pe-4 text-end mb-0'>
-                                        <Link to={"/login"}><li> <span onClick={()=>{setIsHamMenuOpen(!isHamMenuOpen)}}>login</span> </li></Link>
-                                        <Link to={"/signin"}><li> <span onClick={()=>{setIsHamMenuOpen(!isHamMenuOpen)}}>signin</span> </li></Link>
+                                        {
+                                            !isLogged ?
+                                                <div>
+                                                    <Link to={"/login"}><li> <span onClick={() => { setIsHamMenuOpen(!isHamMenuOpen) }}>login</span> </li></Link>
+                                                    <Link to={"/signin"}><li> <span onClick={() => { setIsHamMenuOpen(!isHamMenuOpen) }}>signin</span> </li></Link>
+                                                </div>:
+                                                <div>
+                                                    <Link to={"/"}><li> <span onClick={() => { dispatch(setIsLogged(false)); localStorage.clear() }}>logout</span> </li></Link>
+                                                </div>
+                                        }
                                     </ul>
                                 </div>
                             </div>

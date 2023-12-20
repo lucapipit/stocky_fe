@@ -6,6 +6,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 import { postSigninFunc } from '../states/signinState';
+import { useNavigate } from 'react-router';
 
 const _Signin = () => {
 
@@ -18,11 +19,13 @@ const _Signin = () => {
     const [city, setCity] = useState("");
     const [zipCode, setZipCode] = useState("");
     const [phone, setPhone] = useState("");
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     const registerUser = async () => {
-        
+
         try {
             const payload = {
                 companyName: companyName,
@@ -42,34 +45,36 @@ const _Signin = () => {
                 .then((res) => {
                     if (res.payload.statusCode === 200) {
                         localStorage.setItem('token', res.payload.token);
-                        localStorage.setItem('user', JSON.stringify(res.payload.user));
-                        // navigate('/');
+                        /* localStorage.setItem('user', JSON.stringify(res.payload.user)); */
+                        navigate('/');
+
+                        setCompanyName("");
+                        setEmail("");
+                        setPssw("");
+                        setCountry("");
+                        setAddress("");
+                        setCity("");
+                        setZipCode("");
+                        setPhone("");
+                        setTypeOfJob("select your role");
                     } else {
-                        console.error('la risposta non contiene il token valido');
+                        console.error('login error');
                     }
                 })
                 .catch((err) => {
-                    console.error('errore durante il login', err);
+                    console.error('server error', err);
                 })
-            setCompanyName("");
-            setEmail("");
-            setPssw("");
-            setCountry("");
-            setAddress("");
-            setCity("");
-            setZipCode("");
-            setPhone("");
-            setTypeOfJob("select your role");
+
 
         } catch (error) {
             console.log(error);
         }
-       
-       
-       
-       
-       
-       
+
+
+
+
+
+
     }
 
 
@@ -80,7 +85,7 @@ const _Signin = () => {
                 <h2>Signin</h2>
                 <hr />
                 <div>
-                    <DropdownButton  className="mb-3" variant='info' id="dropdown-basic-button" title={typeOfJob}>
+                    <DropdownButton className="mb-3" variant='info' id="dropdown-basic-button" title={typeOfJob}>
                         <Dropdown.Item href="#/action-1" onClick={() => { setTypeOfJob("Manufacturer") }}>Manufacturer</Dropdown.Item>
                         <Dropdown.Item href="#/action-2" onClick={() => { setTypeOfJob("Dealer") }}>Dealer</Dropdown.Item>
                     </DropdownButton>
@@ -171,7 +176,7 @@ const _Signin = () => {
                     </InputGroup>
 
                     <hr />
-                    <Button className='w-100' variant="primary" onClick={()=>{registerUser()}}>Register</Button>
+                    <Button className='w-100' variant="primary" onClick={() => { registerUser() }}>Register</Button>
 
                 </div>
             </div>
