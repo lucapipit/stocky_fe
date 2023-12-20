@@ -5,12 +5,24 @@ import Container from 'react-bootstrap/Container';
 import '../styles/navbar.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsLogged } from '../states/loginState';
+import { jwtDecode } from 'jwt-decode';
 
 
 const _Navbar = () => {
     const [isHamMenuOpen, setIsHamMenuOpen] = useState(false);
     const isLogged = useSelector((state) => state.login.isLogged);
     const dispatch = useDispatch();
+    const [decodedTkn, setDecodedTkn] = useState("");
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if(token){
+            const tkn = jwtDecode(token, process.env.JWT_SECRET);
+            setDecodedTkn(tkn)
+        }else{
+            setDecodedTkn("")
+        }
+    }, [isLogged])
 
     return (
         <>
@@ -18,7 +30,10 @@ const _Navbar = () => {
                 <Container >
                     <div className='d-flex align-items-center justify-content-between py-1' >
                         <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} /></Link> <i>Infodent Srl</i></div>
-                        <div className=""><i className='bi bi-grid-fill m-2' onClick={() => setIsHamMenuOpen(!isHamMenuOpen)} style={{ fontSize: "30px" }}></i></div>
+                        <div className='d-flex align-items-center'>
+                            <div>{decodedTkn.email}</div>
+                            <div className=""><i className='bi bi-grid-fill m-2' onClick={() => setIsHamMenuOpen(!isHamMenuOpen)} style={{ fontSize: "30px" }}></i></div>
+                        </div>
                     </div>
                 </Container>
             </div>
@@ -39,7 +54,7 @@ const _Navbar = () => {
                                                 <div>
                                                     <Link to={"/login"}><li> <span onClick={() => { setIsHamMenuOpen(!isHamMenuOpen) }}>login</span> </li></Link>
                                                     <Link to={"/signin"}><li> <span onClick={() => { setIsHamMenuOpen(!isHamMenuOpen) }}>signin</span> </li></Link>
-                                                </div>:
+                                                </div> :
                                                 <div>
                                                     <Link to={"/"}><li> <span onClick={() => { dispatch(setIsLogged(false)); localStorage.clear() }}>logout</span> </li></Link>
                                                 </div>

@@ -36,12 +36,12 @@ const _Login = () => {
                         setPssw('');
                         navigate('/');
                     } else {
-                        setServerResponse(res.payload.message)
-                        console.error('la risposta non contiene il token valido');
+                        setServerResponse(res.payload.message);
+                        console.error('login error');
                     }
                 })
                 .catch((err) => {
-                    console.error('errore durante il login', err);
+                    console.error('login or server error', err);
                 })
         }
 

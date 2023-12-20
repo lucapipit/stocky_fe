@@ -1,29 +1,33 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-
 const initialState = {
     loading: false,
     error: false,
-
 };
 
 export const postSigninFunc = createAsyncThunk(
     'api/postSigninFunc',
     async (input) => {
-        const response = await fetch('http://localhost:5050/signin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(input),
-        });
-        const data = await response.json();
-        return data;
+        try {
+            const response = await fetch('http://localhost:5050/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(input),
+            });
+            const data = await response.json();
+            return data;
+            
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 );
 
 const signinSlice = createSlice({
-    name: 'signApi',
+    name: 'signinApi',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -40,6 +44,6 @@ const signinSlice = createSlice({
     }
 });
 
-const {} = signinSlice.actions;
+const { } = signinSlice.actions;
 export default signinSlice.reducer
 
