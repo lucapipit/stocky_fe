@@ -4,6 +4,8 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
+import { useDispatch } from 'react-redux';
+import { postSigninFunc } from '../states/signinState';
 
 const _Signin = () => {
 
@@ -16,6 +18,7 @@ const _Signin = () => {
     const [city, setCity] = useState("");
     const [zipCode, setZipCode] = useState("");
     const [phone, setPhone] = useState("");
+    const dispatch = useDispatch();
 
 
     const registerUser = async () => {
@@ -34,16 +37,39 @@ const _Signin = () => {
                 dealer: typeOfJob === "dealer" ? 1 : 0
 
             };
-            const response = await fetch("http://localhost:5050/signin", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(payload)
-            });
-            return response.json()
+
+            dispatch(postSigninFunc(payload))
+                .then((res) => {
+                    if (res.payload.statusCode === 200) {
+                        localStorage.setItem('token', res.payload.token);
+                        localStorage.setItem('user', JSON.stringify(res.payload.user));
+                        // navigate('/');
+                    } else {
+                        console.error('la risposta non contiene il token valido');
+                    }
+                })
+                .catch((err) => {
+                    console.error('errore durante il login', err);
+                })
+            setCompanyName("");
+            setEmail("");
+            setPssw("");
+            setCountry("");
+            setAddress("");
+            setCity("");
+            setZipCode("");
+            setPhone("");
+            setTypeOfJob("select your role");
 
         } catch (error) {
             console.log(error);
         }
+       
+       
+       
+       
+       
+       
     }
 
 
