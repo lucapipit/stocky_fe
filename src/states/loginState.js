@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 
 const initialState = {
-    token: localStorage.getItem('token') || null,
+    isLogged: false,
     loading: false,
     error: false
 };
@@ -25,16 +25,16 @@ export const postLoginFunc = createAsyncThunk(
 const loginSlice = createSlice({
     name: 'loginApi',
     initialState,
-    reducers: {},
+    reducers: {
+        setIsLogged: (state, action) => {
+            state.isLogged = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(postLoginFunc.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(postLoginFunc.fulfilled, (state, action) => {
-            if (action.payload.token) {
-                state.token = action.payload.token;
-                localStorage.setItem('token', action.payload.token);
-            }
+        builder.addCase(postLoginFunc.fulfilled, (state) => {
             state.loading = false;
         });
         builder.addCase(postLoginFunc.rejected, (state) => {
@@ -44,6 +44,6 @@ const loginSlice = createSlice({
     }
 });
 
-const {} = loginSlice.actions;
+export const { setIsLogged } = loginSlice.actions;
 export default loginSlice.reducer
 
