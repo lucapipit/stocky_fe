@@ -44,8 +44,8 @@ const _Signin = () => {
                 city: city,
                 zipCode: zipCode,
                 phone: phone,
-                manufacturer: typeOfJob === "manufacturer" ? 1 : 0,
-                dealer: typeOfJob === "dealer" ? 1 : 0
+                manufacturer: typeOfJob === "Manufacturer" ? 1 : 0,
+                dealer: typeOfJob === "Dealer" ? 1 : 0
 
             };
 

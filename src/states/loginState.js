@@ -4,7 +4,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const initialState = {
     isLogged: false,
     loading: false,
-    error: false
+    error: "",
+    userData: [],
+    loadingUser: false
 };
 
 export const postLoginFunc = createAsyncThunk(
@@ -19,9 +21,27 @@ export const postLoginFunc = createAsyncThunk(
                 },
                 body: JSON.stringify(input),
             });
-            const data = await response.json();
-            return data;
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
 
+    }
+);
+
+export const getSingleUserFunc = createAsyncThunk(
+    'api/getSingleUser',
+    async (input) => {
+        const {id, token} = input;
+        try {
+            const response = await fetch(`http://localhost:5050/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            return await response.json();
         } catch (error) {
             console.log(error);
         }
@@ -38,6 +58,7 @@ const loginSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        //login
         builder.addCase(postLoginFunc.pending, (state) => {
             state.loading = true;
         });
@@ -46,7 +67,19 @@ const loginSlice = createSlice({
         });
         builder.addCase(postLoginFunc.rejected, (state) => {
             state.loading = false;
-            state.error = true;
+            state.error = "server error extrareducers";
+        });
+        //get single user
+        builder.addCase(getSingleUserFunc.pending, (state) => {
+            state.loadingUser = true;
+        });
+        builder.addCase(getSingleUserFunc.fulfilled, (state, action) => {
+            state.loadingUser = false;
+            state.userData = action.payload
+        });
+        builder.addCase(getSingleUserFunc.rejected, (state) => {
+            state.loadingUser = false;
+            state.error = "server error extrareducers";
         });
     }
 });

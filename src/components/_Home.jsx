@@ -4,15 +4,11 @@ import Button from 'react-bootstrap/Button';
 
 const Home = () => {
   return (
-    <>
-      {/* <Link to="/login">
-        <Button variant="primary">Login</Button>
-      </Link>
-      <Link to="/signin">
-        <Button variant="info">Signin</Button>
-      </Link> */}
-
-    </>
+    <div>
+      <div className='d-flex align-items-center justify-content-center' style={{height: "90vh"}}>
+        <Button variant="primary">Store</Button>
+      </div>
+    </div>
   )
 }
 
