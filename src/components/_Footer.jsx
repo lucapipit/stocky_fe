@@ -6,7 +6,7 @@ const _Footer = () => {
   return (
     <div className='footer'>
          <img src={Logo} alt="logo" />
-      <span>Made with our Stocky</span>
+         <span>Made with our Stocky</span>
     </div>
   )
 }
