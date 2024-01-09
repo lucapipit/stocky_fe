@@ -2,13 +2,21 @@
     cursor: pointer;
 }
 .myVh100{
-    height: calc(100vh - 59px);
+    min-height: calc(100vh - 59px);
+}
+.myW9{
+    width: 90%;
 }
 .myMaxW500{
-    max-width: 500px;
+    max-width: 500px !important;
 }
 .myLightGray{
     color: rgb(169, 169, 169);
+}
+.myBgImgContain{
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 /* icons font size */
 .myIconLg{
