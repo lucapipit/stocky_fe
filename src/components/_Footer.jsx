@@ -1,7 +1,6 @@
 import React from 'react'
 import '../styles/footer.css'
 import Logo from '../assets/zeus2.jpg'
-import { FaFacebook, FaTwitter, FaPinterest, FaInstagram } from 'react-icons/fa'
 
 const _Footer = () => {
   return (
@@ -13,10 +12,9 @@ const _Footer = () => {
          <div className="footerItem">
           <span className="footerTitle">FOLLOW US</span>
           <div className="footerSocial">
-            <i className="footerIcon"><FaFacebook/></i>
-            <i className="footerIcon"><FaTwitter /></i>
-            <i className="footerIcon">< FaPinterest/></i>
-            <i className="footerIcon"><FaInstagram /></i>
+            <i className="footerIcon"><i className="bi bi-facebook"></i></i>
+            <i className="footerIcon"><i className="bi bi-instagram"></i></i>
+            <i className="footerIcon"><i className="bi bi-linkedin"></i></i>
           </div>
           </div>
     </div>

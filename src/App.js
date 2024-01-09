@@ -9,6 +9,7 @@ import _Navbar from "./components/_Navbar";
 import _Account from "./components/_Account";
 import _Footer from "./components/_Footer";
 import { Container } from "react-bootstrap";
+import _Store from "./components/_Store";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/login" element={<_Login />} />
+        <Route path="/store" element={<_Store />} />
         <Route path="/signin" element={<_Signin />} />
         <Route path="/account" element={<_Account />} />
         <Route path="*" element={<ErrorPage />} />
