@@ -14,7 +14,7 @@ export const postLoginFunc = createAsyncThunk(
     async (input) => {
 
         try {
-            const response = await fetch('http://localhost:5050/login', {
+            const response = await fetch(`${process.env.BACKEND_ADDRESS}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ export const getSingleUserFunc = createAsyncThunk(
     async (input) => {
         const {id, token} = input;
         try {
-            const response = await fetch(`http://localhost:5050/users/${id}`, {
+            const response = await fetch(`${process.env.BACKEND_ADDRESS}/users/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
