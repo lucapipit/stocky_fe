@@ -12,7 +12,7 @@ export const getAllCountsFunc = createAsyncThunk(
     'api/getAllCounts',
     async()=>{
         try {
-            const response = await fetch(`https://stockybe.local/allcounts`, {
+            const response = await fetch(`http://localhost:5050/allcounts`, {
                 method: 'GET'
             });
             return await response.json();
@@ -26,7 +26,7 @@ export const getAllAnnouncementsFunc = createAsyncThunk(
     'api/getAllAnnouncements',
     async () => {
         try {
-            const response = await fetch(`https://stockybe.local/allannouncements`, {
+            const response = await fetch(`http://localhost:5050/allannouncements`, {
                 method: 'GET'
             });
             const data = await response.json();
@@ -43,7 +43,7 @@ export const postCreateAnnouncementFunc = createAsyncThunk(
     async (input) => {
 
         try {
-            const response = await fetch(`https://stockybe.local/createannouncement`, {
+            const response = await fetch(`http://localhost:5050/createannouncement`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ export const postCreateAnnouncementFunc = createAsyncThunk(
 export const deleteAnnouncementFunc = createAsyncThunk(
     'api/deleteAnnouncement',
     async (id) => {
-        const response = await fetch(`https://stockybe.local/deleteannouncement/${id}`, {
+        const response = await fetch(`http://localhost:5050/deleteannouncement/${id}`, {
             method: 'delete',
         });
         const data = await response.json();
@@ -73,7 +73,7 @@ export const deleteAnnouncementFunc = createAsyncThunk(
 export const updateAnnouncementFunc = createAsyncThunk(
     'api/updateAnnouncement',
     async (input, id) => {
-        const response = await fetch(`https://stockybe.local/updateannouncement/${id}`, {
+        const response = await fetch(`http://localhost:5050/updateannouncement/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export const getSingleAnnouncementFunc = createAsyncThunk(
     'api/getSingleAnnouncement',
     async (input) => {
         const  {id, token} = input;
-        const response = await fetch(`https://stockybe.local/announcement/${id}`, {
+        const response = await fetch(`http://localhost:5050/announcement/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
