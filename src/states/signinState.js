@@ -9,7 +9,7 @@ export const postSigninFunc = createAsyncThunk(
     'api/postSigninFunc',
     async (input) => {
         try {
-            const response = await fetch(`${process.env.BACKEND_ADDRESS}/signin`, {
+            const response = await fetch(`https://stockybe.local/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
