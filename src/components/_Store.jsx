@@ -19,12 +19,20 @@ const _Store = () => {
     input ? setCounter(counter + 1) : setCounter(counter - 1)
   }
 
+  // useEffect(() => {
+  //   console.log(/* Math.ceil(Math.random()*allCounts) */allCounts[0].mycount);
+  //   dispatch(getAllCountsFunc());
+  //   setTkn(localStorage.getItem("tkn"));
+  //   dispatch(getSingleAnnouncementFunc({ id: counter, token: tkn }))
+  // }, [counter])
   useEffect(() => {
-    console.log(/* Math.ceil(Math.random()*allCounts) */allCounts[0].mycount);
     dispatch(getAllCountsFunc());
     setTkn(localStorage.getItem("tkn"));
-    dispatch(getSingleAnnouncementFunc({ id: counter, token: tkn }))
-  }, [counter])
+    if (allCounts && allCounts.length > 0) {
+      dispatch(getSingleAnnouncementFunc({ id: counter, token: tkn }));
+    }
+  }, [counter, allCounts, tkn]);
+
 
   return (
     <>
