@@ -20,12 +20,12 @@ const _Store = () => {
   }
 
   useEffect(() => {
-    /* console.log(Math.ceil(Math.random()*allCounts) allCounts[0].mycount); */
+    
     dispatch(getAllCountsFunc());
     setTkn(localStorage.getItem("tkn"));
     dispatch(getSingleAnnouncementFunc({ id: counter, token: tkn }))
   }, [counter])
-
+  
   return (
     <>
       <_Navbar />
