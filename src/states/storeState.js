@@ -207,8 +207,8 @@ const sliceStore = createSlice({
             state.isLoading = true;
         })
         builder.addCase(getAnnouncementsByInterestsFunc.fulfilled, (state, action) => {
-            state.dataByInterests = action.payload.data,
-            state.countByInterest = action.payload.count,
+            state.dataByInterests = action.payload.data;
+            state.countByInterest = action.payload.count;
             state.isLoading = false
         })
         builder.addCase(getAnnouncementsByInterestsFunc.rejected, (state) => {
