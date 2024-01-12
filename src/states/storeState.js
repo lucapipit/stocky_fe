@@ -3,8 +3,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const initialState = {
     allData: [],
     singleData: [],
+    dataByInterests: [],
     isLoading: false,
     allCounts: 1,
+    countByInterest: 1,
     error: ""
 }
 
@@ -102,6 +104,22 @@ export const getSingleAnnouncementFunc = createAsyncThunk(
     }
 )
 
+export const getAnnouncementsByInterestsFunc = createAsyncThunk(
+    'api/etAnnouncementsByInterests',
+    async (input) => {
+        const  {interests, token} = input;
+        const response = await fetch(`http://localhost:5050/announcementsbyinterests/${interests}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return await response.json()
+    }
+)
+
+
 const sliceStore = createSlice({
     name: 'api',
     initialState,
@@ -172,7 +190,6 @@ const sliceStore = createSlice({
             state.isLoading = false;
             state.error = " server error"
         })
-
         //singleAnnouncement
         builder.addCase(getSingleAnnouncementFunc.pending, (state) => {
             state.isLoading = true;
@@ -182,6 +199,19 @@ const sliceStore = createSlice({
             state.isLoading = false
         })
         builder.addCase(getSingleAnnouncementFunc.rejected, (state) => {
+            state.isLoading = false;
+            state.error = " server error"
+        })
+        //announcementsByInterests
+        builder.addCase(getAnnouncementsByInterestsFunc.pending, (state) => {
+            state.isLoading = true;
+        })
+        builder.addCase(getAnnouncementsByInterestsFunc.fulfilled, (state, action) => {
+            state.dataByInterests = action.payload.data,
+            state.countByInterest = action.payload.count,
+            state.isLoading = false
+        })
+        builder.addCase(getAnnouncementsByInterestsFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = " server error"
         })
