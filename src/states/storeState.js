@@ -12,7 +12,7 @@ export const getAllCountsFunc = createAsyncThunk(
     'api/getAllCounts',
     async()=>{
         try {
-            const response = await fetch('http://localhost:5050/allcounts', {
+            const response = await fetch(`http://localhost:5050/allcounts`, {
                 method: 'GET'
             });
             return await response.json();
@@ -26,7 +26,7 @@ export const getAllAnnouncementsFunc = createAsyncThunk(
     'api/getAllAnnouncements',
     async () => {
         try {
-            const response = await fetch('http://localhost:5050/allannouncements', {
+            const response = await fetch(`http://localhost:5050/allannouncements`, {
                 method: 'GET'
             });
             const data = await response.json();
@@ -43,7 +43,7 @@ export const postCreateAnnouncementFunc = createAsyncThunk(
     async (input) => {
 
         try {
-            const response = await fetch('http://localhost:5050/createannouncement', {
+            const response = await fetch(`http://localhost:5050/createannouncement`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
