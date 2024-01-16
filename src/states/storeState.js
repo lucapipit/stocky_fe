@@ -61,6 +61,28 @@ export const postCreateAnnouncementFunc = createAsyncThunk(
     }
 )
 
+export const postCreateFormFunc = createAsyncThunk(
+    'api/postCreateForm',
+    async (formData) => {
+
+        try {
+            const response = await fetch('http://localhost:5050/formAnnouncement', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData),
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+)
+
+
 export const deleteAnnouncementFunc = createAsyncThunk(
     'api/deleteAnnouncement',
     async (id) => {
@@ -148,6 +170,19 @@ const sliceStore = createSlice({
             state.isLoading = false
         })
         builder.addCase(postCreateAnnouncementFunc.rejected, (state) => {
+            state.isLoading = false;
+            state.error = " server error"
+        });
+
+         //postCreateForm
+         builder.addCase(postCreateFormFunc.pending, (state) => {
+            state.isLoading = true;
+        })
+        builder.addCase(postCreateFormFunc.fulfilled, (state, action) => {
+            state.allData = action.payload
+            state.isLoading = false
+        })
+        builder.addCase(postCreateFormFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = " server error"
         });

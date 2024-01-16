@@ -56,6 +56,7 @@ const _Navbar = () => {
                                                 <div>
                                                     <Link to={"/login"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>login</span> </li></Link>
                                                     <Link to={"/signin"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>signin</span> </li></Link>
+                                                    <Link to={"/formAnnouncement"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>form announcement</span> </li></Link>
                                                 </div> :
                                                 <div>
                                                     <Link to={"/account"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>account</span> </li></Link>
