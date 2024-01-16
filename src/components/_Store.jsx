@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import "../styles/custom.css";
 import _Navbar from './_Navbar';
 import CardAnnouncement from './CardAnnouncement';
@@ -34,8 +34,9 @@ const _Store = () => {
     if (localStorage.getItem("token")) {
       const myDcdTkn = jwtDecode(localStorage.getItem("token"), process.env.JWT_SECRET);
       setDecodedTkn(myDcdTkn);
-      myInterests = myDcdTkn.interests.split(",").filter((el) => el.length === categoryLevel).map((it) => it.substring(0, 2)).join("-");
-
+      console.log(myDcdTkn,"ci sono");
+     myInterests = myDcdTkn.interests.split(",").filter((el) => el.length === categoryLevel).map((it) => it.substring(0, 2)).join("-");
+   
       if (myInterests === "") {
         setCategoryLevel(categoryLevel - 1);
       }
