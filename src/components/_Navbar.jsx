@@ -10,18 +10,18 @@ import { setIsHamMenuOpen } from '../states/generalState';
 
 
 const _Navbar = () => {
-    const isHamMenuOpen = useSelector((state)=>state.general.isHamMenuOpen);
+    const isHamMenuOpen = useSelector((state) => state.general.isHamMenuOpen);
     const isLogged = useSelector((state) => state.login.isLogged);
     const dispatch = useDispatch();
     const [decodedTkn, setDecodedTkn] = useState("");
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if(token){
+        if (token) {
             const tkn = jwtDecode(token, process.env.JWT_SECRET);
             setDecodedTkn(tkn);
             dispatch(setIsLogged(true))
-        }else{
+        } else {
             setDecodedTkn("")
         }
     }, [isLogged])
@@ -31,7 +31,7 @@ const _Navbar = () => {
             <div className='position-fixed w-100 border bg-light' expand="lg" style={{ zIndex: "9", height: "59px" }}>
                 <Container >
                     <div className='d-flex align-items-center justify-content-between py-1' >
-                        <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} onClick={()=>{ dispatch(setIsHamMenuOpen(false))}}/></Link> <i>Infodent Srl</i></div>
+                        <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} onClick={() => { dispatch(setIsHamMenuOpen(false)) }} /></Link> <i>Infodent Srl</i></div>
                         <div className='d-flex align-items-center'>
                             <div>{decodedTkn.email}</div>
                             <div className=""><i className='bi bi-grid-fill m-2' onClick={() => dispatch(setIsHamMenuOpen(!isHamMenuOpen))} style={{ fontSize: "30px" }}></i></div>
@@ -56,11 +56,11 @@ const _Navbar = () => {
                                                 <div>
                                                     <Link to={"/login"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>login</span> </li></Link>
                                                     <Link to={"/signin"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>signin</span> </li></Link>
-                                                    <Link to={"/formAnnouncement"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>form announcement</span> </li></Link>
                                                 </div> :
                                                 <div>
                                                     <Link to={"/account"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>account</span> </li></Link>
                                                     <Link to={"/"}><li> <span onClick={() => { dispatch(setIsLogged(false)); localStorage.clear(); dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>logout</span> </li></Link>
+                                                    <Link to={"/formAnnouncement"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>form announcement</span> </li></Link>
                                                 </div>
                                         }
                                     </ul>

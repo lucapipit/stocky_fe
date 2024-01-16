@@ -6,7 +6,7 @@ const initialState = {
     dataByInterests: [],
     isLoading: false,
     allCounts: 1,
-    countByInterest: 1,
+    countByInterest: 0,
     error: ""
 }
 
