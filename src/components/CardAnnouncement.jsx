@@ -55,9 +55,16 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
                 {
                     !singleData[0] || isLoading ?
                         <Placeholder animation="glow"><Placeholder xs={4} /></Placeholder> :
-                        <div className='d-flex align-items-top my-3'>
-                            <h2 className='fw-normal'>{singleData[0].price}</h2>
-                            <p className='mt-2'>00$</p>
+                        <div className='d-flex align-items-center justify-content-between'>
+                            <div className='d-flex align-items-top my-3'>
+                                <h2 className='fw-normal'>{singleData[0].price}</h2>
+                                <p className='mt-1'>00$</p>
+                            </div>
+                            <div className='d-flex align-items-top my-3 px-3 py-1 rounded-5 myBgWhite'>
+                                <h2 className='fw-light'>{(Math.round((singleData[0].price) / (singleData[0].quantity) * 100) / 100).toString().split(".")[0]}</h2>
+                                <p className='fw-light'>{(Math.round((singleData[0].price) / (singleData[0].quantity) * 100) / 100).toString().split(".")[1]}$</p>
+                                <h4 className='fw-light'>/item</h4>
+                            </div>
                         </div>
                 }
                 {
