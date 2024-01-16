@@ -25,6 +25,7 @@ const _Store = () => {
   const [decodedTkn, setDecodedTkn] = useState("x");
 
   let myInterests = "";
+  // questa variabile è un let
 
   useEffect(() => {
     setTkn(localStorage.getItem("token"));

@@ -8,8 +8,7 @@ import AccountPage from './pages/AccountPage';
 import SigninPage from './pages/SigninPage';
 import StorePage from './pages/StorePage';
 import ErrorPage from "./pages/ErrorPage";
-
-import FormAnnouncementPage from "./pages/FormAnnouncementPage";
+import FormAnnouncementPage from './pages/FormAnnouncementPage'
 
 
 function App() {
