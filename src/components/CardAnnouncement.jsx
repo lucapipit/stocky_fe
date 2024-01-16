@@ -64,7 +64,7 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
                                 <h2 className='fw-normal'>{(Math.round((singleData[0].price) / (singleData[0].quantity) * 100) / 100).toString().split(".")[0]}</h2>
                                 <p className='fw-light'>{(Math.round((singleData[0].price) / (singleData[0].quantity) * 100) / 100).toString().split(".")[1]}$</p>
                                 <h4 className='fw-light'>/item</h4>
-                            </div> */}
+                            </div> 
                         </div>
                 }
                 {
