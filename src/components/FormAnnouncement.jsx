@@ -47,7 +47,7 @@ function FormAnnouncement() {
 
 
   return (
-    <div className='d-flex align-content-center bg-secondary vh-100 '>
+    <div className='d-flex justify-content-center align-items-center   vh-100 '>
         <form onSubmit={handleCreateFormAnnouncement}>
            <div className="mb-3">
             <label htmlFor='ownwerId' className="form-label">Owner ID</label>
