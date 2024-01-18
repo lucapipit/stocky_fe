@@ -1,40 +1,15 @@
 
-import React, { useState } from 'react';
+import  {React, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Placeholder from 'react-bootstrap/Placeholder';
 
 
 const CardAnnouncement = ({ singleData, isLoading }) => {
 
-    // const [file, setFile] = useState();
-
-    // const upload = async () => {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append('file', file);
-
-    //         const requestOptions = {
-    //             method: 'POST',
-    //             body: formData,
-    //         };
-    //        const response = await fetch('http://localhost:5050/upload', requestOptions);
-    //        if (!response.ok) {
-    //             throw new Error('Network response was not ok.');
-    //         }
-    //         console.log(await response.json());
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-
+   
     return (
         <>
-            {/* <div>
-                <input type='file' onChange={(e) => setFile(e.target.files[0])} />
-                <button type='button' onClick={upload}>upload</button>
-            </div> */}
-
-
+            
             <div className='p-3 rounded-5 bg-light border myMaxW500 myW9'>
                 {
                     !singleData[0] || isLoading ?

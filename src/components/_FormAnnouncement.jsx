@@ -1,143 +1,160 @@
 import { React, useState } from 'react'
- import {  postCreateAnnouncementFunc } from '../states/storeState';
+import { postCreateAnnouncementFunc } from '../states/storeState';
 import { useDispatch } from 'react-redux';
+import Form from 'react-bootstrap/Form';
 
 function _FormAnnouncement() {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    idOwner: "",
-    brandName: "",
-    manufacturerName:"",
-    modelName: "",
-    quantity: "",
-    price: "",
-    pics: "",
-    productSize:"",
-    description: "",
-    techDetail:"",
-    category: "",
-    expireDate:"",
-    textFocus:"",
-    picsFocus:"",
-    views:"",
-    posClick:"",
-    negClick:""
 
-   
-  });
+  const [file, setFile] = useState("");
+  const [idOwner, setIdOwner] = useState(99);
+  const [brandName, setBrandName] = useState("");
+  const [manufacturerName, setManufacturerName] = useState("test srl");
+  const [modelName, setModelName] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [price, setPrice] = useState("");
+  const [productSize, setProductSize] = useState("");
+  const [description, setDescription] = useState("");
+  const [techDetail, setTechDetail] = useState("");
+  const [category, setCategory] = useState("");
+  const [expireDate, setExpireDate] = useState("");
+  const [textFocus, setTextFocus] = useState("");
+  const [picsFocus, setPicsFocus] = useState("");
 
-  const handleCreateFormAnnouncement = (e) => {
-    e.preventDefault();
-    dispatch( postCreateAnnouncementFunc(formData));
 
-    //pulisce il form
-    setFormData({
-      idOwner: "",
-    brandName: "",
-    manufacturerName:"",
-    modelName: "",
-    quantity: "",
-    price: "",
-    pics: "",
-    productSize:"",
-    description: "",
-    techDetail:"",
-    category: "",
-    expireDate:"",
-    textFocus:"",
-    picsFocus:"",
-    views:"",
-    posClick:"",
-    negClick:""
+  const uploadFile = async (file) => {
+    const fileData = new FormData();
+    fileData.append('img', file);
+    console.log(fileData);
 
-    });
-    console.log(formData);
+    try {
+      const response = await fetch('http://localhost:5050/upload', {
+        method: 'POST',
+        body: fileData,
+      });
+      return await response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+
+  const handleCreateFormAnnouncement = async () => {
+
+    const uploadedFile = await uploadFile(file);
+
+    const payload = {
+      idOwner: 99,//compilazione automatica
+      brandName: brandName,
+      manufacturerName: manufacturerName,//compilazione automatica
+      modelName: modelName,
+      quantity: quantity,
+      price: price,
+      pics: `http://localhost:5050/uploads/images/${uploadedFile.imgName}`,
+      productSize: productSize,
+      description: description,
+      techDetail: techDetail,
+      category: category,
+      expireDate: expireDate,
+      textFocus: textFocus,
+      picsFocus: picsFocus,
+      views: 0,
+      posClick: 0,
+      negClick: 0
+    }
+    console.log(payload);
+    dispatch(postCreateAnnouncementFunc(payload))
+    /*  .then((res) => {
+       if (res.payload.statusCode === 200) {
+         console.log("tutto okjkko");
+         setBrandName("");
+         setManufacturerName("");
+         setModelName("");
+         setQuantity(null);
+         setPrice(null);
+         setFile(null);
+         setProductSize("");
+         setDescription("");
+         setTechDetail("");
+         setCategory("");
+         setExpireDate("");
+         setTextFocus("");
+         setPicsFocus("") 
+
+       }
+     }) */
   };
 
 
 
   return (
     <div className='d-flex justify-content-center'>
-      <form onSubmit={handleCreateFormAnnouncement}>
-        <div className="mb-3">
-          <label htmlFor='ownwerId' className="form-label">Owner ID</label>
-          <input type="text" className="form-control" id="idOwner" value={formData.idOwner} onChange={(e) => setFormData({ ...formData, idOwner: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='brandName' className="form-label">Brand Name</label>
-          <input type="text" className="form-control" id="brandName" value={formData.brandName} onChange={(e) => setFormData({ ...formData, brandName: e.target.value })} />
-        </div>
-        <div className='mb-3'>
-          <label htmlFor=' manufacturerName' className=""> manufacturerName</label>
-          <input type='text' className='form-control' id=' manufacturerName' value={formData.manufacturerName} onChange={(e) => setFormData({...formData,manufacturerName: e.target.value})} />
+      <div className='myMaxW500'>
+        <Form.Group>
+          <input type='file' onChange={(e) => setFile(e.target.files[0])} />
+        </Form.Group>
 
-        </div>
-        <div className="mb-3">
-          <label htmlFor='modelName' className="form-label">Model Name</label>
-          <input type="text" className="form-control" id="modelName" value={formData.modelName} onChange={(e) => setFormData({ ...formData, modelName: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='quantity' className="form-label">Quantity</label>
-          <input type="text" className="form-control" id="quantity" value={formData.quantity} onChange={(e) => setFormData({ ...formData, quantity: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='price' className="form-label">Price</label>
-          <input type="text" className="form-control" id="price" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='pics' className="form-label">Pics</label>
-          <input type="text" className="form-control" id="pics" value={formData.pics} onChange={(e) => setFormData({ ...formData, pics: e.target.value })} />
-        </div>
-        <div className='mb-3'>
-          <label htmlFor=' productSize' className="">productSize</label>
-          <input type='text' className='form-control' id=' productSize' value={formData.productSize} onChange={(e) => setFormData({...formData, productSize: e.target.value})} />
+        <Form.Group className="mb-3">
+          <Form.Label>Brand Name</Form.Label>
+          <Form.Control type="text" className="form-control" id="brandName" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
+        </Form.Group>
 
-        </div>
-        <div className="mb-3">
-          <label htmlFor='description' className="form-label">Description</label>
-          <input type="text" className="form-control" id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='category' className="form-label">Category</label>
-          <input type="text" className="form-control" id="category" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='techDetail' className="form-label">techDetail</label>
-          <input type="text" className="form-control" id="techDetail" value={formData.techDetail} onChange={(e) => setFormData({ ...formData, techDetail: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='expireDate' className="form-label">expireDate</label>
-          <input type="date" className="form-control" id="expireDate" value={formData.expireDate} onChange={(e) => setFormData({ ...formData, expireDate: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='textFocus' className="form-label">textFocus</label>
-          <input type="text" className="form-control" id="textFocus" value={formData.textFocus} onChange={(e) => setFormData({ ...formData, textFocus: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='picsFocus' className="form-label">picsFocus</label>
-          <input type="text" className="form-control" id="picsFocus" value={formData.picsFocus} onChange={(e) => setFormData({ ...formData, picsFocus: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='views' className="form-label">views</label>
-          <input type="text" className="form-control" id="views" value={formData.views} onChange={(e) => setFormData({ ...formData, views: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='posClick' className="form-label"> posClick</label>
-          <input type="text" className="form-control" id=" posClick" value={formData.posClick} onChange={(e) => setFormData({ ...formData, posClick: e.target.value })} />
-        </div>
-        <div className="mb-3">
-          <label htmlFor='negClick' className="form-label">negClick</label>
-          <input type="text" className="form-control" id="negClick" value={formData.negClick} onChange={(e) => setFormData({ ...formData, negClick: e.target.value })} />
-        </div>
-        
-        
-       
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <Form.Group className="mb-3">
+          <Form.Label>Model Name</Form.Label>
+          <Form.Control type="text" className="form-control" id="modelName" value={modelName} onChange={(e) => setModelName(e.target.value)} />
+        </Form.Group>
 
-      </form>
+        <Form.Group className="mb-3">
+          <Form.Label>Quantity</Form.Label>
+          <Form.Control type="text" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+        </Form.Group>
 
+        <Form.Group className="mb-3">
+          <Form.Label>Price</Form.Label>
+          <Form.Control type="text" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
+        </Form.Group>
+
+        <Form.Group className='mb-3'>
+          <Form.Label>productSize</Form.Label>
+          <Form.Control type='text' className='form-control' id="productSize" value={productSize} onChange={(e) => setProductSize(e.target.value)} />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Description</Form.Label>
+          <Form.Control type="text" className="form-control" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Category</Form.Label>
+          <Form.Control type="text" className="form-control" id="category" value={category} onChange={(e) => setCategory(e.target.value)} />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>techDetail</Form.Label>
+          <Form.Control type="text" className="form-control" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>expireDate</Form.Label>
+          <Form.Control type="date" className="form-control" id="expireDate" value={expireDate} onChange={(e) => setExpireDate(e.target.value)} />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>textFocus</Form.Label>
+          <Form.Control type="text" className="form-control" id="textFocus" value={textFocus} onChange={(e) => setTextFocus(e.target.value)} />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>picsFocus</Form.Label>
+          <Form.Control type="text" className="form-control" id="picsFocus" value={picsFocus} onChange={(e) => setPicsFocus(e.target.value)} />
+        </Form.Group>
+
+        <button className="btn btn-primary" onClick={handleCreateFormAnnouncement}>Submit</button>
+
+      </div>
     </div>
+
+
   )
 }
 
