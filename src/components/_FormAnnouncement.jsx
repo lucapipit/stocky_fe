@@ -1,43 +1,54 @@
 import { React, useState } from 'react'
-import { postCreateFormFunc } from '../states/storeState';
+ import {  postCreateAnnouncementFunc } from '../states/storeState';
 import { useDispatch } from 'react-redux';
 
 function _FormAnnouncement() {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    ownerId: "",
+    idOwner: "",
     brandName: "",
+    manufacturerName:"",
     modelName: "",
     quantity: "",
     price: "",
     pics: "",
+    productSize:"",
     description: "",
+    techDetail:"",
     category: "",
-    subcategory: "",
-    location: "",
-    tags: "",
-    interests: "",
+    expireDate:"",
+    textFocus:"",
+    picsFocus:"",
+    views:"",
+    posClick:"",
+    negClick:""
 
+   
   });
 
   const handleCreateFormAnnouncement = (e) => {
     e.preventDefault();
-    dispatch(postCreateFormFunc(formData));
+    dispatch( postCreateAnnouncementFunc(formData));
 
     //pulisce il form
     setFormData({
-      ownerId: "",
-      brandName: "",
-      modelName: "",
-      quantity: "",
-      price: "",
-      pics: "",
-      description: "",
-      category: "",
-      subcategory: "",
-      location: "",
-      tags: "",
-      interests: "",
+      idOwner: "",
+    brandName: "",
+    manufacturerName:"",
+    modelName: "",
+    quantity: "",
+    price: "",
+    pics: "",
+    productSize:"",
+    description: "",
+    techDetail:"",
+    category: "",
+    expireDate:"",
+    textFocus:"",
+    picsFocus:"",
+    views:"",
+    posClick:"",
+    negClick:""
 
     });
     console.log(formData);
@@ -47,15 +58,20 @@ function _FormAnnouncement() {
 
 
   return (
-    <div className='d-flex justify-content-center vh-100'>
+    <div className='d-flex justify-content-center'>
       <form onSubmit={handleCreateFormAnnouncement}>
         <div className="mb-3">
           <label htmlFor='ownwerId' className="form-label">Owner ID</label>
-          <input type="text" className="form-control" id="ownerId" value={formData.ownerId} onChange={(e) => setFormData({ ...formData, ownerId: e.target.value })} />
+          <input type="text" className="form-control" id="idOwner" value={formData.idOwner} onChange={(e) => setFormData({ ...formData, idOwner: e.target.value })} />
         </div>
         <div className="mb-3">
           <label htmlFor='brandName' className="form-label">Brand Name</label>
           <input type="text" className="form-control" id="brandName" value={formData.brandName} onChange={(e) => setFormData({ ...formData, brandName: e.target.value })} />
+        </div>
+        <div className='mb-3'>
+          <label htmlFor=' manufacturerName' className=""> manufacturerName</label>
+          <input type='text' className='form-control' id=' manufacturerName' value={formData.manufacturerName} onChange={(e) => setFormData({...formData,manufacturerName: e.target.value})} />
+
         </div>
         <div className="mb-3">
           <label htmlFor='modelName' className="form-label">Model Name</label>
@@ -73,6 +89,11 @@ function _FormAnnouncement() {
           <label htmlFor='pics' className="form-label">Pics</label>
           <input type="text" className="form-control" id="pics" value={formData.pics} onChange={(e) => setFormData({ ...formData, pics: e.target.value })} />
         </div>
+        <div className='mb-3'>
+          <label htmlFor=' productSize' className="">productSize</label>
+          <input type='text' className='form-control' id=' productSize' value={formData.productSize} onChange={(e) => setFormData({...formData, productSize: e.target.value})} />
+
+        </div>
         <div className="mb-3">
           <label htmlFor='description' className="form-label">Description</label>
           <input type="text" className="form-control" id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
@@ -82,21 +103,36 @@ function _FormAnnouncement() {
           <input type="text" className="form-control" id="category" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} />
         </div>
         <div className="mb-3">
-          <label htmlFor='subcategory' className="form-label">Subcategory</label>
-          <input type="text" className="form-control" id="subcategory" value={formData.subcategory} onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })} />
+          <label htmlFor='techDetail' className="form-label">techDetail</label>
+          <input type="text" className="form-control" id="techDetail" value={formData.techDetail} onChange={(e) => setFormData({ ...formData, techDetail: e.target.value })} />
         </div>
         <div className="mb-3">
-          <label htmlFor='location' className="form-label">Location</label>
-          <input type="text" className="form-control" id="location" value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} />
+          <label htmlFor='expireDate' className="form-label">expireDate</label>
+          <input type="date" className="form-control" id="expireDate" value={formData.expireDate} onChange={(e) => setFormData({ ...formData, expireDate: e.target.value })} />
         </div>
         <div className="mb-3">
-          <label htmlFor='tags' className="form-label">Tags</label>
-          <input type="text" className="form-control" id="tags" value={formData.tags} onChange={(e) => setFormData({ ...formData, tags: e.target.value })} />
+          <label htmlFor='textFocus' className="form-label">textFocus</label>
+          <input type="text" className="form-control" id="textFocus" value={formData.textFocus} onChange={(e) => setFormData({ ...formData, textFocus: e.target.value })} />
         </div>
         <div className="mb-3">
-          <label htmlFor='interests' className="form-label">Interests</label>
-          <input type="text" className="form-control" id="interests" value={formData.interests} onChange={(e) => setFormData({ ...formData, interests: e.target.value })} />
+          <label htmlFor='picsFocus' className="form-label">picsFocus</label>
+          <input type="text" className="form-control" id="picsFocus" value={formData.picsFocus} onChange={(e) => setFormData({ ...formData, picsFocus: e.target.value })} />
         </div>
+        <div className="mb-3">
+          <label htmlFor='views' className="form-label">views</label>
+          <input type="text" className="form-control" id="views" value={formData.views} onChange={(e) => setFormData({ ...formData, views: e.target.value })} />
+        </div>
+        <div className="mb-3">
+          <label htmlFor='posClick' className="form-label"> posClick</label>
+          <input type="text" className="form-control" id=" posClick" value={formData.posClick} onChange={(e) => setFormData({ ...formData, posClick: e.target.value })} />
+        </div>
+        <div className="mb-3">
+          <label htmlFor='negClick' className="form-label">negClick</label>
+          <input type="text" className="form-control" id="negClick" value={formData.negClick} onChange={(e) => setFormData({ ...formData, negClick: e.target.value })} />
+        </div>
+        
+        
+       
         <button type="submit" className="btn btn-primary">Submit</button>
 
       </form>

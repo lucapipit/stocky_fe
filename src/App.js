@@ -17,7 +17,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/formAnnouncement" element={<FormAnnouncementPage />} />
+        <Route path="/createannouncement" element={<FormAnnouncementPage />} />
         <Route path="/store" element={<StorePage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/account" element={<AccountPage />} />
