@@ -106,12 +106,12 @@ function _FormAnnouncement() {
 
         <Form.Group className="mb-3">
           <Form.Label>Quantity</Form.Label>
-          <Form.Control type="text" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+          <Form.Control type="number" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Price</Form.Label>
-          <Form.Control type="text" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
+          <Form.Control type="number" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
         </Form.Group>
 
         <Form.Group className='mb-3'>
