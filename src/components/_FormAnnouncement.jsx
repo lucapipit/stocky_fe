@@ -28,7 +28,7 @@ function _FormAnnouncement() {
     console.log(fileData);
 
     try {
-      const response = await fetch('http://localhost:5050/upload', {
+      const response = await fetch('http://localhost:5050/fileupload', {
         method: 'POST',
         body: fileData,
       });
@@ -50,7 +50,7 @@ function _FormAnnouncement() {
       modelName: modelName,
       quantity: quantity,
       price: price,
-      pics: `http://localhost:5050/uploads/images/${uploadedFile.imgName}`,
+      pics: uploadedFile.img,
       productSize: productSize,
       description: description,
       techDetail: techDetail,
@@ -89,7 +89,7 @@ function _FormAnnouncement() {
 
   return (
     <div className='d-flex justify-content-center'>
-      <div className='myMaxW500'>
+      <form className='myMaxW500' encType='multipart/form-data'>
         <Form.Group>
           <input type='file' onChange={(e) => setFile(e.target.files[0])} />
         </Form.Group>
@@ -151,7 +151,7 @@ function _FormAnnouncement() {
 
         <button className="btn btn-primary" onClick={handleCreateFormAnnouncement}>Submit</button>
 
-      </div>
+      </form>
     </div>
 
 
