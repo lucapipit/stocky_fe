@@ -3,15 +3,15 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const PaypalPayment = ({ pricePackage }) => {
 
-    const { PAYPAL_CLIENT_ID } = process.env;
+
     const initialOptions = {
-        clientId: PAYPAL_CLIENT_ID,
+        clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID,
         currency: "EUR",
         intent: "capture",
     };
 
     useEffect(() => {
-        console.log(PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_ID);
+        console.log(process.env);
     }, [])
 
     const apiUrl = "http://localhost:5050"
