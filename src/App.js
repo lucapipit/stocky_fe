@@ -9,6 +9,7 @@ import SigninPage from './pages/SigninPage';
 import StorePage from './pages/StorePage';
 import ErrorPage from "./pages/ErrorPage";
 import FormAnnouncementPage from './pages/FormAnnouncementPage'
+import PaymentAnnouncement from "./components/paymentAnnouncement";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route exact path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/createannouncement" element={<FormAnnouncementPage />} />
+        <Route path="/payment" element={<PaymentAnnouncement />} />
         <Route path="/store" element={<StorePage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/account" element={<AccountPage />} />

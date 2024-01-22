@@ -2,6 +2,8 @@ import { React, useState } from 'react'
 import { postCreateAnnouncementFunc } from '../states/storeState';
 import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import PaymentAnnouncement from './paymentAnnouncement';
+import { Link } from 'react-router-dom';
 
 function _FormAnnouncement() {
   const dispatch = useDispatch();
@@ -150,7 +152,7 @@ function _FormAnnouncement() {
         </Form.Group>
 
         <button className="btn btn-primary" onClick={handleCreateFormAnnouncement}>Submit</button>
-
+        <Link to='/payment'><button className="btn btn-primary m-3">payment</button></Link>
       </form>
     </div>
 

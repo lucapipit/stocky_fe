@@ -8,7 +8,7 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
 
    
     return (
-        <>
+        
             
             <div className='p-3 rounded-5 bg-light border myMaxW500 myW9'>
                 {
@@ -71,7 +71,7 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
                     {!singleData[0] || isLoading ? <Placeholder.Button xs={4} aria-hidden="true" /> : <Button variant="success">Chat</Button>}
                 </div>
             </div>
-        </>
+        
     )
 }
 

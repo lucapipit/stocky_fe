@@ -3,6 +3,7 @@ import signinSlice from './signinState';
 import searchSlice from './searchState';
 import generalSlice from './generalState'; 
 import sliceStore from './storeState';
+import paymentSlice from './paymentState';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
     signin: signinSlice,
     search: searchSlice,
     general: generalSlice,
-    myStore: sliceStore
+    myStore: sliceStore,
+    payment: paymentSlice
 })
 const store = configureStore({
     reducer: rootReducer
