@@ -1,8 +1,9 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import { postCreateAnnouncementFunc } from '../states/storeState';
 import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import PaymentAnnouncement from './paymentAnnouncement';
+import PaymentAnnouncement from './PaymentAnnouncement';
+import PaypalPayment from './PaypalPayment';
 import { Link } from 'react-router-dom';
 
 function _FormAnnouncement() {
@@ -22,6 +23,9 @@ function _FormAnnouncement() {
   const [expireDate, setExpireDate] = useState("");
   const [textFocus, setTextFocus] = useState("");
   const [picsFocus, setPicsFocus] = useState("");
+
+  const [pricePackage, setPricePackage] = useState("5.99");
+  const [readyForPay, setReadyForPay] = useState(false)
 
 
   const uploadFile = async (file) => {
@@ -66,27 +70,8 @@ function _FormAnnouncement() {
     }
     console.log(payload);
     dispatch(postCreateAnnouncementFunc(payload))
-    /*  .then((res) => {
-       if (res.payload.statusCode === 200) {
-         console.log("tutto okjkko");
-         setBrandName("");
-         setManufacturerName("");
-         setModelName("");
-         setQuantity(null);
-         setPrice(null);
-         setFile(null);
-         setProductSize("");
-         setDescription("");
-         setTechDetail("");
-         setCategory("");
-         setExpireDate("");
-         setTextFocus("");
-         setPicsFocus("") 
 
-       }
-     }) */
   };
-
 
 
   return (
@@ -151,7 +136,17 @@ function _FormAnnouncement() {
           <Form.Control type="text" className="form-control" id="picsFocus" value={picsFocus} onChange={(e) => setPicsFocus(e.target.value)} />
         </Form.Group>
 
-        <button className="btn btn-primary" onClick={handleCreateFormAnnouncement}>Submit</button>
+        <div className='d-flex justify-content-center align-items-center gap-3 mb-4'>
+          <div className={`${pricePackage === '0' ? 'mb-5' : ''} p-3 border rounded-5 myCursor`} onClick={() => {setPricePackage("0"); setReadyForPay(true)}}>Free</div>
+          <div className={`${pricePackage === '5.99' ? 'mb-5' : ''} p-3 bg-primary text-light rounded-5 myCursor`} onClick={() => {setPricePackage("5.99"); setReadyForPay(true)}}>Standard</div>
+          <div className={`${pricePackage === '9.99' ? 'mb-5' : ''} p-3 bg-warning text-light rounded-5 myCursor`} onClick={() => {setPricePackage("9.99"); setReadyForPay(true)}}>Boost</div>
+        </div>
+        {/* <button className="btn btn-primary" onClick={handleCreateFormAnnouncement}>Submit</button> */}
+
+        {pricePackage === "0" || !readyForPay ? null : <PaypalPayment
+          pricePackage={pricePackage}
+        />}
+
         <Link to='/payment'><button className="btn btn-primary m-3">payment</button></Link>
       </form>
     </div>
