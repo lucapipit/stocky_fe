@@ -1,0 +1,40 @@
+.footer{
+    margin-top: 100px;
+    padding: 20px;
+    background-color: rgb(194, 225, 225);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+
+}
+.footer img{
+    height: 70px;
+    border-radius: 50%;
+}
+.footerList{
+    list-style: none;
+    margin-bottom: 30px;
+}
+.footerListItem{
+    display: inline-block;
+    width: 50px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+.footerSocial{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    margin-top: 15px;
+}
+.footerIcon{
+    font-size: 24px !important;
+    margin-right: 10px;
+    color: #555;
+    cursor: pointer;
+}
+.footerTitle{
+    margin:50px;
+}
