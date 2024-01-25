@@ -12,7 +12,7 @@ export const PaymentFunc = createAsyncThunk(
     async (input) => {
         const {tkn, apiKey} = input;
         try {
-            const response = await fetch(`http://localhost:5050/payment`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/payment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

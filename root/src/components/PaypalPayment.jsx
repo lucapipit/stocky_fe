@@ -14,7 +14,7 @@ const PaypalPayment = ({ pricePackage }) => {
         console.log(process.env);
     }, [])
 
-    const apiUrl = "http://localhost:5050"
+    const apiUrl = process.env.REACT_APP_SERVER_ADDRESS
 
     const createOrder = async () => {
         // Order is created on the server and the order id is returned
