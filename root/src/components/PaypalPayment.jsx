@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useNavigate } from 'react-router';
+import { postCreateAnnouncementFunc } from '../states/storeState';
+import { useDispatch, useSelector } from 'react-redux';
 
-const PaypalPayment = ({ pricePackage }) => {
+const PaypalPayment = ({ total }) => {
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const announcementPayload = useSelector((state) => state.myStore.announcementPayload);
 
     const initialOptions = {
         clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID,
@@ -11,14 +17,14 @@ const PaypalPayment = ({ pricePackage }) => {
     };
 
     useEffect(() => {
-        console.log(process.env);
+        console.log("");
     }, [])
 
     const apiUrl = process.env.REACT_APP_SERVER_ADDRESS
 
     const createOrder = async () => {
         // Order is created on the server and the order id is returned
-        console.log(pricePackage);
+        console.log(total);
         return fetch(`${apiUrl}/api/orders`, {
             method: "POST",
             headers: {
@@ -29,7 +35,7 @@ const PaypalPayment = ({ pricePackage }) => {
             body: JSON.stringify({
                 product: {
                     description: "pricePackage.description",
-                    cost: pricePackage
+                    cost: total
                 }
             }),
         })
@@ -39,7 +45,7 @@ const PaypalPayment = ({ pricePackage }) => {
 
     const onApprove = async (data) => {
         // Order is captured on the server and the response is returned to the browser
-        return fetch(`${apiUrl}/api/orders/${data.orderID}/capture`, {
+        const response = await fetch(`${apiUrl}/api/orders/${data.orderID}/capture`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -48,7 +54,15 @@ const PaypalPayment = ({ pricePackage }) => {
                 orderID: data.orderID
             })
         })
-            .then((response) => response.json());
+        const res = await response.json()
+        if (res.status === "COMPLETED") {
+            dispatch(postCreateAnnouncementFunc(announcementPayload));
+            navigate("/paymentsuccess")
+        } else {
+            navigate("*")
+        }
+        return res
+
     };
 
     return (

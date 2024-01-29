@@ -4,6 +4,7 @@ const initialState = {
     allData: [],
     singleData: [],
     dataByInterests: [],
+    announcementPayload: {},
     isLoading: false,
     allCounts: 1,
     countByInterest: 0,
@@ -124,6 +125,9 @@ const sliceStore = createSlice({
     name: 'api',
     initialState,
     reducers: {
+        saveAnnouncementPayload: (state, action) => {
+            state.announcementPayload = action.payload
+        }
     },
 
     extraReducers: (builder) => {
@@ -218,4 +222,5 @@ const sliceStore = createSlice({
     }
 });
 
+export const {saveAnnouncementPayload} = sliceStore.actions;
 export default sliceStore.reducer

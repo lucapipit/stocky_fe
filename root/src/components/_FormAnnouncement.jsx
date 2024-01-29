@@ -1,12 +1,14 @@
 import { React, useEffect, useState } from 'react'
 import { postCreateAnnouncementFunc } from '../states/storeState';
-import { useDispatch } from 'react-redux';
+import { saveAnnouncementPayload } from '../states/storeState';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import PaymentAnnouncement from './PaymentAnnouncement';
-import PaypalPayment from './PaypalPayment';
-import { Link } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 function _FormAnnouncement() {
+
   const dispatch = useDispatch();
 
   const [file, setFile] = useState("");
@@ -24,8 +26,15 @@ function _FormAnnouncement() {
   const [textFocus, setTextFocus] = useState("");
   const [picsFocus, setPicsFocus] = useState("");
 
-  const [pricePackage, setPricePackage] = useState("5.99");
-  const [readyForPay, setReadyForPay] = useState(false)
+  const [totalPrice, setTotalPrice] = useState("1.99");
+  const [readyForPay, setReadyForPay] = useState(false);
+
+  const [isFormFilled, setIsFormFilled] = useState(false);
+  const [isFirstTry, setIsFirstTry] = useState(true);
+
+  const navigate = useNavigate();
+
+  const announcementPayload = useSelector((state) => state.myStore.announcementPayload);
 
 
   const uploadFile = async (file) => {
@@ -44,10 +53,28 @@ function _FormAnnouncement() {
     }
   };
 
+  const formCheck = async () => {
 
-  const handleCreateFormAnnouncement = async () => {
+    const uploadedFile = await uploadFile(file);//questo viene salvato anche se il pagamento fallisce. Si creeranno immagini spazzatura.
 
-    const uploadedFile = await uploadFile(file);
+    const formFilled = brandName && manufacturerName && modelName && quantity && uploadedFile.img && description && category;
+
+    if (formFilled) {
+      setIsFormFilled(true);
+      setIsFirstTry(false);
+
+      handleCreateFormAnnouncement(uploadedFile)
+      if (totalPrice !== "0") {
+        navigate(`/paymentmethods/xlf-${totalPrice}-jK$`)
+      }
+    } else {
+      setIsFormFilled(false);
+      setIsFirstTry(false);
+    }
+
+  }
+
+  const handleCreateFormAnnouncement = async (input) => {
 
     const payload = {
       idOwner: 99,//compilazione automatica
@@ -56,7 +83,7 @@ function _FormAnnouncement() {
       modelName: modelName,
       quantity: quantity,
       price: price,
-      pics: uploadedFile.img,
+      pics: input.img,
       productSize: productSize,
       description: description,
       techDetail: techDetail,
@@ -68,8 +95,12 @@ function _FormAnnouncement() {
       posClick: 0,
       negClick: 0
     }
-    console.log(payload);
-    dispatch(postCreateAnnouncementFunc(payload))
+    if (totalPrice === "0") {
+      dispatch(postCreateAnnouncementFunc(payload))
+        .then((response) => response.payload.statusCode === 200 ? navigate("/") : null)
+    } else {
+      dispatch(saveAnnouncementPayload(payload))
+    }
 
   };
 
@@ -137,17 +168,20 @@ function _FormAnnouncement() {
         </Form.Group>
 
         <div className='d-flex justify-content-center align-items-center gap-3 mb-4'>
-          <div className={`${pricePackage === '0' ? 'mb-5' : ''} p-3 border rounded-5 myCursor`} onClick={() => {setPricePackage("0"); setReadyForPay(true)}}>Free</div>
-          <div className={`${pricePackage === '5.99' ? 'mb-5' : ''} p-3 bg-primary text-light rounded-5 myCursor`} onClick={() => {setPricePackage("5.99"); setReadyForPay(true)}}>Standard</div>
-          <div className={`${pricePackage === '9.99' ? 'mb-5' : ''} p-3 bg-warning text-light rounded-5 myCursor`} onClick={() => {setPricePackage("9.99"); setReadyForPay(true)}}>Boost</div>
+          <div className={`${totalPrice === '0' ? 'mb-5' : ''} p-3 border rounded-5 myCursor`} onClick={() => { setTotalPrice("0") }}>Free</div>
+          <div className={`${totalPrice === '1.99' ? 'mb-5' : ''} p-3 bg-primary text-light rounded-5 myCursor`} onClick={() => { setTotalPrice("1.99") }}>Standard</div>
+          <div className={`${totalPrice === '9.99' ? 'mb-5' : ''} p-3 bg-warning text-light rounded-5 myCursor`} onClick={() => { setTotalPrice("9.99") }}>Boost</div>
         </div>
         {/* <button className="btn btn-primary" onClick={handleCreateFormAnnouncement}>Submit</button> */}
 
-        {pricePackage === "0" || !readyForPay ? null : <PaypalPayment
-          pricePackage={pricePackage}
-        />}
+        <Button onClick={formCheck}>Checkout</Button>
+        {
+          !isFirstTry && !isFormFilled ? <Alert className='mt-3' key="danger" variant="danger">
+            Fill the form correctly!
+          </Alert> : null
+        }
 
-        <Link to='/payment'><button className="btn btn-primary m-3">payment</button></Link>
+        {/* <Link to='/payment'><button className="btn btn-primary m-3">payment</button></Link> */}
       </form>
     </div>
 

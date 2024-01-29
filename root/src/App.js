@@ -10,7 +10,10 @@ import StorePage from './pages/StorePage';
 import ErrorPage from "./pages/ErrorPage";
 import FormAnnouncementPage from './pages/FormAnnouncementPage'
 import PaymentAnnouncement from "./components/PaymentAnnouncement";
-import PaypalPayment from "./components/PaypalPayment";
+import PaypalPaymentPage from "./pages/PaypalPaymentPage";
+import PaymentMethodsPage from "./pages/PaymentMethodsPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import AnnounceCreatedSuccessPage from "./pages/AnnounceCreatedSuccessPage";
 
 
 
@@ -23,8 +26,11 @@ function App() {
         <Route exact path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/createannouncement" element={<FormAnnouncementPage />} />
+        <Route path="/paymentmethods/:price" element={<PaymentMethodsPage />} />
         <Route path="/payment" element={<PaymentAnnouncement />} />
-        <Route path="/paypalpayment" element={<PaypalPayment />} />
+        <Route path="/paypalpayment" element={<PaypalPaymentPage />} />
+        <Route path="/paymentsuccess" element={<PaymentSuccessPage />} />
+        <Route path="/announcecreatesuccess" element={<AnnounceCreatedSuccessPage />} />
         <Route path="/store" element={<StorePage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/account" element={<AccountPage />} />
