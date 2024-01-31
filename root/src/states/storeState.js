@@ -44,7 +44,6 @@ export const getAllAnnouncementsFunc = createAsyncThunk(
 export const postCreateAnnouncementFunc = createAsyncThunk(
     'api/postCreateAnnouncement',
     async (input) => {
-
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/createannouncement`, {
                 method: 'POST',
@@ -66,7 +65,7 @@ export const deleteAnnouncementFunc = createAsyncThunk(
     'api/deleteAnnouncement',
     async (id) => {
         const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/deleteannouncement/${id}`, {
-            method: 'delete',
+            method: 'DELETE',
         });
         const data = await response.json();
         return data
@@ -77,12 +76,11 @@ export const updateAnnouncementFunc = createAsyncThunk(
     'api/updateAnnouncement',
     async (input, id) => {
         const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/updateannouncement/${id}`, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(input)
-
         });
         const data = await response.json();
         return data
@@ -106,7 +104,7 @@ export const getSingleAnnouncementFunc = createAsyncThunk(
 )
 
 export const getAnnouncementsByInterestsFunc = createAsyncThunk(
-    'api/etAnnouncementsByInterests',
+    'api/getAnnouncementsByInterests',
     async (input) => {
         const  {interests, token} = input;
         const response = await fetch(`http://localhost:5050/announcementsbyinterests/${interests}`, {
@@ -122,7 +120,7 @@ export const getAnnouncementsByInterestsFunc = createAsyncThunk(
 
 
 const sliceStore = createSlice({
-    name: 'api',
+    name: 'apiStore',
     initialState,
     reducers: {
         saveAnnouncementPayload: (state, action) => {
@@ -167,8 +165,7 @@ const sliceStore = createSlice({
         builder.addCase(getAllAnnouncementsFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = " server error"
-        }
-        );
+        });
         //deleteAnnouncement
         builder.addCase(deleteAnnouncementFunc.pending, (state) => {
             state.isLoading = true;

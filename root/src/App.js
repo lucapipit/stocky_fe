@@ -14,6 +14,7 @@ import PaypalPaymentPage from "./pages/PaypalPaymentPage";
 import PaymentMethodsPage from "./pages/PaymentMethodsPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import AnnounceCreatedSuccessPage from "./pages/AnnounceCreatedSuccessPage";
+import PendingAnnouncementsPage from "./pages/PendingAnnouncementsPage";
 
 
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/paypalpayment" element={<PaypalPaymentPage />} />
         <Route path="/paymentsuccess" element={<PaymentSuccessPage />} />
         <Route path="/announcecreatesuccess" element={<AnnounceCreatedSuccessPage />} />
+        <Route path="/pendingannouncements" element={<PendingAnnouncementsPage />} />
         <Route path="/store" element={<StorePage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/account" element={<AccountPage />} />
