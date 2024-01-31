@@ -25,7 +25,7 @@ const PaypalPayment = ({ total }) => {
     const createOrder = async () => {
         // Order is created on the server and the order id is returned
         console.log(total);
-        return fetch(`${apiUrl}/api/orders`, {
+        return fetch(`http://localhost:5050/api/orders`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
