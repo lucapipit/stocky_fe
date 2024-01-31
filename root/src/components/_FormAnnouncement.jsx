@@ -55,15 +55,12 @@ function _FormAnnouncement() {
 
   const formCheck = async () => {
 
-    const uploadedFile = await uploadFile(file);//questo viene salvato anche se il pagamento fallisce. Si creeranno immagini spazzatura.
-
-    const formFilled = brandName && manufacturerName && modelName && quantity && uploadedFile.img && description && category;
+    const formFilled = brandName && manufacturerName && modelName && quantity && file && description && category;
 
     if (formFilled) {
       setIsFormFilled(true);
       setIsFirstTry(false);
-
-      handleCreateFormAnnouncement(uploadedFile)
+      const uploadedFile = await uploadFile(file);
       if (totalPrice !== "0") {
         navigate(`/paymentmethods/xlf-${totalPrice}-jK$`)
       }
@@ -106,9 +103,9 @@ function _FormAnnouncement() {
 
 
   return (
-    <div className='d-flex justify-content-center'>
+    <div className='d-flex justify-content-center mt-5'>
       <form className='myMaxW500' encType='multipart/form-data'>
-        <Form.Group>
+        <Form.Group className="mb-3">
           <input type='file' onChange={(e) => setFile(e.target.files[0])} />
         </Form.Group>
 
