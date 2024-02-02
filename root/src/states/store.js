@@ -5,6 +5,7 @@ import generalSlice from './generalState';
 import sliceStore from './storeState';
 import paymentSlice from './paymentState';
 import orderSlice from './orderState';
+import penRejSlice from './penRejState';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 
@@ -15,7 +16,9 @@ const rootReducer = combineReducers({
     general: generalSlice,
     myStore: sliceStore,
     payment: paymentSlice,
-    order: orderSlice
+    order: orderSlice,
+    penRej: penRejSlice
+
 })
 const store = configureStore({
     reducer: rootReducer

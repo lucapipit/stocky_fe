@@ -61,6 +61,7 @@ const _Navbar = () => {
                                                     <Link to={"/account"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>account</span> </li></Link>
                                                     <Link to={"/"}><li> <span onClick={() => { dispatch(setIsLogged(false)); localStorage.clear(); dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>logout</span> </li></Link>
                                                     <Link to={"/createannouncement"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>form announcement</span> </li></Link>
+                                                    <Link to={"/pendingannouncements"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>pending announcements</span> </li></Link>
                                                 </div>
                                         }
                                     </ul>

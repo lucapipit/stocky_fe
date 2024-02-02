@@ -13,6 +13,7 @@ function _FormAnnouncement() {
 
   const [file, setFile] = useState("");
   const [idOwner, setIdOwner] = useState(99);
+  const [idPackage, setIdPackage] = useState(2);
   const [brandName, setBrandName] = useState("");
   const [manufacturerName, setManufacturerName] = useState("test srl");
   const [modelName, setModelName] = useState("");
@@ -27,7 +28,6 @@ function _FormAnnouncement() {
   const [picsFocus, setPicsFocus] = useState("");
 
   const [totalPrice, setTotalPrice] = useState("1.99");
-  const [readyForPay, setReadyForPay] = useState(false);
 
   const [isFormFilled, setIsFormFilled] = useState(false);
   const [isFirstTry, setIsFirstTry] = useState(true);
@@ -61,6 +61,7 @@ function _FormAnnouncement() {
       setIsFormFilled(true);
       setIsFirstTry(false);
       const uploadedFile = await uploadFile(file);
+      handleCreateFormAnnouncement(uploadedFile)
       if (totalPrice !== "0") {
         navigate(`/paymentmethods/xlf-${totalPrice}-jK$`)
       }
@@ -74,7 +75,10 @@ function _FormAnnouncement() {
   const handleCreateFormAnnouncement = async (input) => {
 
     const payload = {
-      idOwner: 99,//compilazione automatica
+      idOwner: idOwner,//compilazione automatica
+      idPackage: idPackage,
+      status: 0,
+      relevance: idPackage,
       brandName: brandName,
       manufacturerName: manufacturerName,//compilazione automatica
       modelName: modelName,
@@ -165,9 +169,9 @@ function _FormAnnouncement() {
         </Form.Group>
 
         <div className='d-flex justify-content-center align-items-center gap-3 mb-4'>
-          <div className={`${totalPrice === '0' ? 'mb-5' : ''} p-3 border rounded-5 myCursor`} onClick={() => { setTotalPrice("0") }}>Free</div>
-          <div className={`${totalPrice === '1.99' ? 'mb-5' : ''} p-3 bg-primary text-light rounded-5 myCursor`} onClick={() => { setTotalPrice("1.99") }}>Standard</div>
-          <div className={`${totalPrice === '9.99' ? 'mb-5' : ''} p-3 bg-warning text-light rounded-5 myCursor`} onClick={() => { setTotalPrice("9.99") }}>Boost</div>
+          <div className={`${totalPrice === '0' ? 'mb-5' : ''} p-3 border rounded-5 myCursor`} onClick={() => { setTotalPrice("0"); setIdPackage(1) }}>Free</div>
+          <div className={`${totalPrice === '1.99' ? 'mb-5' : ''} p-3 bg-primary text-light rounded-5 myCursor`} onClick={() => { setTotalPrice("1.99"); setIdPackage(2) }}>Standard</div>
+          <div className={`${totalPrice === '9.99' ? 'mb-5' : ''} p-3 bg-warning text-light rounded-5 myCursor`} onClick={() => { setTotalPrice("9.99"); setIdPackage(3) }}>Boost</div>
         </div>
         {/* <button className="btn btn-primary" onClick={handleCreateFormAnnouncement}>Submit</button> */}
 
