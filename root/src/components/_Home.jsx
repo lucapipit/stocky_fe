@@ -13,7 +13,7 @@ const Home = () => {
     backgroundImage: "url('https://img.freepik.com/free-vector/clean-medical-background_53876-97927.jpg?size=626&ext=jpg&ga=GA1.1.1788068356.1706486400&semt=ais')",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    color: "white",
+    color: "black",
     textAlign: "center",
   };
 
@@ -33,7 +33,7 @@ const Home = () => {
     backgroundPosition: "top",
     height: "300px",
     fontSize: "20px",
- 
+
 
 
   };
@@ -42,7 +42,7 @@ const Home = () => {
   return (
     <div >
 
-      <div style={backgroundStore} className='text-light bg-dark py-5 px-3'>
+      <div style={backgroundStore} className='text-black bg-dark py-5 px-3'>
         <h1 className='text-danger'>Benvenuto nel Negozio di Articoli Medici</h1>
         <p>
           Trova gli articoli medici di cui hai bisogno per prenderti cura della tua salute.
@@ -95,6 +95,7 @@ const Home = () => {
       <div className='portale bg-light text-dark p-3'>
         <h3 className='text-danger'>come funziona il portale</h3>
         <div className='d-flex justify-content-between'>
+          
           <div className='d-flex flex-column align-items-start' style={{ marginRight: '10px' }}>
             <img style={{ width: '100%', height: '280px', objectFit: 'cover', objectPosition: 'center', borderRadius: '10px' }}
               src="https://static.vecteezy.com/system/resources/previews/002/923/747/original/global-network-connection-world-map-point-and-line-composition-concept-of-global-business-illustration-free-vector.jpg" alt="" />
