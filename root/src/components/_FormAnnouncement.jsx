@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import { postCreateAnnouncementFunc } from '../states/storeState';
+import { createPendingAnnouncementFunc } from '../states/penRejState';
 import { saveAnnouncementPayload } from '../states/storeState';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -40,7 +40,6 @@ function _FormAnnouncement() {
   const uploadFile = async (file) => {
     const fileData = new FormData();
     fileData.append('img', file);
-    console.log(fileData);
 
     try {
       const response = await fetch('http://localhost:5050/fileupload', {
@@ -97,7 +96,7 @@ function _FormAnnouncement() {
       negClick: 0
     }
     if (totalPrice === "0") {
-      dispatch(postCreateAnnouncementFunc(payload))
+      dispatch(createPendingAnnouncementFunc(payload))
         .then((response) => response.payload.statusCode === 200 ? navigate("/") : null)
     } else {
       dispatch(saveAnnouncementPayload(payload))

@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 
-const CardPendingAnnouncement = ({ singleData, isLoading }) => {
+const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
 
     const dispatch = useDispatch();
 
@@ -104,10 +104,10 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                     }
                 </div>
 
-                <div className='mb-5 mt-4 d-flex justify-content-center gap-5'>
+                {/* <div className='mb-5 mt-4 d-flex justify-content-center gap-5'>
                     {!singleData[0] || isLoading ? <Placeholder.Button xs={4} aria-hidden="true" /> : <Button variant="danger" onClick={rejectAnnouncement}>Reject</Button>}
                     {!singleData[0] || isLoading ? <Placeholder.Button xs={4} aria-hidden="true" /> : <Button variant="success" onClick={approveAnnouncement}>Approve</Button>}
-                </div>
+                </div> */}
             </div>
 
 
@@ -116,4 +116,4 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
     )
 }
 
-export default CardPendingAnnouncement
+export default CardRejectedAnnouncement
