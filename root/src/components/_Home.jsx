@@ -9,7 +9,7 @@ const Home = () => {
 
 
   const backgroundStore = {
-    minHeight: "100vh",
+    minHeight: "calc(100vh - 59px)",
     backgroundImage: "url('https://img.freepik.com/free-vector/clean-medical-background_53876-97927.jpg?size=626&ext=jpg&ga=GA1.1.1788068356.1706486400&semt=ais')",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -33,7 +33,7 @@ const Home = () => {
     backgroundPosition: "top",
     height: "300px",
     fontSize: "20px",
- 
+
 
 
   };
@@ -42,16 +42,19 @@ const Home = () => {
   return (
     <div >
 
-      <div style={backgroundStore} className='text-light bg-dark py-5 px-3'>
-        <h1 className='text-danger'>Benvenuto nel Negozio di Articoli Medici</h1>
-        <p>
-          Trova gli articoli medici di cui hai bisogno per prenderti cura della tua salute.
-          Esplora la nostra vasta selezione e trova prodotti di alta qualità per ogni tua esigenza.
-        </p>
-        <p>
-          Se sei un professionista del settore, hai la possibilità di inserire annunci per promuovere i tuoi servizi
-          o offrire prodotti specializzati. Entra nel nostro <Link to="/createannouncement">Mercato degli Annunci</Link> ora.
-        </p>
+      <div style={backgroundStore} className='text-light bg-dark py-5 px-3 d-flex justify-content-center flex-column'>
+        <div>
+          <h1 className='text-danger'>Benvenuto nel Negozio di Articoli Medici</h1>
+          <p>
+            Trova gli articoli medici di cui hai bisogno per prenderti cura della tua salute.
+            Esplora la nostra vasta selezione e trova prodotti di alta qualità per ogni tua esigenza.
+          </p>
+          <p>
+            Se sei un professionista del settore, hai la possibilità di inserire annunci per promuovere i tuoi servizi
+            o offrire prodotti specializzati. Entra nel nostro <Link to="/createannouncement">Mercato degli Annunci</Link> ora.
+          </p>
+        </div>
+
         <Link to={"/store"}>
           <Button variant="btn btn-outline-secondary">Vai al Negozio</Button>
         </Link>
@@ -119,18 +122,20 @@ const Home = () => {
 
       </div>
 
-      <div className='p-3' >
-        <div className='pricing bg-dark' id='price'>
+      <div className='p-4 py-5 bg-dark' >
+        <div className='pricing my-5' id='price'>
           <h4 className='text-danger'>choose your plan</h4>
-          <div className='d-flex justify-content-center align-items-center'>
+
+          <div className='d-flex justify-content-center align-items-center gap-3'>
+
             <Card style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/premium-vector/abstract-modern-background-with-lowpoly-triangle-element-vibrant-gradient-color_8221-1337.jpg?w=1060')" }}>
-              <Card.Body className='p-3'>
-                <Card.Title style={{ fontWeight: 'bold', color: 'blue' }}>Free</Card.Title>
+              <Card.Body className='p-4'>
+                <Card.Title className='fw-bold' style={{ color: 'blue' }}>Free</Card.Title>
                 <Card.Text style={{ fontWeight: 'bold', fontSize: '20px' }}>
                   €0/month
                 </Card.Text >
                 <Button variant="primary">Select</Button>
-                <Card.Text style={{ margin: '10px' }} >
+                <Card.Text >
                   always free
                   <ul>
                     <li>1 annuncio</li>
