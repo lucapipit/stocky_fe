@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
 import '../styles/home.css'
 
@@ -151,7 +151,7 @@ const Home = () => {
                 </Card.Body>
               </Card>
             </Link>
-            <Link to="/payment/standard"className='linkfree'>
+            <Link  to="/payment/standard"className='linkfree'>
             <Card className='hoverCardStyle' style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/low-poly-background_1048-8516.jpg?w=900&t=st=1706866072~exp=1706866672~hmac=43adf3a988c1f313519204e41398f201e20f13cf9121ae70d5f3ecfeb65fa40f')" }}>
               <Card.Body className='p-4 d-flex flex-column justify-content-center align-items-center'>
                 <Card.Title style={{ fontWeight: 'bold', color: 'coral' }}>Standard</Card.Title>
@@ -188,10 +188,11 @@ const Home = () => {
 
               </Card>
             </Link>
+
           </div>
         </div>
       </div>
-
+     
       <div className=' bg-light '>
         <h3 className='text-black m-5'>Terms of Use</h3>
         <p className='m-2 p-4'>
