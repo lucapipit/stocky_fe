@@ -3,6 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
+import '../styles/home.css'
 
 
 const Home = () => {
@@ -20,7 +21,6 @@ const Home = () => {
   const cardContainerStyle = {
     display: "flex",
     gap: "20px",
-    marginTop: "20px",
     justifyContent: "center",
     padding: "30px",
 
@@ -33,25 +33,27 @@ const Home = () => {
     backgroundPosition: "top",
     height: "300px",
     fontSize: "20px",
-
-
+    marginTop: "30px",
+    marginBottom: "30px",
 
   };
+
+
 
 
   return (
     <div >
 
-      <div style={backgroundStore} className='text-light bg-dark py-5 px-3 d-flex justify-content-center flex-column'>
+      <div style={backgroundStore} className='text-black bg-dark py-5 px-3 d-flex justify-content-center flex-column'>
         <div>
-          <h1 className='text-danger'>Benvenuto nel Negozio di Articoli Medici</h1>
-          <p>
+          <h1 className='text-black'>Benvenuto nel Negozio di Articoli Medici</h1>
+          <p >
             Trova gli articoli medici di cui hai bisogno per prenderti cura della tua salute.
             Esplora la nostra vasta selezione e trova prodotti di alta qualità per ogni tua esigenza.
           </p>
-          <p>
+          <p >
             Se sei un professionista del settore, hai la possibilità di inserire annunci per promuovere i tuoi servizi
-            o offrire prodotti specializzati. Entra nel nostro <Link to="/createannouncement">Mercato degli Annunci</Link> ora.
+            o offrire prodotti specializzati. Entra nel nostro <Link to="/createannouncement" className='linkcreate'>Mercato degli Annunci</Link> ora.
           </p>
         </div>
 
@@ -96,23 +98,24 @@ const Home = () => {
       </div>
 
       <div className='portale bg-light text-dark p-3'>
-        <h3 className='text-danger'>come funziona il portale</h3>
-        <div className='d-flex justify-content-between'>
-          
-          <div className='d-flex flex-column align-items-start' style={{ marginRight: '10px' }}>
-            <img style={{ width: '100%', height: '280px', objectFit: 'cover', objectPosition: 'center', borderRadius: '10px' }}
+        <h3 className='text-black p-4'>How does the portal work</h3>
+
+        <div className='d-flex justify-content-between p-3'>
+          <div className='d-flex align-items-start' style={{ marginRight: '20px' }}>
+            <img className='imgPortale' style={{ width: '100%', height: '280px', objectFit: 'cover', objectPosition: 'center', borderRadius: '10px' }}
               src="https://static.vecteezy.com/system/resources/previews/002/923/747/original/global-network-connection-world-map-point-and-line-composition-concept-of-global-business-illustration-free-vector.jpg" alt="" />
-            <p style={{ textOverflow: 'ellipsis' }}>
-              Alcune funzionalità del sito possono richiedere la registrazione.<br /> Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.<br />
-              Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.<br />
+            <p className='p-3 portale'>
+              Alcune funzionalità del sito possono richiedere la registrazione. Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.
+              Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.
               I contenuti, i marchi e altri diritti di proprietà intellettuale presenti sul sito sono di nostra proprietà o concessi in licenza a noi.
             </p>
           </div>
-
-          <div className='d-flex flex-column align-items-end' style={{ marginLeft: '10px' }}>
-            <p>
-              Alcune funzionalità del sito possono richiedere la registrazione.<br /> Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.<br />
-              Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.<br />
+        </div>
+        <div className='d-flex justify-content-between'>
+          <div className='d-flex align-items-end' style={{ marginLeft: '20px' }}>
+            <p className='p-3 portale '>
+              Alcune funzionalità del sito possono richiedere la registrazione. Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.
+              Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.
               I contenuti, i marchi e altri diritti di proprietà intellettuale presenti sul sito sono di nostra proprietà o concessi in licenza a noi.
             </p>
             <img style={{ width: '100%', height: '280px', objectFit: 'cover', objectPosition: 'center', borderRadius: '10px' }}
@@ -121,34 +124,36 @@ const Home = () => {
         </div>
 
 
+
       </div>
 
       <div className='p-4 py-5 bg-dark' >
         <div className='pricing my-5' id='price'>
-          <h4 className='text-danger'>choose your plan</h4>
+          <h4 className='text-light'>choose your plan</h4>
 
           <div className='d-flex justify-content-center align-items-center gap-3'>
-
-            <Card style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/premium-vector/abstract-modern-background-with-lowpoly-triangle-element-vibrant-gradient-color_8221-1337.jpg?w=1060')" }}>
-              <Card.Body className='p-4'>
-                <Card.Title className='fw-bold' style={{ color: 'blue' }}>Free</Card.Title>
-                <Card.Text style={{ fontWeight: 'bold', fontSize: '20px' }}>
-                  €0/month
-                </Card.Text >
-                <Button variant="primary">Select</Button>
-                <Card.Text >
-                  always free
-                  <ul>
-                    <li>1 annuncio</li>
-                    <li>1 foto</li>
-                    <li>1 video</li>
-                  </ul>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-
-            <Card style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/low-poly-background_1048-8516.jpg?w=900&t=st=1706866072~exp=1706866672~hmac=43adf3a988c1f313519204e41398f201e20f13cf9121ae70d5f3ecfeb65fa40f')" }}>
-              <Card.Body className='p-3'>
+            <Link to="/payment/free" className='linkfree'>
+              <Card className='hoverCardStyle' style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/premium-vector/abstract-modern-background-with-lowpoly-triangle-element-vibrant-gradient-color_8221-1337.jpg?w=1060')" }}>
+                <Card.Body className='p-4'>
+                  <Card.Title className='fw-bold' style={{ color: 'blue' }}>Free</Card.Title>
+                  <Card.Text className='fw-bold' style={{ fontSize: '20px' }}>
+                    €0/month
+                  </Card.Text >
+                  <Button variant="primary">Select</Button>
+                  <Card.Text>
+                    always free
+                    <ul className='p-0'>
+                      <li>1 annuncio</li>
+                      <li>1 foto</li>
+                      <li>1 video</li>
+                    </ul>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Link>
+            <Link to="/payment/standard"className='linkfree'>
+            <Card className='hoverCardStyle' style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/low-poly-background_1048-8516.jpg?w=900&t=st=1706866072~exp=1706866672~hmac=43adf3a988c1f313519204e41398f201e20f13cf9121ae70d5f3ecfeb65fa40f')" }}>
+              <Card.Body className='p-4 d-flex flex-column justify-content-center align-items-center'>
                 <Card.Title style={{ fontWeight: 'bold', color: 'coral' }}>Standard</Card.Title>
                 <Card.Text style={{ fontWeight: 'bold', fontSize: '20px' }}>
                   €5.99/month
@@ -156,38 +161,40 @@ const Home = () => {
                 <Button variant="primary">Select</Button>
                 <Card.Text style={{ margin: '10px' }} >
                   5 annunci
-                  <ul>
+                  <ul className='p-0'>
                     <li>3 foto</li>
                     <li>5 video</li>
                   </ul>
                 </Card.Text>
               </Card.Body>
             </Card>
+            </Link>
+            <Link to="/payment/boost" className='linkfree'>
+              <Card className='hoverCardStyle' style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/light-green-shapes-green-background_23-2148358597.jpg?t=st=1706866122~exp=1706866722~hmac=b2a44f3c3ebb90c82c68cc1af293545e92de3f7715a0114bbb304a27ad0641d5')" }}>
+                <Card.Body className='p-4'>
+                  <Card.Title className='fw-bold text-success'>Boost</Card.Title>
+                  <Card.Text style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                    €9.99/month
+                  </Card.Text>
+                  <Button variant="primary">Select</Button>
+                  <Card.Text style={{ margin: '10px' }}  >
+                    10 annunci
+                    <ul className='p-0'>
+                      <li>10 foto</li>
+                      <li>10 video</li>
+                    </ul>
+                  </Card.Text>
+                </Card.Body>
 
-            <Card style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/light-green-shapes-green-background_23-2148358597.jpg?t=st=1706866122~exp=1706866722~hmac=b2a44f3c3ebb90c82c68cc1af293545e92de3f7715a0114bbb304a27ad0641d5')" }}>
-              <Card.Body className='p-3'>
-                <Card.Title className='fw-bold text-success'>Boost</Card.Title>
-                <Card.Text style={{ fontWeight: 'bold', fontSize: '20px' }}>
-                  €9.99/month
-                </Card.Text>
-                <Button variant="primary">Select</Button>
-                <Card.Text style={{ margin: '10px' }}  >
-                  10 annunci
-                  <ul className=''>
-                    <li>10 foto</li>
-                    <li>10 video</li>
-                  </ul>
-                </Card.Text>
-              </Card.Body>
-
-            </Card>
+              </Card>
+            </Link>
           </div>
         </div>
       </div>
 
-      <div className='condizione bg-light p-3'>
-        <h3 className='text-danger'>condizioni di uso</h3>
-        <p>
+      <div className=' bg-light '>
+        <h3 className='text-black m-5'>Terms of Use</h3>
+        <p className='m-2 p-4'>
           Questo documento rappresenta le Condizioni d'Uso ("Termini") che regolano l'accesso e l'utilizzo del nostro sito web.<br /> Utilizzando questo sito web, accetti di essere vincolato dai seguenti Termini. Se non accetti questi Termini, ti preghiamo di non utilizzare il nostro sito.<br />
           Accetti di utilizzare il nostro sito solo per scopi leciti e conformi a questi Termini.
 
