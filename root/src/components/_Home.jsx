@@ -46,15 +46,15 @@ const Home = () => {
 
       <div style={backgroundStore} className='text-black bg-dark py-5 px-3 d-flex justify-content-center flex-column'>
         <div>
-          <h1 className='text-black'>Benvenuto nel Negozio di Articoli Medici</h1>
-          <p >
+          <h1 className='text-black font-monserrat'>Benvenuto nel Negozio di Articoli Medici</h1>
+          <h3 className='nycd'>
             Trova gli articoli medici di cui hai bisogno per prenderti cura della tua salute.
             Esplora la nostra vasta selezione e trova prodotti di alta qualità per ogni tua esigenza.
-          </p>
-          <p >
+          </h3>
+          <h3 className='nycd' >
             Se sei un professionista del settore, hai la possibilità di inserire annunci per promuovere i tuoi servizi
             o offrire prodotti specializzati. Entra nel nostro <Link to="/createannouncement" className='linkcreate'>Mercato degli Annunci</Link> ora.
-          </p>
+          </h3>
         </div>
 
         <Link to={"/store"}>
@@ -98,26 +98,26 @@ const Home = () => {
       </div>
 
       <div className='portale bg-light text-dark p-3'>
-        <h3 className='text-black p-4'>How does the portal work</h3>
+        <h2 className='text-black p-4 font-monserrat text-center'>How does the portal work</h2>
 
         <div className='d-flex justify-content-between p-3'>
           <div className='d-flex align-items-start' style={{ marginRight: '20px' }}>
             <img className='imgPortale' style={{ width: '100%', height: '280px', objectFit: 'cover', objectPosition: 'center', borderRadius: '10px' }}
               src="https://static.vecteezy.com/system/resources/previews/002/923/747/original/global-network-connection-world-map-point-and-line-composition-concept-of-global-business-illustration-free-vector.jpg" alt="" />
-            <p className='p-3 portale'>
+            <h3 className='p-3 portale fw-light'>
               Alcune funzionalità del sito possono richiedere la registrazione. Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.
               Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.
               I contenuti, i marchi e altri diritti di proprietà intellettuale presenti sul sito sono di nostra proprietà o concessi in licenza a noi.
-            </p>
+            </h3>
           </div>
         </div>
         <div className='d-flex justify-content-between'>
           <div className='d-flex align-items-end' style={{ marginLeft: '20px' }}>
-            <p className='p-3 portale '>
+            <h3 className='p-3 portale fw-light '>
               Alcune funzionalità del sito possono richiedere la registrazione. Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.
               Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.
               I contenuti, i marchi e altri diritti di proprietà intellettuale presenti sul sito sono di nostra proprietà o concessi in licenza a noi.
-            </p>
+            </h3>
             <img style={{ width: '100%', height: '280px', objectFit: 'cover', objectPosition: 'center', borderRadius: '10px' }}
               src="https://thumbs.dreamstime.com/b/rete-di-computer-comunicazione-internet-nel-fondo-tecnologia-rappresentazione-d-127354210.jpg" alt="" />
           </div>
@@ -129,7 +129,7 @@ const Home = () => {
 
       <div className='p-4 py-5 bg-dark' >
         <div className='pricing my-5' id='price'>
-          <h4 className='text-light'>choose your plan</h4>
+          <h2 className='text-light font-monserrat text-center'>choose your plan</h2>
 
           <div className='d-flex justify-content-center align-items-center gap-3'>
             <Link to="/payment/free" className='linkfree'>
@@ -142,7 +142,7 @@ const Home = () => {
                   <Button variant="primary">Select</Button>
                   <Card.Text>
                     always free
-                    <ul className='p-0'>
+                    <ul className='p-0 font-monserrat'>
                       <li>1 annuncio</li>
                       <li>1 foto</li>
                       <li>1 video</li>
@@ -161,7 +161,7 @@ const Home = () => {
                 <Button variant="primary">Select</Button>
                 <Card.Text style={{ margin: '10px' }} >
                   5 annunci
-                  <ul className='p-0'>
+                  <ul className='p-0 font-monserrat'>
                     <li>3 foto</li>
                     <li>5 video</li>
                   </ul>
@@ -179,7 +179,7 @@ const Home = () => {
                   <Button variant="primary">Select</Button>
                   <Card.Text style={{ margin: '10px' }}  >
                     10 annunci
-                    <ul className='p-0'>
+                    <ul className='p-0 font-monserrat'>
                       <li>10 foto</li>
                       <li>10 video</li>
                     </ul>
@@ -193,9 +193,10 @@ const Home = () => {
         </div>
       </div>
      
-      <div className=' bg-light '>
-        <h3 className='text-black m-5'>Terms of Use</h3>
-        <p className='m-2 p-4'>
+      <div className='p-3 termbg'>
+
+        <h2 className='text-black font-monserrat text-center'>Terms of Use</h2>
+        <h3 className='m-2 p-4 fw-light'>
           Questo documento rappresenta le Condizioni d'Uso ("Termini") che regolano l'accesso e l'utilizzo del nostro sito web.<br /> Utilizzando questo sito web, accetti di essere vincolato dai seguenti Termini. Se non accetti questi Termini, ti preghiamo di non utilizzare il nostro sito.<br />
           Accetti di utilizzare il nostro sito solo per scopi leciti e conformi a questi Termini.
 
@@ -203,7 +204,7 @@ const Home = () => {
           Il contenuto del sito è fornito solo a scopo informativo. Non garantiamo l'accuratezza,<br /> la completezza o l'aggiornamento delle informazioni presentate.<br />
 
           Ci riserviamo il diritto di modificare o interrompere qualsiasi aspetto del sito in qualsiasi momento senza preavviso.
-        </p>
+        </h3>
       </div>
 
     </div>
