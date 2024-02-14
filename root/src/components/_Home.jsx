@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
 import '../styles/home.css'
 
@@ -42,8 +42,7 @@ const Home = () => {
 
 
   return (
-    <div >
-
+    <div>
       <div style={backgroundStore} className='text-black bg-dark py-5 px-3 d-flex justify-content-center flex-column'>
         <div>
           <h1 className='text-black font-monserrat'>Benvenuto nel Negozio di Articoli Medici</h1>
@@ -56,8 +55,7 @@ const Home = () => {
             o offrire prodotti specializzati. Entra nel nostro <Link to="/createannouncement" className='linkcreate'>Mercato degli Annunci</Link> ora.
           </h3>
         </div>
-
-        <Link to={"/store"}>
+        <Link to={"/store"} style={{ marginTop: '20px' }}>
           <Button variant="btn btn-outline-secondary">Vai al Negozio</Button>
         </Link>
       </div>
@@ -151,23 +149,23 @@ const Home = () => {
                 </Card.Body>
               </Card>
             </Link>
-            <Link  to="/payment/standard"className='linkfree'>
-            <Card className='hoverCardStyle' style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/low-poly-background_1048-8516.jpg?w=900&t=st=1706866072~exp=1706866672~hmac=43adf3a988c1f313519204e41398f201e20f13cf9121ae70d5f3ecfeb65fa40f')" }}>
-              <Card.Body className='p-4 d-flex flex-column justify-content-center align-items-center'>
-                <Card.Title style={{ fontWeight: 'bold', color: 'coral' }}>Standard</Card.Title>
-                <Card.Text style={{ fontWeight: 'bold', fontSize: '20px' }}>
-                  €5.99/month
-                </Card.Text>
-                <Button variant="primary">Select</Button>
-                <Card.Text style={{ margin: '10px' }} >
-                  5 annunci
-                  <ul className='p-0 font-monserrat'>
-                    <li>3 foto</li>
-                    <li>5 video</li>
-                  </ul>
-                </Card.Text>
-              </Card.Body>
-            </Card>
+            <Link to="/payment/standard" className='linkfree'>
+              <Card className='hoverCardStyle' style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/low-poly-background_1048-8516.jpg?w=900&t=st=1706866072~exp=1706866672~hmac=43adf3a988c1f313519204e41398f201e20f13cf9121ae70d5f3ecfeb65fa40f')" }}>
+                <Card.Body className='p-4 d-flex flex-column justify-content-center align-items-center'>
+                  <Card.Title style={{ fontWeight: 'bold', color: 'coral' }}>Standard</Card.Title>
+                  <Card.Text style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                    €5.99/month
+                  </Card.Text>
+                  <Button variant="primary">Select</Button>
+                  <Card.Text style={{ margin: '10px' }} >
+                    5 annunci
+                    <ul className='p-0 font-monserrat'>
+                      <li>3 foto</li>
+                      <li>5 video</li>
+                    </ul>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
             </Link>
             <Link to="/payment/boost" className='linkfree'>
               <Card className='hoverCardStyle' style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/light-green-shapes-green-background_23-2148358597.jpg?t=st=1706866122~exp=1706866722~hmac=b2a44f3c3ebb90c82c68cc1af293545e92de3f7715a0114bbb304a27ad0641d5')" }}>
@@ -192,7 +190,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-     
+
       <div className='p-3 termbg'>
 
         <h2 className='text-black font-monserrat text-center'>Terms of Use</h2>
