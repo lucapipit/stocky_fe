@@ -4,6 +4,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
 import '../styles/home.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCreditCard, faFileContract, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+
 
 
 const Home = () => {
@@ -20,13 +23,14 @@ const Home = () => {
 
   const cardContainerStyle = {
     display: "flex",
-    gap: "20px",
-    justifyContent: "center",
-    padding: "30px",
+    alignItems: "center",
+    justifyContent: "space-around",
+    minHeight: "calc(100vh - 59px)",
+    background:"lightgray",
+    
+   
 
-
-
-  };
+    };
 
   const cardStyle = {
     backgroundSize: "cover",
@@ -43,9 +47,9 @@ const Home = () => {
 
   return (
     <div>
-      <div style={backgroundStore} className='text-black bg-dark py-5 px-3 d-flex justify-content-center flex-column'>
+      <div style={backgroundStore} className='text-secondary bg-dark py-5 px-3 d-flex justify-content-center flex-column'>
         <div>
-          <h1 className='text-black font-monserrat'>Benvenuto nel Negozio di Articoli Medici</h1>
+          <h1 className='font-monserrat'>Benvenuto nel Negozio di Articoli Medici</h1>
           <h3 className='nycd'>
             Trova gli articoli medici di cui hai bisogno per prenderti cura della tua salute.
             Esplora la nostra vasta selezione e trova prodotti di alta qualità per ogni tua esigenza.
@@ -60,40 +64,38 @@ const Home = () => {
         </Link>
       </div>
 
-      <div className='bg-dark' style={cardContainerStyle}>
-        <a href='#price' style={{ textDecoration: 'none' }}>
-          <Card style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/abstract-low-poly-design-background_1048-9213.jpg?w=900&t=st=1706865946~exp=1706866546~hmac=351e376fff139bcf17a8797bd5685515f4a050bef3dd8da899dfa79f5a7ce557')" }}>
+      <div className='' style={cardContainerStyle}>
+        <div>
+          <a href='#price' style={{ textDecoration: 'none',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ marginBottom: '5px' }}>
+            <FontAwesomeIcon icon={faCreditCard} size='5x' color='indigo' />
+            </span>
+            <Button variant="btn btn-outline-secondary">Payment</Button>
+          </a>
+        </div>
+        <div>
+          <a href='#condizione' style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ marginBottom: '5px' }}>
+            <FontAwesomeIcon icon={faFileContract} size='5x' color='indigo' />
+            </span>
+            <Button variant="btn btn-outline-secondary">condzioni di uso</Button>
+          </a>
+        </div>
+      
 
-            <Card.Body >
-              <Card.Title className='text-danger shadow p-3 mb-5 bg-body rounded'>Payment</Card.Title>
-              <Card.Text>
-                scegli il metodo di pagamento che preferisci.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </a>
-        <a href='#condizione' style={{ textDecoration: 'none' }}>
-          <Card style={{ ...cardStyle, backgroundImage: "url('https://cdn.pixabay.com/photo/2016/07/05/00/28/background-1497873_1280.jpg')" }}>
-            <Card.Body>
-              <Card.Title className='text-warning shadow p-3 mb-5 bg-body rounded'>condzioni di uso</Card.Title>
-              <Card.Text>
-                leggi le condizioni di uso del nostro sito.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </a>
-        <a href='#portale' style={{ textDecoration: 'none' }}>
-          <Card style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/free-vector/abstract-geometric-wireframe-background_52683-59421.jpg?w=996&t=st=1706865665~exp=1706866265~hmac=a490323788eb3de3c32cd2f49d03b19621fc4f456b318880e1e9496f9a14b8c9')" }}>
-            <Card.Body>
-              <Card.Title className='text-success shadow p-3 mb-5 bg-body rounded'>Portale</Card.Title>
-              <Card.Text>
-                visita il nostro portale per maggiori informazioni.
-
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </a>
+<div>
+  <a href='#portale' style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <span style={{ marginBottom: '5px' }}>
+      <FontAwesomeIcon icon={faExternalLinkAlt} size='5x' color='indigo' />
+    </span>
+    <Button variant="btn btn-outline-secondary">Portale</Button>
+  </a>
+</div>
       </div>
+
+
+     
+
 
       <div className='portale bg-light text-dark p-3'>
         <h2 className='text-black p-4 font-monserrat text-center'>How does the portal work</h2>
