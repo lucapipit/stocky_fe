@@ -1,8 +1,8 @@
 .portale{
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
+    /* -webkit-line-clamp: 3;
+    overflow: hidden; */
     text-overflow: ellipsis;
    
 } 
@@ -20,6 +20,22 @@
 .linkfree{
     text-decoration: none;
     
+}
+.nycd {
+    font-family: 'Montserrat', sans-serif;
+    font-weight:400;
+    text-align: center;
+    margin-bottom: 20px;
+    /* overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; */
+  
+    
+}
+.termbg{
+    background-image : url('https://png.pngtree.com/background/20210711/original/pngtree-original-line-style-elegant-dreamy-blue-background-blue-material-picture-image_1143636.jpg');
+    background-size: cover;
+
 }
 
 
