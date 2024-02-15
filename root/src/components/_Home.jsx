@@ -193,8 +193,8 @@ const Home = () => {
       </div>
 
       <div className=' bg-light '>
-        <h3 className='text-black m-5'>Terms of Use</h3>
-        <p className='m-2 p-4'>
+        <h3 className='text-black mx-3 pt-5'>Terms of Use</h3>
+        <p className='m-0 p-4 py-5'>
           Questo documento rappresenta le Condizioni d'Uso ("Termini") che regolano l'accesso e l'utilizzo del nostro sito web.<br /> Utilizzando questo sito web, accetti di essere vincolato dai seguenti Termini. Se non accetti questi Termini, ti preghiamo di non utilizzare il nostro sito.<br />
           Accetti di utilizzare il nostro sito solo per scopi leciti e conformi a questi Termini.
 
