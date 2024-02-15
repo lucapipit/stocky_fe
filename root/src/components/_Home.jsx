@@ -3,9 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
-import '../styles/home.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCreditCard, faFileContract, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import '../styles/home.css';
 
 
 
@@ -20,17 +18,6 @@ const Home = () => {
     color: "black",
     textAlign: "center",
   };
-
-  const cardContainerStyle = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-around",
-    minHeight: "calc(100vh - 59px)",
-    background:"	paleturquoise",
-    
-   
-
-    };
 
   const cardStyle = {
     backgroundSize: "cover",
@@ -64,44 +51,23 @@ const Home = () => {
         </Link>
       </div>
 
-      <div className='' style={cardContainerStyle}>
-        <div>
-          <a href='#price' style={{ textDecoration: 'none',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <span style={{ marginBottom: '5px' }}>
-            <FontAwesomeIcon icon={faCreditCard} size='5x' color='indigo' />
-            </span>
-            <Button variant="btn btn-outline-secondary">Payment</Button>
-          </a>
-        </div>
-        <div>
-          <a href='#condizione' style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <span style={{ marginBottom: '5px' }}>
-            <FontAwesomeIcon icon={faFileContract} size='5x' color='indigo' />
-            </span>
-            <Button variant="btn btn-outline-secondary">condzioni di uso</Button>
-          </a>
-        </div>
-      
 
-<div>
-  <a href='#portale' style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <span style={{ marginBottom: '5px' }}>
-      <FontAwesomeIcon icon={faExternalLinkAlt} size='5x' color='indigo' />
-    </span>
-    <Button variant="btn btn-outline-secondary">Portale</Button>
-  </a>
-</div>
+      <div className='py-5 px-4 d-flex justify-content-center '>
+        <div className='myMaxW700 d-flex align-items-center justify-content-around my-5 gap-5' >
+          <Button href='#pricing' variant="btn btn-outline-secondary"> <i className="bi bi-credit-card-2-back-fill"></i> Payment</Button>
+          <Button href='#termOfUse' variant="btn btn-outline-secondary"> <i className="bi bi-bookmark-check-fill"></i> Condzioni d'uso</Button>
+          <Button href='#howItWorks' variant="btn btn-outline-secondary"> <i className="bi bi-info-circle-fill"></i> Portale</Button>
+        </div>
       </div>
 
 
-     
 
+      <div className='portale bg-light text-dark p-3' id='howItWorks'>
 
-      <div className='portale bg-light text-dark p-3'>
         <h2 className='text-black p-4 font-monserrat text-center'>How does the portal work</h2>
 
         <div className='d-flex justify-content-between p-3'>
-          <div className='d-flex align-items-start' style={{ marginRight: '20px' }}>
+          <div className='d-flex align-items-start flex-wrap' style={{ marginRight: '20px' }}>
             <img className='imgPortale' style={{ width: '100%', height: '280px', objectFit: 'cover', objectPosition: 'center', borderRadius: '10px' }}
               src="https://static.vecteezy.com/system/resources/previews/002/923/747/original/global-network-connection-world-map-point-and-line-composition-concept-of-global-business-illustration-free-vector.jpg" alt="" />
             <h3 className='p-3 portale fw-light'>
@@ -111,8 +77,9 @@ const Home = () => {
             </h3>
           </div>
         </div>
-        <div className='d-flex justify-content-between'>
-          <div className='d-flex align-items-end' style={{ marginLeft: '20px' }}>
+
+        <div className='d-flex justify-content-between '>
+          <div className='d-flex align-items-end flex-wrap' style={{ marginLeft: '20px' }}>
             <h3 className='p-3 portale fw-light '>
               Alcune funzionalità del sito possono richiedere la registrazione. Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.
               Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.
@@ -123,15 +90,13 @@ const Home = () => {
           </div>
         </div>
 
-
-
       </div>
 
       <div className='p-4 py-5 bg-dark' >
-        <div className='pricing my-5' id='price'>
+        <div className='pricing my-5' id='pricing'>
           <h2 className='text-light font-monserrat text-center'>choose your plan</h2>
 
-          <div className='d-flex justify-content-center align-items-center gap-3'>
+          <div className='d-flex justify-content-center flex-wrap align-items-center gap-3'>
             <Link to="/payment/free" className='linkfree'>
               <Card className='hoverCardStyle' style={{ ...cardStyle, backgroundImage: "url('https://img.freepik.com/premium-vector/abstract-modern-background-with-lowpoly-triangle-element-vibrant-gradient-color_8221-1337.jpg?w=1060')" }}>
                 <Card.Body className='p-4'>
@@ -193,7 +158,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className='p-3 termbg'>
+      <div className='p-3 termbg' id='termOfUse'>
 
         <h2 className='text-black font-monserrat text-center'>Terms of Use</h2>
         <h3 className='m-2 p-4 fw-light'>

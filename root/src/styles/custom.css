@@ -1,29 +1,50 @@
-.myCursor{
+.myCursor {
     cursor: pointer;
 }
-.myVh100{
+
+.myVh100 {
     min-height: calc(100vh - 59px);
 }
-.myW9{
+
+/* width */
+.myW9 {
     width: 90%;
 }
-.myMaxW500{
+
+/* max width */
+.myMaxW500 {
     max-width: 500px !important;
 }
-.myLightGray{
+
+.myMaxW700 {
+    max-width: 700px !important;
+}
+
+.myMaxW1000 {
+    max-width: 1000px !important;
+}
+.myMaxW1200 {
+    max-width: 1200px !important;
+}
+
+/* background color */
+.myLightGray {
     color: rgb(169, 169, 169);
 }
-.myBgImgContain{
+
+.myBgWhite {
+    background-color: #fff;
+}
+
+/* background image */
+.myBgImgContain {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     height: 400px;
 }
+
 /* icons font size */
-.myIconLg{
+.myIconLg {
     font-size: 50px;
-}
-/* background */
-.myBgWhite{
-    background-color: #fff;
 }
