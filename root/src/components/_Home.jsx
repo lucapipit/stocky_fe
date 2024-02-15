@@ -26,7 +26,7 @@ const Home = () => {
     alignItems: "center",
     justifyContent: "space-around",
     minHeight: "calc(100vh - 59px)",
-    background:"lightgray",
+    background:"	paleturquoise",
     
    
 
