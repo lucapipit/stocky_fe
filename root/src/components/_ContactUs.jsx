@@ -26,7 +26,7 @@ const ContactUs = () => {
                 <Form.Control as="textarea" rows={3} placeholder="Enter your message" />
               </Form.Group>
 
-              <Button variant="primary m-3" type="submit">
+              <Button variant="secondary m-3" type="submit">
                 Submit
               </Button>
             </Form>
