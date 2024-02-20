@@ -27,10 +27,11 @@ const ContactUs = () => {
       });
 
       if (response.ok) {
-       
+        setFormData({ name: '', email: '', message: '' });
+        
         console.log('Email sent successfully');
       } else {
-       
+
         console.error('Failed to send email');
       }
     } catch (error) {
