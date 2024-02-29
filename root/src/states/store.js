@@ -6,6 +6,7 @@ import sliceStore from './storeState';
 import paymentSlice from './paymentState';
 import orderSlice from './orderState';
 import penRejSlice from './penRejState';
+import userLocationSlice from './userLocationState';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     myStore: sliceStore,
     payment: paymentSlice,
     order: orderSlice,
-    penRej: penRejSlice
+    penRej: penRejSlice,
+    userLocation: userLocationSlice
 
 })
 const store = configureStore({
