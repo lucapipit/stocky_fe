@@ -1,11 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-    allPendingAnnouncements: [],
     allRejectedAnnouncements: [],
-    createdPendingData: {},
-    updatedPendingData: {},
-    deletedPendingData: {},
     createdRejectedData: {},
     updatedRejectedData: {},
     deletedRejectedData: {},
@@ -13,21 +9,6 @@ const initialState = {
 };
 
 //GET ALL ANNOUNCEMENT
-export const getAllPendingAnnouncementsFunc = createAsyncThunk(
-    'api/getAllPendingAnnouncements',
-    async () => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/pen-allannouncements`, {
-                method: 'GET'
-            });
-            return await response.json()
-        } catch (error) {
-            console.log(error);
-        }
-
-    }
-)
-
 export const getAllRejectedAnnouncementsFunc = createAsyncThunk(
     'api/getAllRejectedAnnouncements',
     async () => {
@@ -43,17 +24,18 @@ export const getAllRejectedAnnouncementsFunc = createAsyncThunk(
     }
 )
 
-//CREATE ANNOUNCEMENT
-export const createPendingAnnouncementFunc = createAsyncThunk(
-    'api/createPendingAnnouncement',
+//GET ALL ANNOUNCEMENT by ID
+export const getAllRejectedAnnouncementsByIdOwnerFunc = createAsyncThunk(
+    'api/getAllRejectedAnnouncementsByIdOwner',
     async (input) => {
+        const {idOwner, token} = input;
+
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/pen-createannouncement`, {
-                method: 'POST',
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/rej-announcement/${idOwner}`, {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(input),
+                    'Authorization': `Bearer ${token}`
+                }
             });
             return await response.json()
         } catch (error) {
@@ -63,6 +45,7 @@ export const createPendingAnnouncementFunc = createAsyncThunk(
     }
 )
 
+//CREATE ANNOUNCEMENT
 export const createRejectedAnnouncementFunc = createAsyncThunk(
     'api/createRejectedAnnouncement',
     async (input) => {
@@ -83,24 +66,6 @@ export const createRejectedAnnouncementFunc = createAsyncThunk(
 )
 
 //UPDATE ANNOUNCEMENT
-export const updatePendingAnnouncementFunc = createAsyncThunk(
-    'api/updatePendingAnnouncement',
-    async (input) => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/updatepen-announcement`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(input)
-            });
-            return await response.json();
-        } catch (error) {
-            console.log(error);
-        }
-    }
-)
-
 export const updateRejectedAnnouncementFunc = createAsyncThunk(
     'api/updateRejectedAnnouncement',
     async (input) => {
@@ -120,7 +85,8 @@ export const updateRejectedAnnouncementFunc = createAsyncThunk(
 )
 
 //DELETE ANNOUNCEMENT
-export const deletePendingAnnouncementFunc = createAsyncThunk(
+
+/* export const deletePendingAnnouncementFunc = createAsyncThunk(
     'api/deletePendingAnnouncement',
     async (input) => {
         try {
@@ -132,28 +98,15 @@ export const deletePendingAnnouncementFunc = createAsyncThunk(
             console.log(error);
         }
     }
-)
+) */
 
-const penRejSlice = createSlice({
-    name: "apiPenRej",
+const rejectedSlice = createSlice({
+    name: "apiRejected",
     initialState,
     reducers: {
 
     },
     extraReducers: (builder) => {
-        // getAllPendingAnnouncements
-        builder.addCase(getAllPendingAnnouncementsFunc.pending, (state) => {
-            state.isLoading = true;
-        });
-        builder.addCase(getAllPendingAnnouncementsFunc.fulfilled, (state, action) => {
-            state.allPendingAnnouncements = action.payload
-            state.isLoading = false
-
-        });
-        builder.addCase(getAllPendingAnnouncementsFunc.rejected, (state) => {
-            state.isLoading = false;
-            state.error = " server error"
-        });
         // getAllRejectedAnnouncements
         builder.addCase(getAllRejectedAnnouncementsFunc.pending, (state) => {
             state.isLoading = true;
@@ -167,18 +120,19 @@ const penRejSlice = createSlice({
             state.isLoading = false;
             state.error = " server error"
         });
-        // createPendingAnnouncement
-        builder.addCase(createPendingAnnouncementFunc.pending, (state) => {
+        // getAllRejectedAnnouncementsByIdOwner
+        builder.addCase(getAllRejectedAnnouncementsByIdOwnerFunc.pending, (state) => {
             state.isLoading = true;
         });
-        builder.addCase(createPendingAnnouncementFunc.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.createdPendingData = action.payload
+        builder.addCase(getAllRejectedAnnouncementsByIdOwnerFunc.fulfilled, (state, action) => {
+            state.allRejectedAnnouncements = action.payload.payload
+            state.isLoading = false
+
         });
-        builder.addCase(createPendingAnnouncementFunc.rejected, (state) => {
+        builder.addCase(getAllRejectedAnnouncementsByIdOwnerFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = " server error"
-        })
+        });
         // createRejectedAnnouncement
         builder.addCase(createRejectedAnnouncementFunc.pending, (state) => {
             state.isLoading = true;
@@ -188,18 +142,6 @@ const penRejSlice = createSlice({
             state.createdRejectedData = action.payload
         });
         builder.addCase(createRejectedAnnouncementFunc.rejected, (state) => {
-            state.isLoading = false;
-            state.error = " server error"
-        })
-        // updatePendingAnnouncement
-        builder.addCase(updatePendingAnnouncementFunc.pending, (state) => {
-            state.isLoading = true;
-        });
-        builder.addCase(updatePendingAnnouncementFunc.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.updatedPendingData = action.payload
-        });
-        builder.addCase(updatePendingAnnouncementFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = " server error"
         })
@@ -215,19 +157,7 @@ const penRejSlice = createSlice({
             state.isLoading = false;
             state.error = " server error"
         })
-        // deletedPendingAnnouncement
-        builder.addCase(deletePendingAnnouncementFunc.pending, (state) => {
-            state.isLoading = true;
-        });
-        builder.addCase(deletePendingAnnouncementFunc.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.deletedPendingData = action.payload
-        });
-        builder.addCase(deletePendingAnnouncementFunc.rejected, (state) => {
-            state.isLoading = false;
-            state.error = " server error"
-        })
     }
 })
 
-export default penRejSlice.reducer
+export default rejectedSlice.reducer

@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllPendingAnnouncementsFunc } from '../states/penRejState';
+import { getAllPendingAnnouncementsFunc } from '../states/pendingAnnState';
 import CardPendingAnnouncement from './CardPendingAnnouncement';
 import Spinner from 'react-bootstrap/Spinner';
 
 const _PendingAnnouncements = () => {
 
     const dispatch = useDispatch();
-    const allPendingAnnouncements = useSelector((state) => state.penRej.allPendingAnnouncements);
-    const isLoading = useSelector((state) => state.penRej.isLoading)
+    const allPendingAnnouncements = useSelector((state) => state.pendingAnn.allPendingAnnouncements);
+    const isLoading = useSelector((state) => state.pendingAnn.isLoading)
 
     useEffect(() => {
         dispatch(getAllPendingAnnouncementsFunc());

@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllRejectedAnnouncementsFunc } from '../states/penRejState';
+import { getAllRejectedAnnouncementsFunc } from '../states/rejectedAnnState';
 import CardRejectedAnnouncement from './CardRejectedAnnouncement';
 import Spinner from 'react-bootstrap/Spinner';
 
 const _RejectedAnnouncements = () => {
 
     const dispatch = useDispatch();
-    const allRejectedAnnouncements = useSelector((state) => state.penRej.allRejectedAnnouncements);
-    const isLoading = useSelector((state) => state.penRej.isLoading)
+    const allRejectedAnnouncements = useSelector((state) => state.rejectedAnn.allRejectedAnnouncements);
+    const isLoading = useSelector((state) => state.rejectedAnn.isLoading)
 
     useEffect(() => {
         dispatch(getAllRejectedAnnouncementsFunc());

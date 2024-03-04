@@ -3,7 +3,8 @@ import { React, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { postCreateAnnouncementFunc } from '../states/storeState';
-import { updatePendingAnnouncementFunc, deletePendingAnnouncementFunc, createRejectedAnnouncementFunc } from '../states/penRejState'
+import { updatePendingAnnouncementFunc, deletePendingAnnouncementFunc } from '../states/pendingAnnState';
+import { createRejectedAnnouncementFunc } from '../states/rejectedAnnState';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -26,8 +27,8 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
         if (window.confirm("Do you want to reject this announcement? ")) {
             dispatch(updatePendingAnnouncementFunc({ ...singleData[0], status: 3 }))
                 .then((response) => response.payload.statusCode === 200 ? dispatch(createRejectedAnnouncementFunc(singleData[0])) : null)
-                /* .then((response) => response.payload.statusCode === 200 ? dispatch(deletePendingAnnouncementFunc(singleData[0].id)) : null)
-                .then((response) => response.payload.statusCode === 200 ? window.location.reload() : null) */
+            /* .then((response) => response.payload.statusCode === 200 ? dispatch(deletePendingAnnouncementFunc(singleData[0].id)) : null)
+            .then((response) => response.payload.statusCode === 200 ? window.location.reload() : null) */
 
         };
     }
@@ -35,7 +36,7 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
     return (
 
         <div>
-            <div className='p-3 rounded-5 bg-light border w-100 mx-4 my-2'>
+            <div className='p-3 rounded-5 bg-light border mx-4 my-2'>
                 <div className='d-flex justify-content-between'>
                     <div className='w-50'>
                         {

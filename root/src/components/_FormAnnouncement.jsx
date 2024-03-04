@@ -1,18 +1,19 @@
 import { React, useEffect, useState } from 'react'
-import { createPendingAnnouncementFunc } from '../states/penRejState';
+import { createPendingAnnouncementFunc } from '../states/pendingAnnState';
 import { saveAnnouncementPayload } from '../states/storeState';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 function _FormAnnouncement() {
 
   const dispatch = useDispatch();
 
   const [file, setFile] = useState("");
-  const [idOwner, setIdOwner] = useState(99);
+  const [idOwner, setIdOwner] = useState(null);
   const [idPackage, setIdPackage] = useState(2);
   const [brandName, setBrandName] = useState("");
   const [manufacturerName, setManufacturerName] = useState("test srl");
@@ -103,6 +104,15 @@ function _FormAnnouncement() {
     }
 
   };
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const tkn = jwtDecode(token, process.env.JWT_SECRET);
+      setIdOwner(tkn.id)
+    }
+  }, [])
 
 
   return (

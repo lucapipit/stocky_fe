@@ -44,10 +44,8 @@ const _Store = () => {
   }, [categoryLevel])
 
   const modifyCounter = (input) => {
-    console.log(numOfAnnouncements);
     if (input) { setCounter(counter + 1); setIsReverseActive({ isFirstOpen: false, value: true }) } else { setCounter(counter - 1); setIsReverseActive({ ...isReverseActive, value: false }) };
     input ? setNumOfAnnouncements(numOfAnnouncements - 1) : setNumOfAnnouncements(numOfAnnouncements + 1);
-    console.log(numOfAnnouncements);
 
     if (numOfAnnouncements === 2) {
       setIsReverseActive({ ...isReverseActive, isFirstOpen: true })
