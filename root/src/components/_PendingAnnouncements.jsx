@@ -17,7 +17,7 @@ const _PendingAnnouncements = () => {
 
     return (
         <div>
-            <h2 className='text-center fw-light mt-3 mb-4'>Pending Announcements</h2>
+            <h1 className='text-center fw-light mt-3 mb-4'>Pending Announcements</h1>
             {allPendingAnnouncements && isLoading ?
                 <div className='text-center my-4'><Spinner animation="border" variant="primary" /></div> :
                 allPendingAnnouncements.map((el) => {

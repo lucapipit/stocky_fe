@@ -18,7 +18,7 @@ const _RejectedAnnouncements = () => {
 
     return (
         <div>
-            <h2 className='text-center fw-light mt-3 mb-4'>Rejected Announcements</h2>
+            <h1 className='text-center fw-light mt-3 mb-4'>Rejected Announcements</h1>
             {allRejectedAnnouncements && isLoading ?
                 <div className='text-center my-4'><Spinner animation="border" variant="primary" /></div> :
                 allRejectedAnnouncements.map((el) => {

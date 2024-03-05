@@ -34,6 +34,8 @@ const _Account = () => {
     return (
       <div >
 
+        <h1 className='fw-light text-center mt-5'>Account</h1>
+
         <div className='d-flex align-items-center justify-content-center my-5'>
           <div className='border rounded-5 p-5 bg-dark text-light'>
             <h2>{userData[0].companyName}</h2>
@@ -47,11 +49,12 @@ const _Account = () => {
           </div>
         </div>
 
-        <hr />
+        <hr className='mx-5' />
 
         <div>
-          <h3 className='my-5 text-center'>Announcements</h3>
-          <div className='d-flex flex-wrap'>
+
+          <h1 className='my-5 text-center fw-light'>Announcements</h1>
+          <div className='d-flex flex-wrap justify-content-center align-items-center my-5'>
             {
               allRejectedAnnouncements && allRejectedAnnouncements.map((el) => {
                 return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
@@ -67,9 +70,8 @@ const _Account = () => {
                 return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
               })
             }
-
-
           </div>
+
         </div>
 
       </div>
