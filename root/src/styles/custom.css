@@ -1,4 +1,9 @@
-h1,h2,h3,h4,h5,h6{
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin: 0 !important;
 }
 
@@ -11,7 +16,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 /* height */
-.myMaxH300{
+.myMaxH300 {
     max-height: 300 !important;
 }
 
@@ -35,6 +40,10 @@ h1,h2,h3,h4,h5,h6{
 
 .myMaxW700 {
     max-width: 700px !important;
+}
+
+.myMaxW800 {
+    max-width: 800px !important;
 }
 
 .myMaxW1000 {
@@ -65,4 +74,59 @@ h1,h2,h3,h4,h5,h6{
 /* icons font size */
 .myIconLg {
     font-size: 50px;
+}
+
+/* text truncate and fading */
+.line-clamp1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.line-clamp2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.myFade {
+    position: relative;
+    height: 400px;
+    /* exactly three lines */
+}
+
+.myFade:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 70px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(255, 255, 255) 30%);
+}
+
+/* position absolute icons */
+.minimizeArrow {
+    position: absolute;
+    bottom: 15px;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.minimizeArrow > i{
+    font-size: 1.5rem;
+}
+.editPencil{
+    right: 20px;
+    font-size: 1.5rem;
+    background-color: #fff;
+    padding: 7px;
+    z-index: 1;
 }

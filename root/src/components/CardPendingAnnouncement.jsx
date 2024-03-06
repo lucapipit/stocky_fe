@@ -2,10 +2,9 @@
 import { React, useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { postCreateAnnouncementFunc } from '../states/storeState';
-import { updatePendingAnnouncementFunc, deletePendingAnnouncementFunc } from '../states/pendingAnnState';
+import { deletePendingAnnouncementFunc } from '../states/pendingAnnState';
 import { createRejectedAnnouncementFunc } from '../states/rejectedAnnState';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
 import Form from 'react-bootstrap/Form';
 
 
@@ -28,7 +27,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
     const rejectAnnouncement = async () => {
         if (window.confirm("Do you want to reject this announcement? ")) {
             console.log({ ...singleData[0], status: 3, rejReasons: rejectionReasons });
-            dispatch(createRejectedAnnouncementFunc({ ...singleData[0], status: 3, rejReasons: rejectionReasons.replace("\'", "\\'" ) }))
+            dispatch(createRejectedAnnouncementFunc({ ...singleData[0], status: 3, rejReasons: rejectionReasons.replace("\\", "\\\\").replace("'", "\\'") }))
                 .then((response) => response.payload.statusCode === 200 ? dispatch(deletePendingAnnouncementFunc(singleData[0].id)) : null)
                 .then((response) => response.payload.statusCode === 200 ? window.location.reload() : null)
 
@@ -41,7 +40,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
             {/* rejection modal */}
             {
                 isRejecting ?
-                    <div className='w-100 p-5 position-absolute d-flex justify-content-center align-items-centerborder'>
+                    <div className='w-100 p-5 position-absolute d-flex justify-content-center align-items-center'>
                         <div className='myMaxW1000 w-100 p-5 bg-dark rounded-4'>
                             <h1 className='text-light text-center mb-4 fw-light'>Reasons of rejection</h1>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -49,20 +48,20 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                             </Form.Group>
                             <div className='d-flex justify-content-center gap-5'>
                                 <i className="bi bi-ban text-danger display-6 myCursor" onClick={rejectAnnouncement}> Reject</i>
-                                <i className="bi bi-arrow-return-left text-secondary display-6 myCursor" onClick={() => setIsRejecting(false)}> Cancel</i><i class="bi bi-arrow-return-left"></i>
+                                <i className="bi bi-arrow-return-left text-secondary display-6 myCursor" onClick={() => setIsRejecting(false)}> Cancel</i>
                             </div>
                         </div>
                     </div>
                     : null
             }
 
-            <div className='p-3 bg-light border mx-4 my-3 myCursor' onClick={()=>setMinimize(!minimize)}>
+            <div className='p-3 bg-light border mx-4 my-3 myCursor' onClick={() => setMinimize(!minimize)}>
 
                 <div className='d-flex gap-4'>
                     <div>
                         {
                             !singleData[0] || isLoading ?
-                                <Placeholder animation="glow"><Placeholder xs={12} style={{ height: '400px' }} /></Placeholder> : <img className='myMaxW300 myMaxH300' src={`http://localhost:5050/uploads/${singleData[0].pics}`} alt="" />
+                                <Placeholder animation="glow"><Placeholder xs={12} style={{ height: '400px' }} /></Placeholder> : <div className='d-flex align-items-center' style={{ height: `${minimize ? "250px" : "100%"}`, overflowY: "hidden" }}><img className='myMaxW300' src={`http://localhost:5050/uploads/${singleData[0].pics}`} alt="" /></div>
                         }
                     </div>
 
@@ -70,7 +69,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
 
                         {
                             !singleData[0] || isLoading ?
-                                <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder> : <h1 className='fw-light'>{singleData[0].modelName}</h1>
+                                <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder> : <div className={`${minimize ? "line-clamp1" : ""} py-2`}><h1 className='fw-light'>{singleData[0].modelName}</h1></div>
                         }
                         {
                             !singleData[0] || isLoading ?
@@ -99,9 +98,24 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                             !singleData[0] || isLoading ?
                                 <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
                                 <div className='mb-2'>
-                                    <span className='bg-success text-light p-1 px-2 rounded-5'>{singleData[0].category}</span>
+                                    <span className='bg-secondary text-light p-1 px-3 rounded-5'>{singleData[0].category}</span>
                                 </div>
                         }
+                        {
+                            !singleData[0] || isLoading ?
+                                <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder>
+                                : <div className={`${minimize ? "line-clamp1" : ""} py-2`}>
+                                    <h4 className='fw-light d-flex flex-wrap gap-1'>
+                                        <h4 className={`${singleData[0].manufacturer ? "text-info" : "text-success"} me-3`}><i className="bi bi-person-vcard-fill me-2"></i>{singleData[0].manufacturer ? "Manufacturer" : "Dealer"}</h4>
+                                        <i className="bi bi-buildings me-3"> {singleData[0].companyName}</i>
+                                        <i className="bi bi-at me-3"> {singleData[0].email}</i>
+                                        <i className="bi bi-globe-americas me-3"> {singleData[0].country}</i>
+                                        <i className="bi bi-geo me-3"> {singleData[0].address} - {singleData[0].zipCode}</i>
+                                    </h4>
+                                </div>
+                        }
+
+
                     </div>
                 </div>
 

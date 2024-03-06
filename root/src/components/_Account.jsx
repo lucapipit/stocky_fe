@@ -34,7 +34,7 @@ const _Account = () => {
     return (
       <div >
 
-        <h1 className='fw-light text-center mt-5'>Account</h1>
+        <h1 className='fw-light text-center mt-5'><i class="bi bi-person-circle"></i> Account</h1>
 
         <div className='d-flex align-items-center justify-content-center my-5'>
           <div className='border rounded-5 p-5 bg-dark text-light'>
