@@ -86,19 +86,7 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
                                         <span className='bg-secondary text-light p-2 px-3 rounded-5'>{singleData[0].category}</span>
                                     </div>
                             }
-                            {
-                                !singleData[0] || isLoading ?
-                                    <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder>
-                                    : <div className={`${minimize ? "line-clamp1" : ""} py-2`}>
-                                        <h4 className='fw-light d-flex flex-wrap gap-1'>
-                                            <h4 className={`${singleData[0].manufacturer ? "text-info" : "text-success"} me-3`}><i className="bi bi-person-vcard-fill me-2"></i>{singleData[0].manufacturer ? "Manufacturer" : "Dealer"}</h4>
-                                            <i className="bi bi-buildings me-3"> {singleData[0].companyName}</i>
-                                            <i className="bi bi-at me-3"> {singleData[0].email}</i>
-                                            <i className="bi bi-globe-americas me-3"> {singleData[0].country}</i>
-                                            <i className="bi bi-geo me-3"> {singleData[0].address} - {singleData[0].zipCode}</i>
-                                        </h4>
-                                    </div>
-                            }
+
                         </div>
 
 
@@ -123,6 +111,19 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
                             : <div>
                                 {
                                     !singleData[0] || isLoading ?
+                                        <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder>
+                                        : <div className={`${minimize ? "line-clamp1" : ""} py-2`}>
+                                            <h4 className='fw-light d-flex flex-wrap gap-1'>
+                                                <h4 className={`${singleData[0].manufacturer ? "text-info" : "text-success"} me-3`}><i className="bi bi-person-vcard-fill me-2"></i>{singleData[0].manufacturer ? "Manufacturer" : "Dealer"}</h4>
+                                                <i className="bi bi-buildings me-3"> {singleData[0].companyName}</i>
+                                                <i className="bi bi-at me-3"> {singleData[0].email}</i>
+                                                <i className="bi bi-globe-americas me-3"> {singleData[0].country}</i>
+                                                <i className="bi bi-geo me-3"> {singleData[0].address} - {singleData[0].zipCode}</i>
+                                            </h4>
+                                        </div>
+                                }
+                                {
+                                    !singleData[0] || isLoading ?
                                         <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder> :
                                         <div>
                                             <hr />
@@ -139,6 +140,7 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
                                             <p>{singleData[0].techDetail}</p>
                                         </div>
                                 }
+
                             </div>
                     }
 

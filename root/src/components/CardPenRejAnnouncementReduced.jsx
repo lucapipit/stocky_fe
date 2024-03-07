@@ -23,13 +23,10 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
             {
                 isEditing ?
                     <div className='w-100 p-5 position-absolute d-flex justify-content-center top-50' style={{ zIndex: "2" }}>
-                        <div className='myMaxW1200 w-100 p-5 bg-secondary rounded-3'>
+                        <div className='myMaxW1200 w-100 p-5 bg-secondary rounded-3 text-center'>
                             <h1 className='text-light text-center mb-4 fw-light'>Reasons of rejection</h1>
                             <CardPenRejAnnouncementReducedForm singleData={singleData} />
-                            <div className='d-flex justify-content-center gap-5 mt-5'>
-                                <i className="bi bi-floppy2-fill text-info display-6 myCursor" > Update</i>
-                                <i className="bi bi-arrow-return-left text-light display-6 myCursor" onClick={() => setIsEditing(false)}> Cancel</i>
-                            </div>
+                            <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => setIsEditing(false)}> Cancel</i>
                         </div>
                     </div>
 

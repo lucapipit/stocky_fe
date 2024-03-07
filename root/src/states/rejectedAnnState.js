@@ -86,11 +86,11 @@ export const updateRejectedAnnouncementFunc = createAsyncThunk(
 
 //DELETE ANNOUNCEMENT
 
-/* export const deletePendingAnnouncementFunc = createAsyncThunk(
-    'api/deletePendingAnnouncement',
+export const deleteRejectedAnnouncementFunc = createAsyncThunk(
+    'api/deleteRejectedAnnouncement',
     async (input) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/pen-deleteannouncement/${input}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/rej-deleteannouncement/${input}`, {
                 method: 'DELETE'
             });
             return await response.json();
@@ -98,7 +98,7 @@ export const updateRejectedAnnouncementFunc = createAsyncThunk(
             console.log(error);
         }
     }
-) */
+)
 
 const rejectedSlice = createSlice({
     name: "apiRejected",
@@ -154,6 +154,17 @@ const rejectedSlice = createSlice({
             state.updatedRejectedData = action.payload
         });
         builder.addCase(updateRejectedAnnouncementFunc.rejected, (state) => {
+            state.isLoading = false;
+            state.error = " server error"
+        })
+        // deleteRejectedAnnouncement
+        builder.addCase(deleteRejectedAnnouncementFunc.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(deleteRejectedAnnouncementFunc.fulfilled, (state, action) => {
+            state.isLoading = false;
+        });
+        builder.addCase(deleteRejectedAnnouncementFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = " server error"
         })

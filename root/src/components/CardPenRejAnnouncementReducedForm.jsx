@@ -2,9 +2,11 @@ import { React, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import {updateAnnouncementFunc} from "../states/storeState"
+import { updateAnnouncementFunc } from "../states/storeState";
+import { createPendingAnnouncementFunc } from "../states/pendingAnnState";
+import { deleteRejectedAnnouncementFunc } from "../states/rejectedAnnState";
 
-const CardPenRejAnnouncementReducedForm = ({singleData}) => {
+const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
     const dispatch = useDispatch();
 
@@ -56,11 +58,11 @@ const CardPenRejAnnouncementReducedForm = ({singleData}) => {
         if (formFilled) {
             setIsFormFilled(true);
             setIsFirstTry(false);
-            const uploadedFile = await uploadFile(file);
-            handleCreateFormAnnouncement(uploadedFile)
-            if (totalPrice !== "0") {
+            /* const uploadedFile = await uploadFile(file); */
+            handleUpdateFormAnnouncement(/* uploadedFile */)
+            /* if (totalPrice !== "0") {
                 navigate(`/paymentmethods/xlf-${totalPrice}-jK$`)
-            }
+            } */
         } else {
             setIsFormFilled(false);
             setIsFirstTry(false);
@@ -68,30 +70,47 @@ const CardPenRejAnnouncementReducedForm = ({singleData}) => {
 
     }
 
-    const handleCreateFormAnnouncement = async (input) => {
+    const handleUpdateFormAnnouncement = async (input) => {
 
         const payload = {
-            idOwner: idOwner,//compilazione automatica
             idPackage: idPackage,
-            status: 0,
+            status: singleData.status,
             relevance: idPackage,
             brandName: brandName,
-            manufacturerName: manufacturerName,//compilazione automatica
+            manufacturerName: manufacturerName,
             modelName: modelName,
             quantity: quantity,
             price: price,
-            pics: input.img,
+            pics: singleData.pics/* input.img */,
             productSize: productSize,
             description: description,
             techDetail: techDetail,
             category: category,
             expireDate: expireDate,
-            textFocus: textFocus,
-            picsFocus: picsFocus,
+            /* textFocus: textFocus,
+            picsFocus: picsFocus, */
             views: 0,
             posClick: 0,
             negClick: 0
         }
+
+        dispatch(updateAnnouncementFunc({ id: singleData.id, payload: payload, status: singleData.status }))
+            .then((response) => {
+                if (response.payload.statusCode === 200) {
+                    if (singleData.status === 3) {
+                        dispatch(createPendingAnnouncementFunc({ ...singleData, ...payload, status: 0, rejReasons: singleData.rejReasons.replace("\\", "\\\\").replace("'", "\\'") }))
+                            .then((response) => {
+                                if (response.payload.statusCode === 200) {
+                                    dispatch(deleteRejectedAnnouncementFunc(singleData.id));
+                                    window.location.reload()
+                                }
+                            })
+                    } else {
+                        window.location.reload()
+                    }
+                }
+            });
+
         /* if (totalPrice === "0") {
             dispatch(createPendingAnnouncementFunc(payload))
                 .then((response) => response.payload.statusCode === 200 ? navigate("/") : null)
@@ -102,7 +121,7 @@ const CardPenRejAnnouncementReducedForm = ({singleData}) => {
     };
 
     return (
-        <div>
+        <>
             <div className='d-flex justify-content-center mt-5'>
                 <Form className='text-light' encType='multipart/form-data'>
 
@@ -158,7 +177,9 @@ const CardPenRejAnnouncementReducedForm = ({singleData}) => {
                 </Form>
 
             </div>
-        </div>
+
+            <i className="bi bi-floppy2-fill text-info display-6 myCursor me-3" onClick={() => formCheck()}> Update</i>
+        </>
     )
 }
 

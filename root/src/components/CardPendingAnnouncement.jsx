@@ -122,6 +122,11 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                 {minimize ?
                     null
                     : <>
+                    
+                        <div className='mt-3 pt-1'>
+                            <p className='text-danger'><i className="bi bi-ban text-danger display-6 me-4"></i>{singleData[0].rejReasons}</p>
+                        </div>
+
                         <div>
                             {
                                 !singleData[0] || isLoading ?
@@ -147,6 +152,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                             {!singleData[0] || isLoading ? <Placeholder.Button xs={4} aria-hidden="true" /> : <i className="bi bi-check-circle text-success display-6 myCursor" onClick={approveAnnouncement}> Approve</i>}
                             {!singleData[0] || isLoading ? <Placeholder.Button xs={4} aria-hidden="true" /> : <i className="bi bi-ban text-danger display-6 myCursor" onClick={() => setIsRejecting(true)}> Reject</i>}
                         </div>
+
                     </>
                 }
 

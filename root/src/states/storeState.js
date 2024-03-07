@@ -74,16 +74,23 @@ export const deleteAnnouncementFunc = createAsyncThunk(
 
 export const updateAnnouncementFunc = createAsyncThunk(
     'api/updateAnnouncement',
-    async (input, id) => {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/updateannouncement/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(input)
-        });
-        const data = await response.json();
-        return data
+    async (input) => {
+
+        const {id, payload, status} = input;
+        try {
+
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/${status===3?"updaterej-announcement":"updatepen-announcement"}/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+            return await response.json();
+
+        } catch (error) {
+            console.error(error)
+        }
     }
 )
 
