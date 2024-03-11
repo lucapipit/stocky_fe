@@ -31,6 +31,9 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     const [isFormFilled, setIsFormFilled] = useState(false);
     const [isFirstTry, setIsFirstTry] = useState(true);
 
+    const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
+
+
     const navigate = useNavigate();
 
     const announcementPayload = useSelector((state) => state.myStore.announcementPayload);
@@ -123,57 +126,97 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     return (
         <>
             <div className='d-flex justify-content-center mt-5'>
-                <Form className='text-light' encType='multipart/form-data'>
+                <Form className='text-light d-flex flex-wrap justify-content-center' encType='multipart/form-data'>
 
-                    <img className='myMaxW700 mb-5' src={`http://localhost:5050/uploads/${singleData.pics}`} alt="" />
-                    {/* <Form.Group className="mb-3">
-                        <input type='file' onChange={(e) => setFile(e.target.files[0])} />
-                    </Form.Group> */}
+                    <div className='d-flex flex-wrap gap-5'>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Brand Name</Form.Label>
-                        <Form.Control type="text" className="form-control" id="brandName" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
-                    </Form.Group>
+                        <div className='position-relative'>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Model Name</Form.Label>
-                        <Form.Control type="text" className="form-control" id="modelName" value={modelName} onChange={(e) => setModelName(e.target.value)} />
-                    </Form.Group>
+                            <div type="file" className='position-absolute top-0 end-0 p-3 px-4' onChange={(e) => setFile(e.target.files[0])}>
+                                <i className="bi bi-pencil-fill text-danger"></i>
+                            </div>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Quantity</Form.Label>
-                        <Form.Control type="number" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-                    </Form.Group>
+                            <div>
+                                <img className='myMaxW500' src={`http://localhost:5050/uploads/${singleData.pics.split(",")[imgSelectionCounter]}`} alt="" />
+                                <div className='w-100'>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Price</Form.Label>
-                        <Form.Control type="number" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
-                    </Form.Group>
+                                    <div className='mt-1 d-flex align-items-center flex-wrap'>
+                                        {
+                                            singleData.pics.split(",").map((el, index) => {
+                                                return (
+                                                    <div className='myBgImgCover me-1 border myCursor'
+                                                        onClick={() => setImgSelectionCounter(index)}
+                                                        style={{ height: "90px", width: "90px", backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #898989de, #898989de)," : ""} url(http://localhost:5050/uploads/${singleData.pics.split(",")[index]})` }}
+                                                    ></div>
+                                                )
 
-                    <Form.Group className='mb-3'>
-                        <Form.Label>productSize</Form.Label>
-                        <Form.Control type='text' className='form-control' id="productSize" value={productSize} onChange={(e) => setProductSize(e.target.value)} />
-                    </Form.Group>
+                                            })
+                                        }
+                                    </div>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" rows={10} type="text" className="form-control" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
-                    </Form.Group>
+                                </div>
+                            </div>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control type="text" className="form-control" id="category" value={category} onChange={(e) => setCategory(e.target.value)} />
-                    </Form.Group>
+                            <Form.Group className="mb-3 mt-5">
+                                <input type='file' multiple onChange={(e) => setFile(e.target.files[0])} />
+                            </Form.Group>
+                        </div>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>techDetail</Form.Label>
-                        <Form.Control as="textarea" rows={10} type="text" className="form-control" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
-                    </Form.Group>
+                        <div>
+                            <Form.Group className="mb-3" style={{ minWidth: "400px" }}>
+                                <Form.Label>Brand Name</Form.Label>
+                                <Form.Control type="text" className="form-control" id="brandName" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
+                            </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>expireDate</Form.Label>
-                        <Form.Control type="date" className="form-control" id="expireDate" value={expireDate} onChange={(e) => setExpireDate(e.target.value)} />
-                    </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Model Name</Form.Label>
+                                <Form.Control type="text" className="form-control" id="modelName" value={modelName} onChange={(e) => setModelName(e.target.value)} />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Quantity</Form.Label>
+                                <Form.Control type="number" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Price</Form.Label>
+                                <Form.Control type="number" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Category</Form.Label>
+                                <Form.Control type="text" className="form-control" id="category" value={category} onChange={(e) => setCategory(e.target.value)} />
+                            </Form.Group>
+                        </div>
+                    </div>
+
+                    <div className='w-100 my-4 d-flex flex-wrap justify-content-center gap-5'>
+                        <Form.Group className="mb-3">
+                            <Form.Label>expireDate</Form.Label>
+                            <Form.Control type="date" className="form-control" id="expireDate" value={expireDate} onChange={(e) => setExpireDate(e.target.value)} />
+                        </Form.Group>
+
+                        <Form.Group className='mb-3'>
+                            <Form.Label>productSize</Form.Label>
+                            <Form.Control type='text' className='form-control' id="productSize" value={productSize} onChange={(e) => setProductSize(e.target.value)} />
+                        </Form.Group>
+                    </div>
+
+                    <div className='w-100 my-5'>
+
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control as="textarea" rows={10} type="text" className="form-control" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                        </Form.Group>
+
+
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>techDetail</Form.Label>
+                            <Form.Control as="textarea" rows={10} type="text" className="form-control" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
+                        </Form.Group>
+                    </div>
                 </Form>
 
             </div>

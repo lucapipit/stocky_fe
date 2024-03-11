@@ -14,6 +14,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
     const [isRejecting, setIsRejecting] = useState(false);
     const [rejectionReasons, setRejectionReasons] = useState("");
     const [minimize, setMinimize] = useState(true);
+    const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
 
     const approveAnnouncement = async () => {
         if (window.confirm("Do you want to approve this announcement? ")) {
@@ -55,13 +56,13 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                     : null
             }
 
-            <div className='p-3 bg-light border mx-4 my-3 myCursor' onClick={() => setMinimize(!minimize)}>
+            <div className='p-3 bg-light border mx-4 my-3 myCursor' >
 
                 <div className='d-flex gap-4'>
                     <div>
                         {
                             !singleData[0] || isLoading ?
-                                <Placeholder animation="glow"><Placeholder xs={12} style={{ height: '400px' }} /></Placeholder> : <div className='d-flex align-items-center' style={{ height: `${minimize ? "250px" : "100%"}`, overflowY: "hidden" }}><img className='myMaxW300' src={`http://localhost:5050/uploads/${singleData[0].pics}`} alt="" /></div>
+                                <Placeholder animation="glow"><Placeholder xs={12} style={{ height: '400px' }} /></Placeholder> : <div className='d-flex align-items-center' style={{ height: `${minimize ? "250px" : "100%"}`, overflowY: "hidden" }}><img className='myMaxW300' src={`http://localhost:5050/uploads/${singleData[0].pics.split(",")[imgSelectionCounter]}`} alt="" /></div>
                         }
                     </div>
 
@@ -119,10 +120,31 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                     </div>
                 </div>
 
+                <div className='w-100'>
+                    {
+                        minimize ?
+                            null
+                            :
+                            <div className='mt-1 d-flex align-items-center flex-wrap'>
+                                {
+                                    singleData[0].pics.split(",").map((el, index) => {
+                                        return (
+                                            <div className='myBgImgCover me-1 border myCursor'
+                                                onClick={() => setImgSelectionCounter(index)}
+                                                style={{ height: "90px", width: "90px", backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #898989de, #898989de)," : ""} url(http://localhost:5050/uploads/${singleData[0].pics.split(",")[index]})` }}
+                                            ></div>
+                                        )
+
+                                    })
+                                }
+                            </div>
+                    }
+                </div>
+
                 {minimize ?
                     null
                     : <>
-                    
+
                         <div className='mt-3 pt-1'>
                             <p className='text-danger'><i className="bi bi-ban text-danger display-6 me-4"></i>{singleData[0].rejReasons}</p>
                         </div>
@@ -155,6 +177,11 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
 
                     </>
                 }
+
+                <div className='myCursor text-center mt-2' style={{fontSize: "2rem"}} onClick={() => setMinimize(!minimize)}>
+                    <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                </div>
+
 
             </div>
         </>

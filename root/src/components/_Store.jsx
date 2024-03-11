@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import "../styles/custom.css";
 import _Navbar from './_Navbar';
 import CardAnnouncement from './CardAnnouncement';
 import { useDispatch, useSelector } from 'react-redux';

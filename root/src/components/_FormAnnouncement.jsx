@@ -40,7 +40,17 @@ function _FormAnnouncement() {
 
   const uploadFile = async (file) => {
     const fileData = new FormData();
-    fileData.append('img', file);
+
+    const imgArray = [];
+
+    [...Array(file.length)].map((el, index) => {
+      console.log("eccomi", imgArray);
+      /* imgArray.push(file[index]) */
+      fileData.append('img', file[index] );
+    })
+    
+
+    console.log([...fileData]);
 
     try {
       const response = await fetch('http://localhost:5050/fileupload', {
@@ -61,6 +71,7 @@ function _FormAnnouncement() {
       setIsFormFilled(true);
       setIsFirstTry(false);
       const uploadedFile = await uploadFile(file);
+      console.log(file);
       handleCreateFormAnnouncement(uploadedFile)
       if (totalPrice !== "0") {
         navigate(`/paymentmethods/xlf-${totalPrice}-jK$`)
@@ -119,7 +130,7 @@ function _FormAnnouncement() {
     <div className='d-flex justify-content-center mt-5'>
       <form className='myMaxW500' encType='multipart/form-data'>
         <Form.Group className="mb-3">
-          <input type='file' onChange={(e) => setFile(e.target.files[0])} />
+          <input type='file' multiple onChange={(e) => { console.log(e.target.files.length); setFile(e.target.files) }} />
         </Form.Group>
 
         <Form.Group className="mb-3">

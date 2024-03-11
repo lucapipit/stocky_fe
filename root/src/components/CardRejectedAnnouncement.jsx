@@ -96,13 +96,12 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
                         <p className='text-danger'><i className="bi bi-ban text-danger display-6 me-4"></i>{singleData[0].rejReasons}</p>
                     </div>
 
-                    {
-                        minimize ?
-                            <div className=' minimizeArrow'>
-                                <i class="bi bi-caret-down-fill text-secondary"></i>
-                            </div>
-                            : null
-                    }
+                    {/* sistema di frecce per espandere la card. Da capire perchè funziona solo con due div */}
+                    <div className='myCursor minimizeArrow' onClick={() => setMinimize(!minimize)}>
+                        <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                    </div>
+
+
 
 
                     {
@@ -144,7 +143,13 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
                             </div>
                     }
 
+                    {/* sistema di frecce per espandere la card. Da capire perchè funziona solo con due div */}
+                    <div className='myCursor text-center' style={{ fontSize: "2rem" }} onClick={() => setMinimize(!minimize)}>
+                        <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                    </div>
+
                 </div>
+
 
             </div>
 

@@ -13,7 +13,7 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
             <div className='p-3 rounded-5 bg-light border myMaxW500 myW9'>
                 {
                     !singleData[0] || isLoading ?
-                        <Placeholder animation="glow"><Placeholder xs={12} style={{ height: '400px' }} /></Placeholder> : <div className='mb-2 rounded-4 myBgImgContain' style={{ backgroundImage: `url("http://localhost:5050/uploads/${singleData[0].pics}")` }}></div>
+                        <Placeholder animation="glow"><Placeholder xs={12} style={{ height: '400px' }} /></Placeholder> : <div className='mb-2 rounded-4 myBgImgContain' style={{ backgroundImage: `url("http://localhost:5050/uploads/${singleData[0].pics}")`, height: "400px" }}></div>
                 }
                 {
                     !singleData[0] || isLoading ?

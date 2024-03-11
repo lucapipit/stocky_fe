@@ -26,6 +26,9 @@ h6 {
 }
 
 /* max width */
+.myMaxW100 {
+    max-width: 100px !important;
+}
 .myMaxW300 {
     max-width: 300px !important;
 }
@@ -68,7 +71,11 @@ h6 {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    height: 400px;
+}
+.myBgImgCover {
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 /* icons font size */
@@ -97,7 +104,7 @@ h6 {
 
 .myFade {
     position: relative;
-    height: 400px;
+    height: 402px;
     /* exactly three lines */
 }
 
@@ -111,22 +118,4 @@ h6 {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(255, 255, 255) 30%);
 }
 
-/* position absolute icons */
-.minimizeArrow {
-    position: absolute;
-    bottom: 15px;
-    z-index: 1;
-    left: 50%;
-    transform: translateX(-50%);
-}
 
-.minimizeArrow > i{
-    font-size: 1.5rem;
-}
-.editPencil{
-    right: 20px;
-    font-size: 1.5rem;
-    background-color: #fff;
-    padding: 7px;
-    z-index: 1;
-}

@@ -11,6 +11,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
     const [minimize, setMinimize] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
+    const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
 
     useEffect(() => {
         console.log(singleData, isLoading);
@@ -22,15 +23,16 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
             {/* rejection modal */}
             {
                 isEditing ?
-                    <div className='w-100 p-5 position-absolute d-flex justify-content-center top-50' style={{ zIndex: "2" }}>
-                        <div className='myMaxW1200 w-100 p-5 bg-secondary rounded-3 text-center'>
-                            <h1 className='text-light text-center mb-4 fw-light'>Reasons of rejection</h1>
+
+                    <div className='p-5 penRejEditCard position-absolute d-flex justify-content-center '>
+                        <div className='w-100 p-5 bg-secondary rounded-3 text-center'>
                             <CardPenRejAnnouncementReducedForm singleData={singleData} />
                             <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => setIsEditing(false)}> Cancel</i>
                         </div>
                     </div>
 
-                    : <div className="m-2 myCursor border myMaxW800" onClick={() => setMinimize(!minimize)}>
+
+                    : <div className="m-2 border myMaxW800" >
 
                         <div className='' style={{ borderLeft: `3px solid ${singleData.status === 3 ? "red" : singleData.status === 0 ? "lightgray" : "yellowgreen"}` }}>
 
@@ -50,9 +52,15 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                         {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={12} style={{ height: `${minimize ? "200px" : "400px"}` }} /></Placeholder>
-                                                : <div className='d-flex align-items-center' style={{ height: `${minimize ? "250px" : "100%"}`, overflowY: "hidden" }}><img className='myMaxW300' src={`http://localhost:5050/uploads/${singleData.pics}`} alt="" /></div>
+                                                :
+                                                <div className='myMaxW300'>
+                                                    <div className='d-flex align-items-center' style={{ height: `${minimize ? "250px" : "100%"}`, overflowY: "hidden" }}>
+                                                        <img className='myMaxW300' src={`http://localhost:5050/uploads/${singleData.pics.split(",")[imgSelectionCounter]}`} alt="" />
+                                                    </div>
+                                                </div>
                                         }
                                     </div>
+
 
                                     <div className='px-3' >
 
@@ -102,6 +110,27 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
                                 </div>
 
+                                <div className='w-100'>
+                                    {
+                                        minimize ?
+                                            null
+                                            :
+                                            <div className='mt-1 d-flex align-items-center flex-wrap'>
+                                                {
+                                                    singleData.pics.split(",").map((el, index) => {
+                                                        return (
+                                                            <div className='myBgImgCover me-1 border myCursor'
+                                                                onClick={() => setImgSelectionCounter(index)}
+                                                                style={{ height: "90px", width: "90px", backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #898989de, #898989de)," : ""} url(http://localhost:5050/uploads/${singleData.pics.split(",")[index]})` }}
+                                                            ></div>
+                                                        )
+
+                                                    })
+                                                }
+                                            </div>
+                                    }
+                                </div>
+
                                 <div className='mb-4 mt-3 text-center'>
                                     {
                                         !singleData || isLoading ?
@@ -114,13 +143,12 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
                                 </div>
 
-                                {
-                                    minimize ?
-                                        <div className=' minimizeArrow'>
-                                            <i class="bi bi-caret-down-fill text-secondary"></i>
-                                        </div>
-                                        : null
-                                }
+
+                                <div className='myCursor minimizeArrow' onClick={() => setMinimize(!minimize)}>
+                                    <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                                </div>
+
+
 
                                 {
                                     minimize ?
@@ -138,7 +166,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                             {
                                                 !singleData || isLoading ?
                                                     <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder> :
-                                                    <div className='mt-5'>
+                                                    <div className='my-5'>
                                                         <hr />
                                                         <h5 className='fw-normal'> Technical detail</h5>
                                                         <p>{singleData.techDetail}</p>
