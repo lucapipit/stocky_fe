@@ -129,9 +129,9 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                                 {
                                     singleData[0].pics.split(",").map((el, index) => {
                                         return (
-                                            <div className='myBgImgCover me-1 border myCursor'
+                                            <div className='myBgImgCover me-1 myCursor'
                                                 onClick={() => setImgSelectionCounter(index)}
-                                                style={{ height: "90px", width: "90px", backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #898989de, #898989de)," : ""} url(http://localhost:5050/uploads/${singleData[0].pics.split(",")[index]})` }}
+                                                style={{ height: "90px", width: "90px", border: `${index===imgSelectionCounter?"3px solid #507598":""}`, backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #b8b8b8de, #b8b8b8de)," : ""} url(http://localhost:5050/uploads/${singleData[0].pics.split(",")[index]})` }}
                                             ></div>
                                         )
 

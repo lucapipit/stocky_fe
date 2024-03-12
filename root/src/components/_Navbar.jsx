@@ -45,7 +45,7 @@ const _Navbar = () => {
             {
                 isHamMenuOpen ?
 
-                    <div className='d-flex justify-content-end hamMenu bg-light position-absolute w-100 mt-5 pt-2 top-0 ' style={{ /* overflowY: "scroll", */ height: "calc(100vh - 59px)" }} >
+                    <div className='d-flex position-fixed justify-content-end hamMenu bg-light position-absolute w-100 mt-5 pt-2 top-0 ' style={{ overflowY: "scroll", height: "calc(100vh - 0px)" }} >
                         <div className=' w-100' style={{ minHeight: "calc(100vh - 59px)" }}>
 
                             <div className='pb-5'>

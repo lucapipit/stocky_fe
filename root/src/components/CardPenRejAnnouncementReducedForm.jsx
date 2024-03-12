@@ -1,7 +1,6 @@
 import { React, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
 import { updateAnnouncementFunc } from "../states/storeState";
 import { createPendingAnnouncementFunc } from "../states/pendingAnnState";
 import { deleteRejectedAnnouncementFunc } from "../states/rejectedAnnState";
@@ -10,7 +9,8 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
     const dispatch = useDispatch();
 
-    const [file, setFile] = useState("");
+    const [file, setFile] = useState(singleData.pics.split(","));
+    const [newFile, setNewFile] = useState("");
     const [idOwner, setIdOwner] = useState(singleData.idOwner);
     const [idPackage, setIdPackage] = useState(singleData.idPackage);
     const [brandName, setBrandName] = useState(singleData.brandName);
@@ -26,22 +26,19 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     const [textFocus, setTextFocus] = useState(singleData.textFocus);
     const [picsFocus, setPicsFocus] = useState(singleData.picsFocus);
 
-    const [totalPrice, setTotalPrice] = useState("1.99");
-
     const [isFormFilled, setIsFormFilled] = useState(false);
     const [isFirstTry, setIsFirstTry] = useState(true);
 
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
 
 
-    const navigate = useNavigate();
 
-    const announcementPayload = useSelector((state) => state.myStore.announcementPayload);
-
-
-    const uploadFile = async (file) => {
+    const uploadFile = async (newFile) => {
         const fileData = new FormData();
-        fileData.append('img', file);
+
+        [...Array(newFile.length)].map((el, index) => {
+            fileData.append('img', newFile[index]);
+        })
 
         try {
             const response = await fetch('http://localhost:5050/fileupload', {
@@ -54,6 +51,19 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         }
     };
 
+    const deleteFile = async (input) => {
+
+        try {
+            const response = await fetch(`http://localhost:5050/del-fileupload/${input}`, {
+                method: "DELETE"
+            })
+            return await response.json()
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     const formCheck = async () => {
 
         const formFilled = brandName && manufacturerName && modelName && quantity /* && file */ && description && category;
@@ -61,8 +71,8 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         if (formFilled) {
             setIsFormFilled(true);
             setIsFirstTry(false);
-            /* const uploadedFile = await uploadFile(file); */
-            handleUpdateFormAnnouncement(/* uploadedFile */)
+            const uploadedFile = await uploadFile(newFile);
+            handleUpdateFormAnnouncement(uploadedFile)
             /* if (totalPrice !== "0") {
                 navigate(`/paymentmethods/xlf-${totalPrice}-jK$`)
             } */
@@ -71,6 +81,14 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
             setIsFirstTry(false);
         }
 
+    }
+
+    const manageImages = async () => {
+        deleteFile(file[imgSelectionCounter]);
+        setFile(file.splice(file.indexOf(file[imgSelectionCounter]), 1));
+        dispatch(updateAnnouncementFunc({ payload: {...singleData, pics: file.toString()}, id: singleData.id, status: singleData.status }));
+        setImgSelectionCounter(0);
+        setFile(file)//fondamentale per aggiornare la galleria immagini
     }
 
     const handleUpdateFormAnnouncement = async (input) => {
@@ -84,7 +102,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
             modelName: modelName,
             quantity: quantity,
             price: price,
-            pics: singleData.pics/* input.img */,
+            pics: newFile?file.concat(input.img.split(",")).toString():file.toString(),
             productSize: productSize,
             description: description,
             techDetail: techDetail,
@@ -128,25 +146,27 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
             <div className='d-flex justify-content-center mt-5'>
                 <Form className='text-light d-flex flex-wrap justify-content-center' encType='multipart/form-data'>
 
-                    <div className='d-flex flex-wrap gap-5'>
+                    <div className='d-flex justify-content-center flex-wrap gap-5'>
 
                         <div className='position-relative'>
 
-                            <div type="file" className='position-absolute top-0 end-0 p-3 px-4' onChange={(e) => setFile(e.target.files[0])}>
-                                <i className="bi bi-pencil-fill text-danger"></i>
+                            <div className='position-absolute top-0 end-0 p-3 px-4'>
+                                <div>
+                                    <i className="bi bi-trash-fill text-danger display-6" onClick={() => { manageImages() }}></i>
+                                </div>
                             </div>
 
                             <div>
-                                <img className='myMaxW500' src={`http://localhost:5050/uploads/${singleData.pics.split(",")[imgSelectionCounter]}`} alt="" />
+                                <img className='myMaxW500' src={`http://localhost:5050/uploads/${file[imgSelectionCounter]}`} alt="" />
                                 <div className='w-100'>
 
                                     <div className='mt-1 d-flex align-items-center flex-wrap'>
                                         {
-                                            singleData.pics.split(",").map((el, index) => {
+                                            file.map((el, index) => {
                                                 return (
-                                                    <div className='myBgImgCover me-1 border myCursor'
+                                                    <div className='myBgImgCover me-1 myCursor'
                                                         onClick={() => setImgSelectionCounter(index)}
-                                                        style={{ height: "90px", width: "90px", backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #898989de, #898989de)," : ""} url(http://localhost:5050/uploads/${singleData.pics.split(",")[index]})` }}
+                                                        style={{ height: "90px", width: "90px", border: `${index===imgSelectionCounter?"3px solid #507598":""}`, backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #b8b8b8de, #b8b8b8de)," : ""} url(http://localhost:5050/uploads/${file[index]})` }}
                                                     ></div>
                                                 )
 
@@ -158,7 +178,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                             </div>
 
                             <Form.Group className="mb-3 mt-5">
-                                <input type='file' multiple onChange={(e) => setFile(e.target.files[0])} />
+                                <input type='file' multiple onChange={(e) => { setNewFile(e.target.files) }} />
                             </Form.Group>
                         </div>
 
