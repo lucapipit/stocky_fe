@@ -17,7 +17,10 @@ h6 {
 
 /* height */
 .myMaxH300 {
-    max-height: 300 !important;
+    max-height: 300px !important;
+}
+.myMaxH500 {
+    max-height: 500px !important;
 }
 
 /* width */
@@ -29,6 +32,7 @@ h6 {
 .myMaxW100 {
     max-width: 100px !important;
 }
+
 .myMaxW300 {
     max-width: 300px !important;
 }
@@ -72,6 +76,7 @@ h6 {
     background-repeat: no-repeat;
     background-position: center;
 }
+
 .myBgImgCover {
     background-size: 100% auto;
     background-repeat: no-repeat;
@@ -118,4 +123,52 @@ h6 {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(255, 255, 255) 30%);
 }
 
+/* image gallery carousel style */
+.imgGalleryCarousel {
+    height: 90px;
+    width: 90px;
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+}
 
+.imgGalleryCarouselActive {
+    border: 4px solid #507598;
+}
+
+/* CardPenRejAnnouncementReducedForm edit modal*/
+.announcementEditModal{
+    background-color: #444;
+}
+
+.trashButtonImage{
+    height: 50px; 
+    width: 50px; 
+    border-radius: 28px; 
+    font-size: 23px;
+    box-shadow: 1px 1px 6px lightgray;
+}
+
+.trashButtonImage:hover{
+    box-shadow: none;
+}
+
+/* input type=file */
+.myInputFile{
+    background: linear-gradient(to top, #2a606c, #42727c);
+    border-radius: 10px;
+}
+
+input[type='file'] button{
+    background-color: red;
+}
+/* input form.control */
+.form-control{
+    border-radius: 20px;
+    font-weight: 700;
+    padding: 6px 20px;
+    color: #444;
+}
+.form-label{
+    font-weight:400;
+    font-size: 1.2rem;
+}

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateAnnouncementFunc } from "../states/storeState";
 import { createPendingAnnouncementFunc } from "../states/pendingAnnState";
 import { deleteRejectedAnnouncementFunc } from "../states/rejectedAnnState";
+import Resizer from "react-image-file-resizer";
 
 const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
@@ -38,6 +39,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
         [...Array(newFile.length)].map((el, index) => {
             fileData.append('img', newFile[index]);
+            console.log(newFile[index]);
         })
 
         try {
@@ -84,11 +86,13 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     }
 
     const manageImages = async () => {
-        deleteFile(file[imgSelectionCounter]);
-        setFile(file.splice(file.indexOf(file[imgSelectionCounter]), 1));
-        dispatch(updateAnnouncementFunc({ payload: {...singleData, pics: file.toString()}, id: singleData.id, status: singleData.status }));
-        setImgSelectionCounter(0);
-        setFile(file)//fondamentale per aggiornare la galleria immagini
+        if (window.confirm("Do you want to delete this image? ")) {
+            deleteFile(file[imgSelectionCounter]);
+            setFile(file.splice(file.indexOf(file[imgSelectionCounter]), 1));
+            dispatch(updateAnnouncementFunc({ payload: { ...singleData, pics: file.toString() }, id: singleData.id, status: singleData.status }));
+            setImgSelectionCounter(0);
+            setFile(file)//fondamentale per aggiornare la galleria immagini
+        }
     }
 
     const handleUpdateFormAnnouncement = async (input) => {
@@ -102,7 +106,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
             modelName: modelName,
             quantity: quantity,
             price: price,
-            pics: newFile?file.concat(input.img.split(",")).toString():file.toString(),
+            pics: newFile ? file.concat(input.img.split(",")).toString() : file.toString(),
             productSize: productSize,
             description: description,
             techDetail: techDetail,
@@ -141,6 +145,34 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
     };
 
+    const resizeFile = async (file) =>
+        new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                file,
+                500,
+                500,
+                "PNG",
+                100,
+                0,
+                (uri) => {
+                    resolve(uri);
+                },
+                "file"
+            );
+        });
+
+    const myResize = async (e) => {
+        let imgArray = [];
+        [...Array(e.target.files.length)].map(async (el, index) => {
+            const myFile = e.target.files[index];
+            const image = await resizeFile(myFile);
+            imgArray.push(image);
+            setNewFile(imgArray);
+        });
+
+        setNewFile(imgArray);
+    }
+
     return (
         <>
             <div className='d-flex justify-content-center mt-5'>
@@ -150,23 +182,30 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
                         <div className='position-relative'>
 
-                            <div className='position-absolute top-0 end-0 p-3 px-4'>
-                                <div>
-                                    <i className="bi bi-trash-fill text-danger display-6" onClick={() => { manageImages() }}></i>
-                                </div>
-                            </div>
+                            {
+                                file.length > 1 ?
+                                    <div className='position-absolute top-0 end-0 p-3'>
+                                        <div className='bg-light border p-2 trashButtonImage'>
+                                            <i className="bi bi-trash-fill myCursor text-danger" onClick={() => { manageImages() }}></i>
+                                        </div>
+                                    </div>
+                                    : null
+                            }
+
 
                             <div>
-                                <img className='myMaxW500' src={`http://localhost:5050/uploads/${file[imgSelectionCounter]}`} alt="" />
+
+                                <img className='myMaxH500' src={`http://localhost:5050/uploads/${file[imgSelectionCounter]}`} alt="" />
+
                                 <div className='w-100'>
 
                                     <div className='mt-1 d-flex align-items-center flex-wrap'>
                                         {
                                             file.map((el, index) => {
                                                 return (
-                                                    <div className='myBgImgCover me-1 myCursor'
+                                                    <div className={`myBgImgCover imgGalleryCarousel me-1 myCursor ${index === imgSelectionCounter ? "imgGalleryCarouselActive" : ""}`}
                                                         onClick={() => setImgSelectionCounter(index)}
-                                                        style={{ height: "90px", width: "90px", border: `${index===imgSelectionCounter?"3px solid #507598":""}`, backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #b8b8b8de, #b8b8b8de)," : ""} url(http://localhost:5050/uploads/${file[index]})` }}
+                                                        style={{ backgroundImage: `url(http://localhost:5050/uploads/${file[index]})` }}
                                                     ></div>
                                                 )
 
@@ -177,8 +216,14 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                                 </div>
                             </div>
 
-                            <Form.Group className="mb-3 mt-5">
-                                <input type='file' multiple onChange={(e) => { setNewFile(e.target.files) }} />
+                            <Form.Group className="mb-3 mt-5 d-flex align-items-center justify-content-center">
+                                <input type='file' style={{ display: "none" }} id="upload-input" multiple onChange={(e) => { /* setNewFile(e.target.files) */ myResize(e) }} />
+                                <label className='myCursor myInputFile border rounded-5 d-flex align-items-center' htmlFor="upload-input">
+                                    <div className='bg-light fw-bold text-dark p-1 px-3 rounded-5'>choose a file</div>
+                                    <p className='text-light m-0 p1 px-3'>{!newFile ? "select one or multiple images" : newFile.length == 1 ? JSON.stringify(newFile[0].name) : `${JSON.stringify(newFile.length)} images selected`}</p>
+                                </label>
+
+                                {newFile ? <h4 className='fw-light'><i className="bi bi-arrow-repeat text-info ms-3 myCursor" onClick={() => { localStorage.setItem("editId", singleData.id); formCheck() }}> update image</i></h4> : null}
                             </Form.Group>
                         </div>
 
@@ -227,21 +272,21 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
                         <Form.Group className="mb-3">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" rows={10} type="text" className="form-control" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                            <Form.Control as="textarea" rows={10} type="text" className="form-control p-3" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
                         </Form.Group>
 
 
 
                         <Form.Group className="mb-3">
-                            <Form.Label>techDetail</Form.Label>
-                            <Form.Control as="textarea" rows={10} type="text" className="form-control" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
+                            <Form.Label>Tech Detail</Form.Label>
+                            <Form.Control as="textarea" rows={10} type="text" className="form-control p-3" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
                         </Form.Group>
                     </div>
                 </Form>
 
             </div>
 
-            <i className="bi bi-floppy2-fill text-info display-6 myCursor me-3" onClick={() => formCheck()}> Update</i>
+            <i className="bi bi-arrow-repeat text-info display-6 myCursor me-3" onClick={() => { formCheck(); localStorage.removeItem("editId") }}> Update</i>
         </>
     )
 }

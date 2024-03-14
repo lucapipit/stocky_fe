@@ -129,9 +129,9 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                                 {
                                     singleData[0].pics.split(",").map((el, index) => {
                                         return (
-                                            <div className='myBgImgCover me-1 myCursor'
+                                            <div className={`myBgImgCover imgGalleryCarousel me-1 myCursor ${index === imgSelectionCounter ? "imgGalleryCarouselActive" : ""}`}
                                                 onClick={() => setImgSelectionCounter(index)}
-                                                style={{ height: "90px", width: "90px", border: `${index===imgSelectionCounter?"3px solid #507598":""}`, backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #b8b8b8de, #b8b8b8de)," : ""} url(http://localhost:5050/uploads/${singleData[0].pics.split(",")[index]})` }}
+                                                style={{ backgroundImage: `url(http://localhost:5050/uploads/${singleData[0].pics.split(",")[index]})` }}
                                             ></div>
                                         )
 
@@ -178,7 +178,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                     </>
                 }
 
-                <div className='myCursor text-center mt-2' style={{fontSize: "2rem"}} onClick={() => setMinimize(!minimize)}>
+                <div className='myCursor text-center mt-2' style={{ fontSize: "2rem" }} onClick={() => setMinimize(!minimize)}>
                     <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
                 </div>
 

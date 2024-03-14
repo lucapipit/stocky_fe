@@ -7,6 +7,7 @@ import Alert from 'react-bootstrap/Alert';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import Resizer from "react-image-file-resizer";
 
 function _FormAnnouncement() {
 
@@ -42,9 +43,9 @@ function _FormAnnouncement() {
     const fileData = new FormData();
 
     [...Array(file.length)].map((el, index) => {
-      fileData.append('img', file[index] );
+      fileData.append('img', file[index]);
     })
-    
+
     try {
       const response = await fetch('http://localhost:5050/fileupload', {
         method: 'POST',
@@ -108,6 +109,29 @@ function _FormAnnouncement() {
 
   };
 
+  const resizeFile = async(file) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        300,
+        300,
+        "JPEG",
+        50,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "base64"
+      );
+    });
+
+    const myResize = async (e) => {
+      const file = e.target.files[0];
+      const images = await resizeFile(file);
+      console.log(images);
+      setFile(images);
+    }
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -121,8 +145,13 @@ function _FormAnnouncement() {
   return (
     <div className='d-flex justify-content-center mt-5'>
       <form className='myMaxW500' encType='multipart/form-data'>
-        <Form.Group className="mb-3">
-          <input type='file' multiple onChange={(e) => { setFile(e.target.files) }} />
+
+        <Form.Group className="my-5 d-flex align-items-center justify-content-center">
+          <label className='myCursor myInputFile border rounded-5 d-flex align-items-center' htmlFor="upload-input">
+            <div className='bg-light fw-bold text-dark p-1 px-3 rounded-5'>choose a file</div>
+            <p className='text-light m-0 p1 px-3'>{!file ? "select one or multiple images" : file.length == 1 ? JSON.stringify(file[0].name) : `${JSON.stringify(file.length)} images selected`}</p>
+          </label>
+          <input type='file' style={{ display: "none" }} id="upload-input" multiple onChange={(e) => { /* setFile(e.target.files); */ myResize(e)}} />
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -146,7 +175,7 @@ function _FormAnnouncement() {
         </Form.Group>
 
         <Form.Group className='mb-3'>
-          <Form.Label>productSize</Form.Label>
+          <Form.Label>Product Size</Form.Label>
           <Form.Control type='text' className='form-control' id="productSize" value={productSize} onChange={(e) => setProductSize(e.target.value)} />
         </Form.Group>
 
@@ -161,16 +190,16 @@ function _FormAnnouncement() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>techDetail</Form.Label>
+          <Form.Label>Tech Detail</Form.Label>
           <Form.Control type="text" className="form-control" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>expireDate</Form.Label>
+          <Form.Label>Expire Date</Form.Label>
           <Form.Control type="date" className="form-control" id="expireDate" value={expireDate} onChange={(e) => setExpireDate(e.target.value)} />
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        {/* <Form.Group className="mb-3">
           <Form.Label>textFocus</Form.Label>
           <Form.Control type="text" className="form-control" id="textFocus" value={textFocus} onChange={(e) => setTextFocus(e.target.value)} />
         </Form.Group>
@@ -178,7 +207,7 @@ function _FormAnnouncement() {
         <Form.Group className="mb-3">
           <Form.Label>picsFocus</Form.Label>
           <Form.Control type="text" className="form-control" id="picsFocus" value={picsFocus} onChange={(e) => setPicsFocus(e.target.value)} />
-        </Form.Group>
+        </Form.Group> */}
 
         <div className='d-flex justify-content-center align-items-center gap-3 mb-4'>
           <div className={`${totalPrice === '0' ? 'mb-5' : ''} p-3 border rounded-5 myCursor`} onClick={() => { setTotalPrice("0"); setIdPackage(1) }}>Free</div>

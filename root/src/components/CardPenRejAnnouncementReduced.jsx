@@ -10,7 +10,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
     const dispatch = useDispatch();
 
     const [minimize, setMinimize] = useState(true);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(localStorage.getItem("editId") == singleData.id ? true : false);
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
 
 
@@ -22,9 +22,9 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                 isEditing ?
 
                     <div className='p-5 penRejEditCard position-absolute d-flex justify-content-center '>
-                        <div className='w-100 p-5 bg-secondary rounded-3 text-center'>
+                        <div className='w-100 p-5 announcementEditModal rounded-3 text-center'>
                             <CardPenRejAnnouncementReducedForm singleData={singleData} />
-                            <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => setIsEditing(false)}> Cancel</i>
+                            <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => {setIsEditing(false); localStorage.removeItem("editId")}}> Cancel</i>
                         </div>
                     </div>
 
@@ -39,7 +39,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
                                     {
                                         singleData.status !== 1 ?
-                                            <div className='position-absolute editPencil' onClick={() => setIsEditing(true)}>
+                                            <div className='position-absolute editPencil myCursor' onClick={() => setIsEditing(true)}>
                                                 <i className="bi bi-pencil-fill text-secondary"></i>
                                             </div>
                                             : null
@@ -116,9 +116,9 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                 {
                                                     singleData.pics.split(",").map((el, index) => {
                                                         return (
-                                                            <div className='myBgImgCover me-1 myCursor'
+                                                            <div className={`myBgImgCover imgGalleryCarousel me-1 myCursor ${index === imgSelectionCounter ? "imgGalleryCarouselActive" : ""}`}
                                                                 onClick={() => setImgSelectionCounter(index)}
-                                                                style={{ height: "90px", width: "90px", border: `${index===imgSelectionCounter?"3px solid #507598":""}`, backgroundImage: `${index === imgSelectionCounter ? "linear-gradient(to right, #b8b8b8de, #b8b8b8de)," : ""} url(http://localhost:5050/uploads/${singleData.pics.split(",")[index]})` }}
+                                                                style={{ backgroundImage: `url(http://localhost:5050/uploads/${singleData.pics.split(",")[index]})` }}
                                                             ></div>
                                                         )
 
