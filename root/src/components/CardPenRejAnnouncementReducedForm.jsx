@@ -149,10 +149,10 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         new Promise((resolve) => {
             Resizer.imageFileResizer(
                 file,
-                500,
-                500,
-                "PNG",
-                100,
+                1300,
+                1100,
+                "JPEG",
+                file.size > 200000 ? (file.size > 600000 ? 60 : 70) : 90,
                 0,
                 (uri) => {
                     resolve(uri);
@@ -165,6 +165,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         let imgArray = [];
         [...Array(e.target.files.length)].map(async (el, index) => {
             const myFile = e.target.files[index];
+            console.log(myFile.size);
             const image = await resizeFile(myFile);
             imgArray.push(image);
             setNewFile(imgArray);
@@ -268,8 +269,6 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                     </div>
 
                     <div className='w-100 my-5'>
-
-
                         <Form.Group className="mb-3">
                             <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={10} type="text" className="form-control p-3" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
@@ -282,6 +281,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                             <Form.Control as="textarea" rows={10} type="text" className="form-control p-3" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
                         </Form.Group>
                     </div>
+
                 </Form>
 
             </div>
