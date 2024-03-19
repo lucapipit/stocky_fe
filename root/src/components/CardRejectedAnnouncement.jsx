@@ -98,7 +98,7 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
 
                     {/* sistema di frecce per espandere la card. Da capire perchè funziona solo con due div */}
                     <div className='myCursor minimizeArrow' onClick={() => setMinimize(!minimize)}>
-                        <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                        <i className={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
                     </div>
 
 
@@ -145,7 +145,7 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
 
                     {/* sistema di frecce per espandere la card. Da capire perchè funziona solo con due div */}
                     <div className='myCursor text-center' style={{ fontSize: "2rem" }} onClick={() => setMinimize(!minimize)}>
-                        <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                        <i className={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
                     </div>
 
                 </div>

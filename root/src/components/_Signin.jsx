@@ -154,7 +154,7 @@ const _Signin = () => {
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
-                        <InputGroup.Text id="basic-addon1"><i class="bi bi-geo-fill"></i></InputGroup.Text>
+                        <InputGroup.Text id="basic-addon1"><i className="bi bi-geo-fill"></i></InputGroup.Text>
                         <Form.Control
                             placeholder="City"
                             aria-label="City"
@@ -187,7 +187,7 @@ const _Signin = () => {
                     <hr />
                     <Button className='w-100' variant="primary" onClick={() => { registerUser(); setFirstSendTry(false) }}>{signinLoading ? <Spinner animation="border" size='sm' /> : "register"}</Button>
                     <p className="mt-3 text-center">{firstSendTry || formOk ? "" : <i className="bi bi-exclamation-triangle-fill text-danger"> Fill the form correctly</i>}</p>
-                    {serverResponse ? <p className="mt-3 text-center text-danger"><i class="bi bi-exclamation-circle"> {serverResponse}</i></p> : <p></p>}
+                    {serverResponse ? <p className="mt-3 text-center text-danger"><i className="bi bi-exclamation-circle"> {serverResponse}</i></p> : <p></p>}
                 </div>
             </div>
         </div>

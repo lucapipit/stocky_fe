@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 import CardPenRejAnnouncementReducedForm from './CardPenRejAnnouncementReducedForm';
 
@@ -13,6 +13,9 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
     const [isEditing, setIsEditing] = useState(localStorage.getItem("editId") == singleData.id ? true : false);
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
 
+    //loading states
+    const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
+    const isUpdating = useSelector((state) => state.myStore.isLoading);
 
     return (
         <>
@@ -21,10 +24,18 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
             {
                 isEditing ?
 
-                    <div className='p-5 penRejEditCard position-absolute d-flex justify-content-center '>
-                        <div className='w-100 p-5 announcementEditModal rounded-3 text-center'>
+                    <div className='position-absolute myZindex2 d-flex justify-content-center top-0 '>
+                        {
+                            isDeletingPics || isUpdating ?
+                                <div className='position-absolute myZindex2 myBgTransparentHigh rounded-3 w-100 h-100 border d-flex align-items-center justify-content-center '>
+                                    {/* My Loading Overlay */}
+                                    {isLoading ? <Spinner animation="grow" /> : null}
+                                </div>
+                                : null
+                        }
+                        <div className='p-5 myMainGradient  rounded-3 text-center'>
                             <CardPenRejAnnouncementReducedForm singleData={singleData} />
-                            <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => {setIsEditing(false); localStorage.removeItem("editId")}}> Cancel</i>
+                            <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => { setIsEditing(false); localStorage.removeItem("editId") }}> Cancel</i>
                         </div>
                     </div>
 
@@ -99,7 +110,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                 <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
                                                 <div className='mb-5 mt-2 d-flex flex-wrap align-items-center gap-4'>
                                                     <div className='bg-secondary text-light p-1 px-3 rounded-5'>{singleData.category}</div>
-                                                    <h5 className='m-0'><i class="bi bi-eye-fill "></i> {singleData.views}</h5>
+                                                    <h5 className='m-0'><i className="bi bi-eye-fill "></i> {singleData.views}</h5>
                                                 </div>
                                         }
                                     </div>
@@ -142,7 +153,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
 
                                 <div className='myCursor minimizeArrow' onClick={() => setMinimize(!minimize)}>
-                                    <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                                    <i className={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
                                 </div>
 
 

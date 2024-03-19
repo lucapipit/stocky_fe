@@ -9,6 +9,7 @@ import pendingAnnState from './pendingAnnState';
 import rejectedAnnState from './rejectedAnnState';
 import acceptedAnnState from './acceptedAnnState';
 import userLocationSlice from './userLocationState';
+import uploadFile from './uploadFileState';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
     pendingAnn: pendingAnnState,
     rejectedAnn: rejectedAnnState,
     acceptedAnn: acceptedAnnState,
-    userLocation: userLocationSlice
+    userLocation: userLocationSlice,
+    uploadFile: uploadFile
 
 })
 const store = configureStore({

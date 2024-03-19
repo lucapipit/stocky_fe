@@ -179,7 +179,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                 }
 
                 <div className='myCursor text-center mt-2' style={{ fontSize: "2rem" }} onClick={() => setMinimize(!minimize)}>
-                    <i class={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                    <i className={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
                 </div>
 
 

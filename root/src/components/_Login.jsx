@@ -69,7 +69,7 @@ const _Login = () => {
                 </InputGroup>
                 <button className="btn btn-primary w-100" onClick={() => { handleSubmit(); setFirstSendTry(false) }}>{loginLoading?<Spinner animation="border" size='sm' />:"login"}</button>
                 <p className="mt-3 text-center">{firstSendTry||formOk?"":<i className="bi bi-exclamation-triangle-fill text-danger"> Fill the form correctly</i>}</p>
-                {serverResponse?<p className="mt-3 text-center text-danger"><i class="bi bi-exclamation-circle"> {serverResponse}</i></p>:<p></p>}
+                {serverResponse?<p className="mt-3 text-center text-danger"><i className="bi bi-exclamation-circle"> {serverResponse}</i></p>:<p></p>}
             </div>
         </div>
     )
