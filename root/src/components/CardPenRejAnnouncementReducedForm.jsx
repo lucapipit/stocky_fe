@@ -2,9 +2,8 @@ import { React, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAnnouncementFunc } from "../states/storeState";
-import { createPendingAnnouncementFunc } from "../states/pendingAnnState";
-import { deleteRejectedAnnouncementFunc } from "../states/rejectedAnnState";
 import { deleteFileFunc } from '../states/uploadFileState';
+import { setIsPenRejModalEditing } from '../states/generalState';
 import Resizer from "react-image-file-resizer";
 import Spinner from 'react-bootstrap/Spinner';
 
@@ -16,6 +15,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     const [idOwner, setIdOwner] = useState(singleData.idOwner);
     const [newFile, setNewFile] = useState("");
     const [idPackage, setIdPackage] = useState(singleData.idPackage);
+    const [rejReasons, setRejReasons] = useState(singleData.rejReasons);
     const [brandName, setBrandName] = useState(singleData.brandName);
     const [manufacturerName, setManufacturerName] = useState(singleData.manufacturerName);
     const [modelName, setModelName] = useState(singleData.modelName);
@@ -35,6 +35,9 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
     const [newFileItems, setNewFileItems] = useState("");
 
+
+    /* selectors */
+    const isPenRejModalEditing = useSelector((state) => state.general.isPenRejModalEditing);
     /* loading states */
     const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
     const isLoading = useSelector((state) => state.myStore.isLoading);
@@ -89,16 +92,17 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         const payload = {
             idPackage: idPackage,
             status: singleData.status,
+            rejReasons: rejReasons,
             relevance: idPackage,
-            brandName: brandName,
-            manufacturerName: manufacturerName,
-            modelName: modelName,
+            brandName: brandName.replace("\\", "\\\\").replace("'", "\\'"),
+            manufacturerName: manufacturerName.replace("\\", "\\\\").replace("'", "\\'"),
+            modelName: modelName.replace("\\", "\\\\").replace("'", "\\'"),
             quantity: quantity,
             price: price,
             pics: newFile ? file.concat(input.img.split(",")).toString() : file.toString(),
-            productSize: productSize,
-            description: description,
-            techDetail: techDetail,
+            productSize: productSize.replace("\\", "\\\\").replace("'", "\\'"),
+            description: description.replace("\\", "\\\\").replace("'", "\\'"),
+            techDetail: techDetail.replace("\\", "\\\\").replace("'", "\\'"),
             category: category,
             expireDate: expireDate,
             /* textFocus: textFocus,
@@ -108,14 +112,13 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
             negClick: 0
         }
 
-        dispatch(updateAnnouncementFunc({ id: singleData.id, payload: payload, status: singleData.status }))
+        dispatch(updateAnnouncementFunc({ payload: { ...payload, id: singleData.id }, token: localStorage.getItem("token") }))
             .then((response) => {
                 if (response.payload.statusCode === 200) {
                     if (singleData.status === 3) {
-                        dispatch(createPendingAnnouncementFunc({ ...singleData, ...payload, status: 0, rejReasons: singleData.rejReasons.replace("\\", "\\\\").replace("'", "\\'") }))
+                        dispatch(updateAnnouncementFunc({ payload: { ...payload, id: singleData.id, status: 0 }, token: localStorage.getItem("token") }))
                             .then((response) => {
                                 if (response.payload.statusCode === 200) {
-                                    dispatch(deleteRejectedAnnouncementFunc(singleData.id));
                                     window.location.reload()
                                 }
                             })
@@ -160,7 +163,12 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
                     <div className='d-flex justify-content-center flex-wrap gap-5'>
 
+                        <div className='position-absolute top-0 end-0 display-6 p-4 pt-3 myCursor'>
+                            <i class="bi bi-x-lg" onClick={() => { dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId") }}></i>
+                        </div>
+
                         <div className='position-relative'>
+
 
                             {
                                 file.length > 1 ?
@@ -183,7 +191,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
                                 <div className='w-100'>
 
-                                    <div className='mt-1 d-flex align-items-center justify-content-center flex-wrap'>
+                                    <div className='mt-1 d-flex align-items-center justify-content-center flex-wrap myMaxW600'>
                                         {
                                             file.map((el, index) => {
                                                 return (
@@ -268,7 +276,8 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
             </div>
 
-            {isLoading ? <span><Spinner animation="border" variant='info' /><i className='text-info display-6 me-3'> Update</i></span>: <i className="bi bi-arrow-repeat text-info display-6 myCursor me-3" onClick={() => { formCheck(); localStorage.removeItem("editId") }}> Update</i>}
+            {isLoading ? <span><Spinner animation="border" variant='info' /><i className='text-info display-6 me-3'> Update</i></span> : <i className="bi bi-arrow-repeat text-info display-6 myCursor me-3" onClick={() => { formCheck(); localStorage.removeItem("editId") }}> Update</i>}
+            <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => { dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId") }}> Cancel</i>
         </>
     )
 }

@@ -3,26 +3,31 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 import CardPenRejAnnouncementReducedForm from './CardPenRejAnnouncementReducedForm';
+import { setIsPenRejModalEditing } from '../states/generalState';
 
 
 const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
     const dispatch = useDispatch();
 
+
     const [minimize, setMinimize] = useState(true);
-    const [isEditing, setIsEditing] = useState(localStorage.getItem("editId") == singleData.id ? true : false);
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
 
     //loading states
     const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
     const isUpdating = useSelector((state) => state.myStore.isLoading);
 
+    //open and keep edit modal open state. 
+    const isPenRejModalEditing = useSelector((state) => state.general.isPenRejModalEditing);
+
+
     return (
         <>
 
             {/* rejection modal */}
             {
-                isEditing ?
+                isPenRejModalEditing.value && isPenRejModalEditing.id === singleData.id || localStorage.getItem("editId") == singleData.id ?
 
                     <div className='position-absolute myZindex2 d-flex justify-content-center top-0 '>
                         {
@@ -33,16 +38,15 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                 </div>
                                 : null
                         }
-                        <div className='p-5 myMainGradient  rounded-3 text-center'>
+                        <div className='p-5 myMainGradient text-center'>
                             <CardPenRejAnnouncementReducedForm singleData={singleData} />
-                            <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => { setIsEditing(false); localStorage.removeItem("editId") }}> Cancel</i>
                         </div>
                     </div>
 
 
                     : <div className="m-2 border myMaxW800" >
 
-                        <div className='' style={{ borderLeft: `3px solid ${singleData.status === 3 ? "red" : singleData.status === 0 ? "lightgray" : "yellowgreen"}` }}>
+                        <div style={{ borderLeft: `3px solid ${singleData.status === 3 ? "red" : singleData.status === 0 ? "lightgray" : "yellowgreen"}` }}>
 
                             <div className={`${minimize ? "myFade" : "position-relative"} p-3`}>
 
@@ -50,7 +54,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
                                     {
                                         singleData.status !== 1 ?
-                                            <div className='position-absolute editPencil myCursor' onClick={() => setIsEditing(true)}>
+                                            <div className='position-absolute editPencil myCursor' onClick={() => { /* setKeepEditModalOpen(true); */ dispatch(setIsPenRejModalEditing({ value: true, id: singleData.id })) }}>
                                                 <i className="bi bi-pencil-fill text-secondary"></i>
                                             </div>
                                             : null
@@ -180,6 +184,18 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                         <p>{singleData.techDetail}</p>
                                                     </div>
                                             }
+
+                                            {
+                                                !singleData || isLoading ?
+                                                    <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder> :
+                                                    <div className='my-5'>
+                                                        <hr />
+                                                        <span className='border border-primary me-2 px-3 py-2 rounded-5 text-primary'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
+                                                        <span className='border border-info px-3 me-2 py-2 rounded-5 text-info'>Last update at: <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
+                                                        {singleData.dataApproved?<span className='border border-success px-3 py-2 rounded-5 text-success'><i className="bi bi-check-circle-fill me-2"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span>:null}
+                                                    </div>
+                                            }
+
                                         </div>
                                 }
 
@@ -188,7 +204,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                             </div>
 
                         </div>
-                    </div>
+                    </div >
             }
 
         </>

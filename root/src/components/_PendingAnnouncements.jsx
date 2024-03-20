@@ -1,26 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllPendingAnnouncementsFunc } from '../states/pendingAnnState';
+import { getAllAnnouncementsFunc } from '../states/storeState';
 import CardPendingAnnouncement from './CardPendingAnnouncement';
 import Spinner from 'react-bootstrap/Spinner';
 
 const _PendingAnnouncements = () => {
 
     const dispatch = useDispatch();
-    const allPendingAnnouncements = useSelector((state) => state.pendingAnn.allPendingAnnouncements);
-    const isLoading = useSelector((state) => state.pendingAnn.isLoading)
+    const allData = useSelector((state) => state.myStore.allData);
+    const isLoading = useSelector((state) => state.myStore.isLoading);
 
     useEffect(() => {
-        dispatch(getAllPendingAnnouncementsFunc());
+        dispatch(getAllAnnouncementsFunc({token: localStorage.getItem("token"), status: 0}));
     }, [])
 
 
     return (
         <div>
             <h1 className='text-center fw-light mt-3 mb-4'>Pending Announcements</h1>
-            {allPendingAnnouncements && isLoading ?
-                <div className='text-center my-4'><Spinner animation="border" variant="primary" /></div> :
-                allPendingAnnouncements.map((el) => {
+            {allData && isLoading ?
+                <div className='text-center my-4'><Spinner animation="border" variant="primary" /></div> 
+                :allData .map((el) => {
                     return <CardPendingAnnouncement singleData={[el]} isLoading={isLoading} />
                 })}
         </div>

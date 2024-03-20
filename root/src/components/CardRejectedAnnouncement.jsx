@@ -1,9 +1,6 @@
 
 import { React, useEffect, useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
-import { postCreateAnnouncementFunc } from '../states/storeState';
-import { updatePendingAnnouncementFunc, deletePendingAnnouncementFunc } from '../states/pendingAnnState';
-import { createRejectedAnnouncementFunc } from '../states/rejectedAnnState';
 import { useDispatch } from 'react-redux';
 
 
@@ -13,25 +10,6 @@ const CardRejectedAnnouncement = ({ singleData, isLoading }) => {
     const dispatch = useDispatch();
     const [minimize, setMinimize] = useState(true);
 
-    const approveAnnouncement = async () => {
-        if (window.confirm("Do you want to approve this announcement? ")) {
-            dispatch(updatePendingAnnouncementFunc({ ...singleData[0], status: 1 }))
-                .then((response) => response.payload.statusCode === 200 ? dispatch(postCreateAnnouncementFunc(singleData[0])) : null)
-                .then((response) => response.payload.statusCode === 200 ? dispatch(deletePendingAnnouncementFunc(singleData[0].id)) : null)
-                .then((response) => response.payload.statusCode === 200 ? window.location.reload() : null)
-
-        };
-    }
-
-    const rejectAnnouncement = async () => {
-        if (window.confirm("Do you want to reject this announcement? ")) {
-            dispatch(updatePendingAnnouncementFunc({ ...singleData[0], status: 3 }))
-                .then((response) => response.payload.statusCode === 200 ? dispatch(createRejectedAnnouncementFunc(singleData[0])) : null)
-            /* .then((response) => response.payload.statusCode === 200 ? dispatch(deletePendingAnnouncementFunc(singleData[0].id)) : null)
-            .then((response) => response.payload.statusCode === 200 ? window.location.reload() : null) */
-
-        };
-    }
 
     return (
 

@@ -13,7 +13,7 @@ const initialState = {
 
 export const getAllCountsFunc = createAsyncThunk(
     'api/getAllCounts',
-    async()=>{
+    async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/allcounts`, {
                 method: 'GET'
@@ -27,10 +27,14 @@ export const getAllCountsFunc = createAsyncThunk(
 
 export const getAllAnnouncementsFunc = createAsyncThunk(
     'api/getAllAnnouncements',
-    async () => {
+    async (input) => {
+        const { token, status } = input;
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/allannouncements`, {
-                method: 'GET'
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/allannouncements/${status}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             const data = await response.json();
             return data;
@@ -41,16 +45,38 @@ export const getAllAnnouncementsFunc = createAsyncThunk(
     }
 )
 
+export const getAllAnnouncementsByIdOwnerFunc = createAsyncThunk(
+    'api/getAllAnnouncementsByIdOwner',
+    async (input) => {
+        const { idOwner, token } = input;
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/alluserannouncements/${idOwner}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            return await response.json()
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+)
+
 export const postCreateAnnouncementFunc = createAsyncThunk(
     'api/postCreateAnnouncement',
     async (input) => {
+        const { payload, token } = input;
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/createannouncement`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(input),
+                body: JSON.stringify(payload),
             });
             const data = await response.json();
             return data;
@@ -75,14 +101,14 @@ export const deleteAnnouncementFunc = createAsyncThunk(
 export const updateAnnouncementFunc = createAsyncThunk(
     'api/updateAnnouncement',
     async (input) => {
-
-        const {id, payload, status} = input;
+        const { payload, token } = input;
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/${status===3?"updaterej-announcement":"updatepen-announcement"}/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/updateannouncement`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(payload)
             });
@@ -97,7 +123,7 @@ export const updateAnnouncementFunc = createAsyncThunk(
 export const getSingleAnnouncementFunc = createAsyncThunk(
     'api/getSingleAnnouncement',
     async (input) => {
-        const  {id, token} = input;
+        const { id, token } = input;
         const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/announcement/${id}`, {
             method: 'GET',
             headers: {
@@ -113,7 +139,7 @@ export const getSingleAnnouncementFunc = createAsyncThunk(
 export const getAnnouncementsByInterestsFunc = createAsyncThunk(
     'api/getAnnouncementsByInterests',
     async (input) => {
-        const  {interests, token} = input;
+        const { interests, token } = input;
         const response = await fetch(`http://localhost:5050/announcementsbyinterests/${interests}`, {
             method: 'GET',
             headers: {
@@ -148,28 +174,39 @@ const sliceStore = createSlice({
             state.isLoading = false;
             state.error = " server error"
         });
-        //postCreateAnnouncements
-        builder.addCase(postCreateAnnouncementFunc.pending, (state) => {
-            state.isLoading = true;
-        })
-        builder.addCase(postCreateAnnouncementFunc.fulfilled, (state, action) => {
-            state.allData = action.payload
-            state.isLoading = false
-        })
-        builder.addCase(postCreateAnnouncementFunc.rejected, (state) => {
-            state.isLoading = false;
-            state.error = " server error"
-        });
         // getAllAnnouncements
         builder.addCase(getAllAnnouncementsFunc.pending, (state) => {
             state.isLoading = true;
         })
         builder.addCase(getAllAnnouncementsFunc.fulfilled, (state, action) => {
-            state.allData = action.payload
+            state.allData = action.payload.data
             state.isLoading = false
 
         })
         builder.addCase(getAllAnnouncementsFunc.rejected, (state) => {
+            state.isLoading = false;
+            state.error = " server error"
+        });
+        // getAllAnnouncementsByIdOwner
+        builder.addCase(getAllAnnouncementsByIdOwnerFunc.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(getAllAnnouncementsByIdOwnerFunc.fulfilled, (state, action) => {
+            state.allData = action.payload.payload
+            state.isLoading = false
+        });
+        builder.addCase(getAllAnnouncementsByIdOwnerFunc.rejected, (state) => {
+            state.isLoading = false;
+            state.error = " server error"
+        });
+        //postCreateAnnouncements
+        builder.addCase(postCreateAnnouncementFunc.pending, (state) => {
+            state.isLoading = true;
+        })
+        builder.addCase(postCreateAnnouncementFunc.fulfilled, (state, action) => {
+            state.isLoading = false
+        })
+        builder.addCase(postCreateAnnouncementFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = " server error"
         });
@@ -178,7 +215,6 @@ const sliceStore = createSlice({
             state.isLoading = true;
         })
         builder.addCase(deleteAnnouncementFunc.fulfilled, (state, action) => {
-            state.allData = action.payload
             state.isLoading = false
 
         })
@@ -192,7 +228,6 @@ const sliceStore = createSlice({
         })
         builder.addCase(updateAnnouncementFunc.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.allData = action.payload
         });
         builder.addCase(updateAnnouncementFunc.rejected, (state) => {
             state.isLoading = false;
@@ -226,5 +261,5 @@ const sliceStore = createSlice({
     }
 });
 
-export const {saveAnnouncementPayload} = sliceStore.actions;
+export const { saveAnnouncementPayload } = sliceStore.actions;
 export default sliceStore.reducer

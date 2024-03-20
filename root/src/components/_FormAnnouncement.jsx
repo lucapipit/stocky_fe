@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import { createPendingAnnouncementFunc } from '../states/pendingAnnState';
+import { postCreateAnnouncementFunc } from '../states/storeState';
 import { saveAnnouncementPayload } from '../states/storeState';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
@@ -101,7 +101,7 @@ function _FormAnnouncement() {
       negClick: 0
     }
     if (totalPrice === "0") {
-      dispatch(createPendingAnnouncementFunc(payload))
+      dispatch(postCreateAnnouncementFunc({payload: payload, token: localStorage.getItem("token")}))
         .then((response) => response.payload.statusCode === 200 ? navigate("/") : null)
     } else {
       dispatch(saveAnnouncementPayload(payload))
