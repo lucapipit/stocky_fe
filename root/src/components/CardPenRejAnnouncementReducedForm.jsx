@@ -31,6 +31,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
     const [isFormFilled, setIsFormFilled] = useState(false);
     const [isFirstTry, setIsFirstTry] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
     const [newFileItems, setNewFileItems] = useState("");
@@ -41,6 +42,11 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     /* loading states */
     const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
     const isLoading = useSelector((state) => state.myStore.isLoading);
+
+    //escape string
+    const escapeString = (input) => {
+        return input.replaceAll("\\", "\\\\").replaceAll("'", "\\'")/* .replaceAll("%", "\\%") */
+    }
 
     const uploadFile = async (newFile) => {
         const fileData = new FormData();
@@ -79,9 +85,14 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
     const manageImages = async () => {
         if (window.confirm("Do you want to delete this image? ")) {
-            dispatch(deleteFileFunc(file[imgSelectionCounter]));
+            dispatch(deleteFileFunc(file[imgSelectionCounter]))
+                .then((response) => {
+                    if (response.payload.statusCode !== 200) {
+                        setErrorMessage(response.payload.message)
+                    }
+                });
             setFile(file.splice(file.indexOf(file[imgSelectionCounter]), 1));
-            dispatch(updateAnnouncementFunc({ payload: { ...singleData, pics: file.toString() }, id: singleData.id, status: singleData.status }));
+            handleUpdateFormAnnouncement();
             setImgSelectionCounter(0);
             setFile(file)//fondamentale per aggiornare la galleria immagini
         }
@@ -92,18 +103,19 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         const payload = {
             idPackage: idPackage,
             status: singleData.status,
-            rejReasons: rejReasons,
+            rejReasons: escapeString(rejReasons),
             relevance: idPackage,
-            brandName: brandName.replace("\\", "\\\\").replace("'", "\\'"),
-            manufacturerName: manufacturerName.replace("\\", "\\\\").replace("'", "\\'"),
-            modelName: modelName.replace("\\", "\\\\").replace("'", "\\'"),
+            brandName: escapeString(brandName),
+            manufacturerName: escapeString(manufacturerName),
+            modelName: escapeString(modelName),
             quantity: quantity,
             price: price,
             pics: newFile ? file.concat(input.img.split(",")).toString() : file.toString(),
-            productSize: productSize.replace("\\", "\\\\").replace("'", "\\'"),
-            description: description.replace("\\", "\\\\").replace("'", "\\'"),
-            techDetail: techDetail.replace("\\", "\\\\").replace("'", "\\'"),
-            category: category,
+            productSize: escapeString(productSize),
+            description: escapeString(description),
+            techDetail: escapeString(techDetail),
+            category: escapeString(category),
+            dataApproved: singleData.dataApproved,
             expireDate: expireDate,
             /* textFocus: textFocus,
             picsFocus: picsFocus, */
@@ -125,6 +137,8 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                     } else {
                         window.location.reload()
                     }
+                } else {
+                    setErrorMessage(response.payload.message)
                 }
             });
     };
@@ -155,6 +169,8 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         setNewFile(imgArray);
     }
 
+
+
     return (
         <>
             <div className='d-flex justify-content-center mt-5'>
@@ -163,8 +179,8 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
                     <div className='d-flex justify-content-center flex-wrap gap-5'>
 
-                        <div className='position-absolute top-0 end-0 display-6 p-4 pt-3 myCursor'>
-                            <i class="bi bi-x-lg" onClick={() => { dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId") }}></i>
+                        <div className='position-absolute top-0 end-0 display-6 p-4 pt-4 myCursor'>
+                            <i class="bi bi-x-lg" onClick={() => { document.body.style.overflow = ''; dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId") }}></i>
                         </div>
 
                         <div className='position-relative'>
@@ -276,8 +292,16 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
             </div>
 
-            {isLoading ? <span><Spinner animation="border" variant='info' /><i className='text-info display-6 me-3'> Update</i></span> : <i className="bi bi-arrow-repeat text-info display-6 myCursor me-3" onClick={() => { formCheck(); localStorage.removeItem("editId") }}> Update</i>}
-            <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => { dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId") }}> Cancel</i>
+            <div className='pb-5'>
+                {isLoading ? <span><Spinner animation="border" variant='info' /><i className='text-info display-6 me-3'> Update</i></span> : <i className="bi bi-arrow-repeat text-info display-6 myCursor me-3" onClick={() => { formCheck(); localStorage.removeItem("editId") }}> Update</i>}
+                <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => { dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId") }}> Cancel</i>
+                {
+                    errorMessage ?
+                        <div className='d-flex align-items-center justify-content-center mt-4 fw-light'><p className='text-light p-3 myMaxW700 bg-danger'>{errorMessage}</p></div>
+                        : null
+                }
+            </div>
+
         </>
     )
 }

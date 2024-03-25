@@ -27,12 +27,13 @@ const _Account = () => {
 
 
   return (
-    <>
+    <div >
+      
       {
         userData && userData.length > 0 ?
           <div className='position-relative' >
 
-            <h1 className='fw-light text-center mt-5'><i className="bi bi-person-circle"></i> Account</h1>
+            <h1 className='fw-light text-center pt-5'><i className="bi bi-person-circle"></i> Account</h1>
 
             <div className='d-flex align-items-center justify-content-center my-5'>
               <div className='border rounded-5 p-5 myMainGradient text-light shadow'>
@@ -68,7 +69,7 @@ const _Account = () => {
             <Spinner animation="border" variant='dark' />
           </div>
       }
-    </>
+    </div>
   )
 
 }

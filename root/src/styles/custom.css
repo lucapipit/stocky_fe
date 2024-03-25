@@ -11,6 +11,10 @@ h6 {
     cursor: pointer;
 }
 
+.myZindex2 {
+    z-index: 2;
+}
+
 .myVh100 {
     min-height: calc(100vh - 59px);
 }
@@ -19,6 +23,7 @@ h6 {
 .myMaxH300 {
     max-height: 300px !important;
 }
+
 .myMaxH500 {
     max-height: 500px !important;
 }
@@ -74,12 +79,16 @@ h6 {
     background-color: #fff;
 }
 
-.myMainGradient{
+.myMainGradient {
     background: linear-gradient(to bottom, #333, #2a606c);
 }
 
-.myBgTransparentHigh{
+.myBgTransparentHigh {
     background: #cfcfcfb8;
+}
+
+.myBgTransparentVeryHigh {
+    background: #0f0f0fee;
 }
 
 /* background image */
@@ -136,7 +145,6 @@ h6 {
 }
 
 /* overflow y */
-.myOverflowY{
+.myOverflowY {
     overflow-y: scroll;
 }
-
