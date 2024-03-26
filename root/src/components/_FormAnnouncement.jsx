@@ -8,6 +8,10 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Resizer from "react-image-file-resizer";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import productCategories from '../assets/JSON/productCategories.json';
+import { setCategoriesProduct, delCategoriesProduct } from '../states/generalState'
 
 function _FormAnnouncement() {
 
@@ -24,7 +28,7 @@ function _FormAnnouncement() {
   const [productSize, setProductSize] = useState("");
   const [description, setDescription] = useState("");
   const [techDetail, setTechDetail] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState([]);
   const [expireDate, setExpireDate] = useState("");
   const [textFocus, setTextFocus] = useState("");
   const [picsFocus, setPicsFocus] = useState("");
@@ -36,7 +40,7 @@ function _FormAnnouncement() {
 
   const navigate = useNavigate();
 
-  const announcementPayload = useSelector((state) => state.myStore.announcementPayload);
+  const categoriesProduct = useSelector((state) => state.general.categoriesProduct);
 
 
   const uploadFile = async (file) => {
@@ -101,7 +105,7 @@ function _FormAnnouncement() {
       negClick: 0
     }
     if (totalPrice === "0") {
-      dispatch(postCreateAnnouncementFunc({payload: payload, token: localStorage.getItem("token")}))
+      dispatch(postCreateAnnouncementFunc({ payload: payload, token: localStorage.getItem("token") }))
         .then((response) => response.payload.statusCode === 200 ? navigate("/") : null)
     } else {
       dispatch(saveAnnouncementPayload(payload))
@@ -109,7 +113,7 @@ function _FormAnnouncement() {
 
   };
 
-  const resizeFile = async(file) =>
+  const resizeFile = async (file) =>
     new Promise((resolve) => {
       Resizer.imageFileResizer(
         file,
@@ -125,13 +129,18 @@ function _FormAnnouncement() {
       );
     });
 
-    const myResize = async (e) => {
-      const file = e.target.files[0];
-      const images = await resizeFile(file);
-      console.log(images);
-      setFile(images);
-    }
+  const myResize = async (e) => {
+    const file = e.target.files[0];
+    const images = await resizeFile(file);
+    console.log(images);
+    setFile(images);
+  }
 
+  const manageCategory = (input) => {
+    console.log(categoriesProduct);
+    if(!categoriesProduct.includes(input.id))
+    dispatch(setCategoriesProduct(input))
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -140,6 +149,8 @@ function _FormAnnouncement() {
       setIdOwner(tkn.id)
     }
   }, [])
+
+
 
 
   return (
@@ -151,7 +162,7 @@ function _FormAnnouncement() {
             <div className='bg-light fw-bold text-dark p-1 px-3 rounded-5'>choose a file</div>
             <p className='text-light m-0 p1 px-3'>{!file ? "select one or multiple images" : file.length == 1 ? JSON.stringify(file[0].name) : `${JSON.stringify(file.length)} images selected`}</p>
           </label>
-          <input type='file' style={{ display: "none" }} id="upload-input" multiple onChange={(e) => { /* setFile(e.target.files); */ myResize(e)}} />
+          <input type='file' style={{ display: "none" }} id="upload-input" multiple onChange={(e) => { /* setFile(e.target.files); */ myResize(e) }} />
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -186,7 +197,29 @@ function _FormAnnouncement() {
 
         <Form.Group className="mb-3">
           <Form.Label>Category</Form.Label>
-          <Form.Control type="text" className="form-control" id="category" value={category} onChange={(e) => setCategory(e.target.value)} />
+          <DropdownButton id="dropdown-basic-button" title={categoriesProduct.length ? categoriesProduct.length === 1 ? "1 item" : `${categoriesProduct.length} items` : "select one or more categories"}>
+            <h4 className='w-100 text-center mt-3'>Dental Categories</h4>
+            <hr className='w-100 px-5 mt-1' />
+            {
+              productCategories && productCategories.map((el) => {
+                if (el.area === "dental") { return <span className=" text-light p-1 px-3 m-1 rounded-5 myBgAcqua myCursor" onClick={() => { manageCategory(el) }}>{el.eng}</span> }
+              })
+            }
+            <h4 className='w-100 text-center mt-3'>Medical Categories</h4>
+            <hr className='w-100 px-5 mt-1' />
+            {
+              productCategories && productCategories.map((el) => {
+                if (el.area === "medical") { return <span className=" text-light p-1 px-3 m-1 rounded-5 myBgRed myCursor" onClick={() => { manageCategory(el) }}>{el.eng}</span> }
+              })
+            }
+          </DropdownButton>
+          <div className='d-flex flex-wrap justify-content-center my-3'>
+            {
+              categoriesProduct && categoriesProduct.map((el) => {
+                return <span className={`text-light p-1 px-3 m-1 rounded-5 d-flex align-iems-center ${el.area == "dental" ? "myBgAcqua" : "myBgRed"}`}>{el.eng} <i className="bi bi-trash-fill ms-2 myCursor" onClick={() => { dispatch(delCategoriesProduct(el.id)) }}></i></span>
+              })
+            }
+          </div>
         </Form.Group>
 
         <Form.Group className="mb-3">

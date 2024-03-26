@@ -15,11 +15,12 @@ h6 {
     z-index: 2;
 }
 
+
+/* height */
 .myVh100 {
     min-height: calc(100vh - 59px);
 }
 
-/* height */
 .myMaxH300 {
     max-height: 300px !important;
 }
@@ -79,6 +80,14 @@ h6 {
     background-color: #fff;
 }
 
+.myBgAcqua {
+    background-color: #14a7ad;
+}
+
+.myBgRed {
+    background-color: #d21b4c;
+}
+
 .myMainGradient {
     background: linear-gradient(to bottom, #333, #2a606c);
 }
@@ -103,6 +112,7 @@ h6 {
     background-repeat: no-repeat;
     background-position: center;
 }
+
 
 /* icons font size */
 .myIconLg {

@@ -6,6 +6,7 @@ import { deleteFileFunc } from '../states/uploadFileState';
 import { setIsPenRejModalEditing } from '../states/generalState';
 import Resizer from "react-image-file-resizer";
 import Spinner from 'react-bootstrap/Spinner';
+import { escapeString } from '../functions/general';
 
 const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
@@ -42,11 +43,6 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     /* loading states */
     const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
     const isLoading = useSelector((state) => state.myStore.isLoading);
-
-    //escape string
-    const escapeString = (input) => {
-        return input.replaceAll("\\", "\\\\").replaceAll("'", "\\'")/* .replaceAll("%", "\\%") */
-    }
 
     const uploadFile = async (newFile) => {
         const fileData = new FormData();
