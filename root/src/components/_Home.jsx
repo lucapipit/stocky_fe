@@ -3,6 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
+import boxDraw from '../assets/box draw.png';
 
 
 
@@ -11,10 +12,7 @@ const Home = () => {
 
   const backgroundStore = {
     minHeight: "calc(100vh - 59px)",
-    backgroundImage: "url('https://img.freepik.com/free-vector/clean-medical-background_53876-97927.jpg?size=626&ext=jpg&ga=GA1.1.1788068356.1706486400&semt=ais')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    color: "black",
+    background: `linear-gradient(to bottom, #333, #2a606c)`,
     textAlign: "center",
   };
 
@@ -29,24 +27,19 @@ const Home = () => {
   };
 
 
-
-
   return (
     <div>
-      <div style={backgroundStore} className='text-secondary bg-dark py-5 px-3 d-flex justify-content-center flex-column'>
+
+      <div style={backgroundStore} className='text-light py-5 px-3 d-flex justify-content-center flex-column'>
         <div>
-          <h1 className='font-monserrat'>Benvenuto nel Negozio di Articoli Medici</h1>
-          <h3 className='nycd'>
-            Trova gli articoli medici di cui hai bisogno per prenderti cura della tua salute.
-            Esplora la nostra vasta selezione e trova prodotti di alta qualità per ogni tua esigenza.
-          </h3>
-          <h3 className='nycd' >
-            Se sei un professionista del settore, hai la possibilità di inserire annunci per promuovere i tuoi servizi
-            o offrire prodotti specializzati. Entra nel nostro <Link to="/createannouncement" className='linkcreate'>Mercato degli Annunci</Link> ora.
+          <img className='img-fluid myMaxW300' src={boxDraw} alt="" />
+          <h1 className='font-monserrat display-6 fw-bold'>myStocker</h1>
+          <h3 className='nycd display-6' >
+            Get in the Store and make a deal!
           </h3>
         </div>
-        <Link to={"/store"} style={{ marginTop: '20px' }}>
-          <Button variant="btn btn-outline-secondary">Vai al Negozio</Button>
+        <Link to={"/store"}>
+          <Button variant="btn btn-secondary mt-5">Store</Button>
         </Link>
       </div>
 
@@ -64,7 +57,7 @@ const Home = () => {
       <div className='text-dark p-3' id='howItWorks'>
 
         <h2 className='text-black p-4 font-monserrat text-center'>How does the portal work</h2>
-        
+
         {/* <div>
 
           <div className='d-flex justify-content-center p-3'>

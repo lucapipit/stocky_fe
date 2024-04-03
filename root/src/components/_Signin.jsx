@@ -9,7 +9,8 @@ import { postSigninFunc } from '../states/signinState';
 import { postLoginFunc, setIsLogged } from '../states/loginState';
 import { useNavigate } from 'react-router';
 import Spinner from 'react-bootstrap/Spinner';
-
+import countriesArray from '../assets/JSON/countriesIso2Arry.json';
+import { setDistributionArea, delDistributionArea } from '../states/generalState';
 
 const _Signin = () => {
 
@@ -27,9 +28,12 @@ const _Signin = () => {
     const [serverResponse, setServerResponse] = useState("");
     const formOk = companyName && email && pssw && country && city && zipCode && typeOfJob !== "select your role";
 
+    const [addArea, setAddArea] = useState(false);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const signinLoading = useSelector((state) => state.signin.loading)
+    const signinLoading = useSelector((state) => state.signin.loading);
+    const distributionAreaISO = useSelector((state) => state.general.distributionAreaISO);
 
     const registerUser = async () => {
 
@@ -52,17 +56,17 @@ const _Signin = () => {
             dispatch(postSigninFunc(payload))
                 .then((res) => {
                     if (res.payload.statusCode === 200) {
-                        
-                        dispatch(postLoginFunc({email: email, pssw: pssw}))
-                        .then((res)=>{
-                            if(res.payload.statusCode === 200){
-                                localStorage.setItem('token', res.payload.token);
-                                dispatch(setIsLogged(true));
-                            }else {
-                                setServerResponse(res.payload.message);
-                                console.error('login error');
-                            }
-                        });
+
+                        dispatch(postLoginFunc({ email: email, pssw: pssw }))
+                            .then((res) => {
+                                if (res.payload.statusCode === 200) {
+                                    localStorage.setItem('token', res.payload.token);
+                                    dispatch(setIsLogged(true));
+                                } else {
+                                    setServerResponse(res.payload.message);
+                                    console.error('login error');
+                                }
+                            });
 
                         setCompanyName("");
                         setEmail("");
@@ -74,7 +78,7 @@ const _Signin = () => {
                         setPhone("");
                         setTypeOfJob("select your role");
                         navigate("/");
-                        
+
                     } else {
                         setServerResponse(res.payload.message);
                         console.error('signin error');
@@ -92,7 +96,7 @@ const _Signin = () => {
         <div className='d-flex align-items-center justify-content-center' style={{ height: "100vh" }}>
             <div className='bg-light border w-75 p-5 rounded-5'>
                 <h2 className='text-center text-secondary fw-light'>Signin</h2>
-                <hr className='mb-4'/>
+                <hr className='mb-4' />
                 <div>
                     <DropdownButton className="mb-3" variant='info' id="dropdown-basic-button" title={typeOfJob}>
                         <Dropdown.Item href="#/action-1" onClick={() => { setTypeOfJob("Manufacturer") }}>Manufacturer</Dropdown.Item>
@@ -131,8 +135,35 @@ const _Signin = () => {
                         />
                     </InputGroup>
 
-                    <hr />
 
+                    <hr className='my-4' />
+
+                    <h4 className='text-secondary fw-light mb-4'>Distrubution area</h4>
+                    <div className='d-flex justify-content-start'>
+                        {
+                            addArea ?
+                                <DropdownButton className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title="select a country">
+                                    {
+                                        countriesArray && countriesArray.iso2.map((el) => {
+                                            return <Dropdown.Item onClick={() => { setTypeOfJob("Manufacturer"); dispatch(setDistributionArea(el)); setAddArea(false) }}>{el.split(":")[0]}</Dropdown.Item>
+                                        })
+                                    }
+                                </DropdownButton>
+                                : <div className='myBgWhite plusDistributionArea myCursor d-flex align-items-center justify-content-center border' onClick={() => { setAddArea(true) }}><i className="bi bi-plus-lg text-primary"></i></div>
+                        }
+
+                    </div>
+                    <div className='mt-3'>
+                        {
+                            distributionAreaISO && distributionAreaISO.map((item) => {
+                                return <span className='bg-dark text-light me-2 my-1 p-1 px-3 rounded-5 distAreaCountry'>{item.split(":")[0]}<i className="bi bi-trash-fill text-danger ms-2 myCursor" onClick={() => { dispatch(delDistributionArea(item)); console.log(item); }}></i></span>
+                            })
+                        }
+                    </div>
+
+                    <hr className='mt-5' />
+
+                    <h4 className=' text-secondary fw-light mb-4'>Company location</h4>
                     <InputGroup className="mb-3">
                         <InputGroup.Text id="basic-addon1"><i className="bi bi-globe-americas"></i></InputGroup.Text>
                         <Form.Control

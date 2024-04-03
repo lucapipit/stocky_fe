@@ -4,6 +4,7 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import { updateAnnouncementFunc } from '../states/storeState';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import productCategories from '../assets/JSON/productCategories.json';
 
 
 const CardPendingAnnouncement = ({ singleData, isLoading }) => {
@@ -91,13 +92,23 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                                         </div>
                                     </div>
                             }
-                            {
-                                !singleData[0] || isLoading ?
-                                    <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
-                                    <div className='mb-2'>
-                                        <span className='bg-secondary text-light p-1 px-3 rounded-5'>{singleData[0].category}</span>
-                                    </div>
-                            }
+
+                            <div className='d-flex flex-wrap mb-3'>
+                                {
+                                    singleData[0].category && singleData[0].category.split(",").map((el) => {
+                                        return (
+                                            <div>
+                                                {productCategories.map((item) => {
+                                                    if (item.id === +el) {
+                                                        return <span className={`text-light p-1 px-3 m-1 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`}> {item.eng} </span>
+                                                    }
+                                                })}
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+
                             {
                                 !singleData[0] || isLoading ?
                                     <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder>
@@ -173,7 +184,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
                                 <hr />
                                 <span className='border border-primary me-4 px-3 py-2 rounded-5 text-primary'>Created at: <i className='fw-bold'>{singleData[0].dataIns.split("T")[0]}</i></span>
                                 <span className='border border-info px-3 py-2 rounded-5 text-info'>Last update at: <i className='fw-bold'>{singleData[0].dataMod.split("T")[0]}</i></span>
-                            
+
                             </div>
 
                             <div className='mb-5 mt-4 d-flex justify-content-center gap-5'>

@@ -13,6 +13,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
     const [minimize, setMinimize] = useState(true);
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
+    const [category, setCategory] = useState(singleData.category)
 
     //loading states
     const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
@@ -117,7 +118,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
                                                 <div className='mb-5 mt-2 d-flex flex-wrap align-items-center gap-4'>
-                                                    <div className='bg-secondary text-light p-1 px-3 rounded-5'>{singleData.category}</div>
+                                                    <div className='bg-secondary text-light p-1 px-3 rounded-5'>{/* ()=>console.log(singleData.category.json()) */}</div>
                                                     <h5 className='m-0'><i className="bi bi-eye-fill "></i> {singleData.views}</h5>
                                                 </div>
                                         }

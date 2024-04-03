@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsLogged } from '../states/loginState';
 import { jwtDecode } from 'jwt-decode';
 import { setIsHamMenuOpen } from '../states/generalState';
+import { clearCategoriesProduct } from '../states/generalState';
 
 
 const _Navbar = () => {
@@ -34,7 +35,7 @@ const _Navbar = () => {
                         <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} onClick={() => { dispatch(setIsHamMenuOpen(false)) }} /></Link> <i>Infodent Srl</i></div>
                         <div className='d-flex align-items-center'>
                             <div>{decodedTkn.email}</div>
-                            <div className=""><i className='bi bi-grid-fill m-2' onClick={() => dispatch(setIsHamMenuOpen(!isHamMenuOpen))} style={{ fontSize: "30px" }}></i></div>
+                            <div className="myCursor"><i className='bi bi-grid-fill m-2' onClick={() => dispatch(setIsHamMenuOpen(!isHamMenuOpen))} style={{ fontSize: "30px" }}></i></div>
                         </div>
                     </div>
                 </Container>
@@ -60,7 +61,7 @@ const _Navbar = () => {
                                                 <div>
                                                     <Link to={"/account"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Account</span> </li></Link>
                                                     <Link to={"/"}><li> <span onClick={() => { dispatch(setIsLogged(false)); localStorage.clear(); dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Logout</span> </li></Link>
-                                                    <Link to={"/createannouncement"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Form Announcement</span> </li></Link>
+                                                    <Link to={"/createannouncement"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)); dispatch(clearCategoriesProduct()) }}>Form Announcement</span> </li></Link>
                                                     <Link to={"/pendingannouncements"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Pending Announcements</span> </li></Link>
                                                     <Link to={"/rejectedannouncements"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Rejected Announcements</span> </li></Link>
                                                     <Link to={"/contactus"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Contact Us</span> </li></Link>

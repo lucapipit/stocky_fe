@@ -6,7 +6,8 @@ const initialState = {
     isPenRejModalEditing: { value: false, id: null },
     dcdTkn: { id: "", email: "", interests: "" },
     categoriesProduct: [],
-    categoriesProductEng: []
+    categoriesProductId: [],
+    distributionAreaISO: []
 };
 
 
@@ -28,26 +29,54 @@ const generalSlice = createSlice({
             }
         },
         setCategoriesProduct: (state, action) => {
-            const cat = state.categoriesProduct;
-            const catEng = state.categoriesProductEng;
-            cat.push({ id: action.payload.id, eng: action.payload.eng, ita: action.payload.ita, area: action.payload.area });
-            console.log(catEng);
-            catEng.push(action.payload.eng);
-            state.categoriesProduct = cat
+            let isDuplicated = false;
+            state.categoriesProduct && state.categoriesProduct.map((el) => {
+                if (el.id === action.payload.id) { isDuplicated = true }
+            });
+
+            if (!isDuplicated || state.categoriesProduct.length === 0) {
+                state.categoriesProduct.push(action.payload);
+                state.categoriesProductId.push(action.payload.id)
+            }
 
         },
         delCategoriesProduct: (state, action) => {
             const cat = [];
+            const catId = [];
             state.categoriesProduct.map((el) => {
                 if (el.id !== action.payload) {
-                    cat.push(el)
+                    cat.push(el);
+                    catId.push(el.id)
                 }
             });
-            state.categoriesProduct = cat
+            state.categoriesProduct = cat;
+            state.categoriesProductId = catId
         },
+        clearCategoriesProduct: (state, action) => {
+            state.categoriesProduct = [];
+            state.categoriesProduct.id = []
+        },
+        setDistributionArea: (state, action) => {
+            let isDuplicated = false;
+            state.distributionAreaISO && state.distributionAreaISO.map((el) => {
+                if (el === action.payload) { isDuplicated = true }
+            });
+            if (!isDuplicated) { state.distributionAreaISO.push(action.payload); }
+
+        },
+        delDistributionArea: (state, action) => {
+            const arryCountries = [];
+            state.distributionAreaISO && state.distributionAreaISO.map((el) => {
+                if (action.payload !== el) {
+                    arryCountries.push(el)
+                }
+            });
+            state.distributionAreaISO = arryCountries
+        }
     }
 });
 
-export const { setIsHamMenuOpen, setIsPenRejModalEditing, decodeTkn, setCategoriesProduct, delCategoriesProduct } = generalSlice.actions;
+export const { setIsHamMenuOpen, setIsPenRejModalEditing, decodeTkn, setCategoriesProduct, delCategoriesProduct, clearCategoriesProduct,
+    setDistributionArea, delDistributionArea } = generalSlice.actions;
 export default generalSlice.reducer
 

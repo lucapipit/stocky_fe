@@ -1,5 +1,3 @@
-
-
 /* position absolute icons */
 .minimizeArrow {
     position: absolute;
@@ -56,10 +54,6 @@
     border-radius: 10px;
 }
 
-input[type='file'] button {
-    background-color: red;
-}
-
 /* input form.control */
 .form-control {
     border-radius: 20px;
@@ -73,12 +67,41 @@ input[type='file'] button {
     font-size: 1.2rem;
 }
 
-/* bbotstrap dropdown custom */
-.dropdown-menu.show{
+/* botstrap dropdown custom */
+.dropdown-menu.show {
     display: flex !important;
     flex-wrap: wrap !important;
     width: 100% !important;
     padding: 15px;
     margin: 15px 0;
     justify-content: center;
+}
+
+/* categories border active */
+.myBorderAcqua {
+    border: 3px solid #14a7ad
+}
+
+.myBorderRed {
+    border: 3px solid #d21b4c
+}
+
+.borderActive {
+    border: 3px solid #2a606c
+}
+
+/* Distribution area plus and trash button */
+.plusDistributionArea {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+}
+
+.distAreaCountry > i {
+    font-size: 0%;
+    transition: font-size .3s ease-in-out .05s;
+}
+
+.distAreaCountry:hover > i {
+    font-size: 100%;
 }
