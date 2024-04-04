@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 import CardPenRejAnnouncementReducedForm from './CardPenRejAnnouncementReducedForm';
 import { setIsPenRejModalEditing } from '../states/generalState';
+import productCategories from '../assets/JSON/productCategories.json';
 
 
 const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
@@ -117,11 +118,25 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                         {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
-                                                <div className='mb-5 mt-2 d-flex flex-wrap align-items-center gap-4'>
-                                                    <div className='bg-secondary text-light p-1 px-3 rounded-5'>{/* ()=>console.log(singleData.category.json()) */}</div>
+                                                <div className='mb-2 d-flex flex-wrap align-items-center'>
                                                     <h5 className='m-0'><i className="bi bi-eye-fill "></i> {singleData.views}</h5>
                                                 </div>
                                         }
+                                        <div className='my-3 d-flex flex-wrap align-items-center'>
+                                            {
+                                                singleData.category && singleData.category.split(",").map((el) => {
+                                                    return (
+                                                        <div>
+                                                            {productCategories.map((item) => {
+                                                                if (item.id === +el) {
+                                                                    return <span className={`text-light p-1 px-3 m-1 ms-0 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`} style={{fontSize: ".7rem"}}> {minimize?item.code:item.eng} </span>
+                                                                }
+                                                            })}
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
                                     </div>
 
 
@@ -148,12 +163,12 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                     }
                                 </div>
 
-                                <div className='mb-4 mt-3 text-center'>
+                                <div className='mb-4 mt-3 text-start'>
                                     {
                                         !singleData || isLoading ?
                                             <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
-                                            <div className={`${minimize ? "line-clamp2" : ""}`}>
-                                                <span className='p-1 px-2'>{singleData.status === 0 ? <i className='display-6'><Spinner animation="grow" /> on approval</i> : singleData.status === 1 ? <i className="bi bi-check-circle text-success display-6"> approved</i> : <i className="bi bi-ban text-danger display-6"> denied</i>}</span>
+                                            <div className={`${minimize ? "line-clamp2" : ""} mt-4`}>
+                                                <span className='p-1 px-2'>{singleData.status === 0 ? <i><Spinner animation="grow" size="sm" /> on approval</i> : singleData.status === 1 ? <i className="bi bi-check-circle-fill text-success"> approved</i> : <i className="bi bi-ban text-danger"> denied:</i>}</span>
                                                 <p className='text-danger px-3'>{singleData.rejReasons}</p>
                                             </div>
                                     }
@@ -195,9 +210,12 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                     <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder> :
                                                     <div className='my-5'>
                                                         <hr />
-                                                        <span className='border border-primary me-2 px-3 py-2 rounded-5 text-primary'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
-                                                        <span className='border border-info px-3 me-2 py-2 rounded-5 text-info'>Last update at: <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
-                                                        {singleData.dataApproved ? <span className='border border-success px-3 py-2 rounded-5 text-success'><i className="bi bi-check-circle-fill me-2"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span> : null}
+                                                        <div className='d-flex flex-wrap'>
+                                                            <span className='border border-primary me-2 px-3 py-2 rounded-5 text-primary'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
+                                                            <span className='border border-info px-3 me-2 py-2 rounded-5 text-info'><i class="bi bi-pencil-fill me-2"></i> <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
+                                                            {singleData.dataApproved ? <span className='border border-success px-3 py-2 rounded-5 text-success'><i className="bi bi-check-circle-fill me-2"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span> : null}
+                                                            {singleData.dataRejected ? <span className='border border-danger px-3 py-2 rounded-5 text-danger'><i className="bi bi-ban me-2"></i> <i className='fw-bold'>{singleData.dataRejected.split("T")[0]}</i></span> : null}
+                                                        </div>
                                                     </div>
                                             }
 

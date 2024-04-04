@@ -97,11 +97,61 @@
     border-radius: 15px;
 }
 
-.distAreaCountry > i {
+.distAreaCountry>i {
     font-size: 0%;
-    transition: font-size .3s ease-in-out .05s;
+    transition: font-size .2s ease-in-out .05s;
 }
 
-.distAreaCountry:hover > i {
+.distAreaCountry:hover>i {
     font-size: 100%;
+}
+
+/* sign in form - deler/manufacturer selector */
+.delManSelector {
+    border: 4px solid #6c757d;
+}
+
+.delManSelectorActive {
+    border: 4px solid #14a7ad;
+    background-color: #333 !important;
+}
+
+.delManSelector>i {
+    display: none;
+}
+
+.delManSelectorActive>i {
+    top: -18px;
+    left: -18px;
+    color: #14a7ad;
+    font-size: 1.8rem;
+}
+
+/* sign in form - progress bar */
+.progressStepBar>div:first-child {
+    width: 215px;
+}
+
+.progressStepBar > div:first-child > div {
+    height: 15px;
+    width: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid rgb(180, 180, 180);
+    z-index: 1;
+}
+
+.progressStepBar > div:first-child > .active {
+    background-color: #14a7ad;
+}
+
+.progressStepBar>div:last-child {
+    height: 5px;
+    width: 200px;
+    z-index: 2;
+}
+.progressStepBar>div:nth-child(2){
+    height: 7px;
+    width: 200px;
+    border: 1px solid rgb(180, 180, 180);
 }

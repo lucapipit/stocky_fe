@@ -256,7 +256,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                         </div>
 
                         <div>
-                            <Form.Group className="mb-3" style={{ minWidth: "400px" }}>
+                            <Form.Group className="mb-3">
                                 <Form.Label>Brand Name</Form.Label>
                                 <Form.Control type="text" className="form-control" id="brandName" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
                             </Form.Group>
@@ -279,7 +279,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                             
                             <Form.Group className="mb-3">
                                 <Form.Label>Category</Form.Label>
-                                <DropdownButton title={categoriesProduct.length ? categoriesProduct.length === 1 ? "1 item" : `${categoriesProduct.length} items` : "select one or more categories"}>
+                                <DropdownButton id="dropdown-basic-button" title={categoriesProduct.length ? categoriesProduct.length === 1 ? "1 item" : `${categoriesProduct.length} items` : "select one or more categories"}>
                                     <h4 className='w-100 text-center mt-3'>Dental Categories</h4>
                                     <hr className='w-100 px-5 mt-1' />
                                     {
@@ -296,7 +296,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                                     }
                                 </DropdownButton>
 
-                                <div className='d-flex flex-wrap justify-content-center my-3 myMaxW500'>
+                                <div className='d-flex flex-wrap justify-content-center my-3 '>
                                     {
                                         categoriesProduct && categoriesProduct.map((el) => {
                                             return (
@@ -317,10 +317,10 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                     </div>
 
                     <div className='w-100 my-4 d-flex flex-wrap justify-content-center gap-5'>
-                        <Form.Group className="mb-3">
+                        {/* <Form.Group className="mb-3">
                             <Form.Label>expireDate</Form.Label>
                             <Form.Control type="date" className="form-control" id="expireDate" value={expireDate} onChange={(e) => setExpireDate(e.target.value)} />
-                        </Form.Group>
+                        </Form.Group> */}
 
                         <Form.Group className='mb-3'>
                             <Form.Label>productSize</Form.Label>
@@ -348,7 +348,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
             <div className='pb-5'>
                 {isLoading ? <span><Spinner animation="border" variant='info' /><i className='text-info display-6 me-3'> Update</i></span> : <i className="bi bi-arrow-repeat text-info display-6 myCursor me-3" onClick={() => { formCheck(); localStorage.removeItem("editId") }}> Update</i>}
-                <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => { dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId") }}> Cancel</i>
+                <i className="bi bi-arrow-return-left text-light display-6 myCursor ms-3" onClick={() => { dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId"); document.body.style.overflow = ''; }}> Cancel</i>
                 {
                     errorMessage ?
                         <div className='d-flex align-items-center justify-content-center mt-4 fw-light'><p className='text-light p-3 myMaxW700 bg-danger'>{errorMessage}</p></div>

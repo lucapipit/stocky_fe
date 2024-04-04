@@ -24,7 +24,7 @@ const CardPendingAnnouncement = ({ singleData, isLoading }) => {
 
     const rejectAnnouncement = async () => {
         if (window.confirm("Do you want to reject this announcement? ")) {
-            dispatch(updateAnnouncementFunc({ payload: { ...singleData[0], status: 3, rejReasons: rejectionReasons }, token: localStorage.getItem("token") }))
+            dispatch(updateAnnouncementFunc({ payload: { ...singleData[0], status: 3, rejReasons: rejectionReasons, dataRejected: new Date() }, token: localStorage.getItem("token") }))
                 .then((response) => response.payload.statusCode === 200 ? window.location.reload() : null)
         };
     }
