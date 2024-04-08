@@ -97,6 +97,12 @@
     border-radius: 15px;
 }
 
+.disabledPlus, .disabledPlus > .plusDistributionArea{
+    pointer-events: none;
+    opacity: 0.7;
+    color: #8f8f8f !important;
+}
+
 .distAreaCountry>i {
     font-size: 0%;
     transition: font-size .2s ease-in-out .05s;
@@ -132,7 +138,7 @@
     width: 215px;
 }
 
-.progressStepBar > div:first-child > div {
+.progressStepBar>div:first-child>div {
     height: 15px;
     width: 15px;
     border-radius: 8px;
@@ -141,7 +147,7 @@
     z-index: 1;
 }
 
-.progressStepBar > div:first-child > .active {
+.progressStepBar>div:first-child>.active {
     background-color: #14a7ad;
 }
 
@@ -150,8 +156,15 @@
     width: 200px;
     z-index: 2;
 }
-.progressStepBar>div:nth-child(2){
+
+.progressStepBar>div:nth-child(2) {
     height: 7px;
     width: 200px;
     border: 1px solid rgb(180, 180, 180);
+}
+
+/* dropdown menu bootstrap */
+.dropdown-menu.show {
+    height: 400px;
+    overflow-y: scroll;
 }

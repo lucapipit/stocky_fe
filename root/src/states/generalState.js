@@ -7,7 +7,8 @@ const initialState = {
     dcdTkn: { id: "", email: "", interests: "" },
     categoriesProduct: [],
     categoriesProductId: [],
-    distributionAreaISO: []
+    distributionAreaISO: [],
+    sellingAreaExcludedISO: []
 };
 
 
@@ -57,6 +58,7 @@ const generalSlice = createSlice({
             state.categoriesProduct.id = []
         },
         setDistributionArea: (state, action) => {
+            state.sellingAreaExcludedISO = [];
             let isDuplicated = false;
             state.distributionAreaISO && state.distributionAreaISO.map((el) => {
                 if (el === action.payload) { isDuplicated = true }
@@ -72,11 +74,35 @@ const generalSlice = createSlice({
                 }
             });
             state.distributionAreaISO = arryCountries
-        }
+        },
+        clearDistributionArea: (state, action) => {
+            state.distributionAreaISO = [];
+        },
+        setSellingAreaExcluded: (state, action) => {
+            state.distributionAreaISO = [];
+            let isDuplicated = false;
+            state.sellingAreaExcludedISO && state.sellingAreaExcludedISO.map((el) => {
+                if (el === action.payload) { isDuplicated = true }
+            });
+            if (!isDuplicated) { state.sellingAreaExcludedISO.push(action.payload); }
+
+        },
+        delSellingAreaExcluded: (state, action) => {
+            const arryCountries = [];
+            state.sellingAreaExcludedISO && state.sellingAreaExcludedISO.map((el) => {
+                if (action.payload !== el) {
+                    arryCountries.push(el)
+                }
+            });
+            state.sellingAreaExcludedISO = arryCountries
+        },
+        clearSellingAreaExcluded: (state, action) => {
+            state.sellingAreaExcludedISO = [];
+        },
     }
 });
 
 export const { setIsHamMenuOpen, setIsPenRejModalEditing, decodeTkn, setCategoriesProduct, delCategoriesProduct, clearCategoriesProduct,
-    setDistributionArea, delDistributionArea } = generalSlice.actions;
+    setDistributionArea, delDistributionArea, clearDistributionArea, setSellingAreaExcluded, delSellingAreaExcluded, clearSellingAreaExcluded } = generalSlice.actions;
 export default generalSlice.reducer
 
