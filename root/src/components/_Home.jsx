@@ -35,7 +35,7 @@ const Home = () => {
           <img className='img-fluid myMaxW300' src={boxDraw} alt="" />
           <h1 className='font-monserrat display-6 fw-bold'>myStocker</h1>
           <h3 className='nycd display-6' >
-            Get in the Store and make a deal!
+            Get in the Outlet and make a deal!
           </h3>
         </div>
         <Link to={"/store"}>

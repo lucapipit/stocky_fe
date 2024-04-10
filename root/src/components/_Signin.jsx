@@ -10,8 +10,10 @@ import { postLoginFunc, setIsLogged } from '../states/loginState';
 import { useNavigate } from 'react-router';
 import Spinner from 'react-bootstrap/Spinner';
 import countriesArray from '../assets/JSON/countriesIso2Arry.json';
+import phoneCodes from '../assets/JSON/countryPhoneCodes.json';
 import { setDistributionArea, delDistributionArea, setSellingAreaExcluded, delSellingAreaExcluded, clearSellingAreaExcluded, clearDistributionArea } from '../states/generalState';
-import { Country, State, City } from 'country-state-city'; //https://www.npmjs.com/package/country-state-city
+import { getCitiesFunc } from '../states/geonamesState';
+
 
 const _Signin = () => {
 
@@ -24,6 +26,7 @@ const _Signin = () => {
     const [city, setCity] = useState("");
     const [zipCode, setZipCode] = useState("");
     const [phone, setPhone] = useState("");
+    const [phoneCode, setPhoneCode] = useState("");
 
     const [firstSendTry, setFirstSendTry] = useState(true);
     const [serverResponse, setServerResponse] = useState("");
@@ -38,6 +41,8 @@ const _Signin = () => {
     const signinLoading = useSelector((state) => state.signin.loading);
     const distributionAreaISO = useSelector((state) => state.general.distributionAreaISO);
     const sellingAreaExcludedISO = useSelector((state) => state.general.sellingAreaExcludedISO);
+    const allCities = useSelector((state) => state.geonames.allCities);
+    const isLoading = useSelector((state) => state.geonames.isLoading);
 
     const registerUser = async () => {
 
@@ -51,7 +56,7 @@ const _Signin = () => {
                 address: address,
                 city: city,
                 zipCode: zipCode,
-                phone: phone,
+                phone: `${phoneCode}-${phone.toString()}`,
                 manufacturer: typeOfJob === "Manufacturer" ? 1 : 0,
                 dealer: typeOfJob === "Dealer" ? 1 : 0
 
@@ -104,14 +109,16 @@ const _Signin = () => {
         }
     };
 
+
+
     //inputs validation
-    const isEmailValid = email.includes("@") && email.length > 6;
-    const speciCharacter = ["!", "#", "$", "%", "&", "@", "<", ">", "="];
-    const isPsswValid = pssw.split("").some((x) => speciCharacter.includes(x)) && pssw.length > 7;
+    const specialCharacter = ["!", "#", "$", "%", "&", "@", "<", ">", "="];
+    const isEmailValid = email.includes("@") && email.includes(".") && email.length > 6;
+    const isPsswValid = pssw.split("").some((x) => specialCharacter.includes(x)) && pssw.length > 7;
 
     useEffect(() => {
-        console.log(/* State.getAllStates(), Country.getAllCountries(), */ City.getAllCities());
-    }, [])
+        country && phoneCodes.map((el) => { if (el.code === country.split(":")[1]) { setPhoneCode(el.dial_code) } });
+    }, [country])
 
 
     return (
@@ -260,7 +267,7 @@ const _Signin = () => {
                                     <div className='d-flex justify-content-start'>
                                         {
                                             addArea ?
-                                                <DropdownButton className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title="select a country">
+                                                <DropdownButton className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title="exclude a country">
                                                     {
                                                         countriesArray && countriesArray.iso2.map((el) => {
                                                             return <Dropdown.Item onClick={() => { dispatch(setSellingAreaExcluded(el)); setAddArea(false) }}>{el.split(":")[0]}</Dropdown.Item>
@@ -269,7 +276,7 @@ const _Signin = () => {
                                                 </DropdownButton>
                                                 :
                                                 <div className='d-flex gap-4 align-items-center flex-wrap'>
-                                                    <div className={`${sellWholeWorld ? "disabledPlus" : null} d-flex align-items-center flex-wrap gap-2 text-primary myCursor`} onClick={() => { setAddArea(true) }}><div className='myBgWhite plusDistributionArea d-flex align-items-center justify-content-center border' ><i className="bi bi-plus-lg text-primary"></i></div>add a country</div>
+                                                    <div className={`${sellWholeWorld ? "disabledPlus" : null} d-flex align-items-center flex-wrap gap-2 text-primary myCursor`} onClick={() => { setAddArea(true) }}><div className='myBgWhite plusDistributionArea d-flex align-items-center justify-content-center border' ><i className="bi bi-plus-lg text-primary"></i></div>exclude a country</div>
                                                     <Form><Form.Check defaultChecked={sellWholeWorld ? "checked" : ""} type="switch" id="custom-switch" label="I wanto to sell to the entire world" onClick={() => { setSellWholeWorld(!sellWholeWorld); dispatch(clearSellingAreaExcluded()) }} /></Form>
                                                 </div>
                                         }
@@ -291,58 +298,91 @@ const _Signin = () => {
                         step === 3 ?
                             <div>
                                 <h4 className=' text-secondary fw-light mb-4'>Company location</h4>
-                                <InputGroup className="mb-3">
-                                    <InputGroup.Text id="basic-addon1"><i className="bi bi-globe-americas"></i></InputGroup.Text>
-                                    <DropdownButton className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={country ? country.split(":")[0] : "select a country"}>
-                                        {
-                                            countriesArray && countriesArray.iso2.map((el) => {
-                                                return <Dropdown.Item onClick={() => setCountry(el)}>{el.split(":")[0]}</Dropdown.Item>
-                                            })
-                                        }
-                                    </DropdownButton>
-                                </InputGroup>
-                                <InputGroup className="mb-3">
-                                    <InputGroup.Text id="basic-addon1"><i className="bi bi-geo-fill"></i></InputGroup.Text>
-                                    <DropdownButton disabled={country ? false : true} className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={city ? city.split(":")[0] : "select a city"}>
-                                        {
-                                            City.getAllCities().map((el) => {
-                                                if (el.countryCode === country.split(":")[1]) {
-                                                    return <Dropdown.Item onClick={() => setCity(`${el.name}:${el.countryCode}`)}>{el.name}</Dropdown.Item>
-                                                }
-                                            })
-                                        }
-                                    </DropdownButton>
-                                </InputGroup>
-                                <InputGroup className="mb-3">
-                                    <InputGroup.Text id="basic-addon1"><i className="bi bi-geo-alt-fill"></i></InputGroup.Text>
-                                    <Form.Control
-                                        placeholder="Address"
-                                        aria-label="Address"
-                                        aria-describedby="basic-addon1"
-                                        onChange={(e) => { setAddress(e.target.value) }}
-                                        value={address}
-                                    />
-                                </InputGroup>
-                                <InputGroup className="mb-3">
-                                    <InputGroup.Text id="basic-addon1"><i className="bi bi-mailbox2-flag"></i></InputGroup.Text>
-                                    <Form.Control
-                                        placeholder="Zip Code"
-                                        aria-label="Zip Code"
-                                        aria-describedby="basic-addon1"
-                                        onChange={(e) => { setZipCode(e.target.value) }}
-                                        value={zipCode}
-                                    />
-                                </InputGroup>
-                                <InputGroup className="mb-3">
-                                    <InputGroup.Text id="basic-addon1"><i className="bi bi-telephone-fill"></i></InputGroup.Text>
-                                    <Form.Control
-                                        placeholder="Phone"
-                                        aria-label="Phone"
-                                        aria-describedby="basic-addon1"
-                                        onChange={(e) => { setPhone(e.target.value) }}
-                                        value={phone}
-                                    />
-                                </InputGroup>
+
+                                <div className="mb-3 d-flex gap-2 align-items-center">
+                                    <InputGroup className="mb-3">
+                                        <InputGroup.Text id="basic-addon1"><i className="bi bi-globe-americas"></i></InputGroup.Text>
+                                        <DropdownButton className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={country ? country.split(":")[0] : "select a country"}>
+                                            {
+                                                countriesArray && countriesArray.iso2.map((el) => {
+                                                    return <Dropdown.Item onClick={() => { setCountry(el); dispatch(getCitiesFunc(el.split(":")[1])) }}>{el.split(":")[0]}</Dropdown.Item>
+                                                })
+                                            }
+                                        </DropdownButton>
+                                    </InputGroup>
+                                    {country ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                </div>
+
+                                <div className="mb-3 d-flex gap-2 align-items-center">
+                                    <InputGroup className="mb-3">
+                                        <InputGroup.Text id="basic-addon1" disabled={country && city ? false : true} ><i className="bi bi-geo-fill"></i></InputGroup.Text>
+                                        <DropdownButton disabled={country ? false : true} className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={city ? city.split(":")[0] : "select a city"}>
+                                            {
+                                                isLoading ?
+                                                    <Spinner className='mt-3' animation="border"/>
+                                                    : allCities.map((el) => {
+                                                        return <Dropdown.Item onClick={() => setCity(`${el.name}:${el.geonameid}`)}>{el.name} ({el.admin1})</Dropdown.Item>
+                                                    })
+                                            }
+                                        </DropdownButton>
+                                    </InputGroup>
+                                    {isLoading ? <Spinner animation="border" size="sm" /> : null}
+                                    {city ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                </div>
+
+                                <div className="mb-3 d-flex gap-2 align-items-center">
+                                    <InputGroup className="mb-3">
+                                        <InputGroup.Text id="basic-addon1"><i className="bi bi-geo-alt-fill"></i></InputGroup.Text>
+                                        <Form.Control
+                                            disabled={country && city ? false : true}
+                                            placeholder="Address"
+                                            aria-label="Address"
+                                            aria-describedby="basic-addon1"
+                                            onChange={(e) => { setAddress(e.target.value) }}
+                                            value={address}
+                                        />
+                                    </InputGroup>
+                                    {address ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                </div>
+
+                                <div className="mb-3 d-flex gap-2 align-items-center">
+                                    <InputGroup className="mb-3">
+                                        <InputGroup.Text id="basic-addon1"><i className="bi bi-mailbox2-flag"></i></InputGroup.Text>
+                                        <Form.Control
+                                            disabled={country && city ? false : true}
+                                            placeholder="Zip Code"
+                                            aria-label="Zip Code"
+                                            aria-describedby="basic-addon1"
+                                            onChange={(e) => { setZipCode(e.target.value) }}
+                                            value={zipCode}
+                                        />
+                                    </InputGroup>
+                                    {zipCode ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                </div>
+
+                                <div className="mb-3 d-flex gap-2 align-items-center">
+                                    <InputGroup className="mb-3">
+                                        <InputGroup.Text id="basic-addon1"><i className="bi bi-telephone-fill"></i></InputGroup.Text>
+                                        <DropdownButton disabled={country ? false : true} className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={phoneCode ? phoneCode : "select a prefix"}>
+                                            {
+                                                phoneCodes.map((el) => {
+                                                    return <Dropdown.Item onClick={() => setPhoneCode(el.dial_code)}>{el.dial_code} ({el.name})</Dropdown.Item>
+                                                })
+                                            }
+                                        </DropdownButton>
+                                        <Form.Control
+                                            disabled={country ? false : true}
+                                            type='number'
+                                            placeholder="Phone"
+                                            aria-label="Phone"
+                                            aria-describedby="basic-addon1"
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            value={phone}
+                                        />
+                                    </InputGroup>
+                                    {phone.length > 5 ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                </div>
+
                             </div>
                             : null
                     }
