@@ -5,14 +5,14 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { postSigninFunc } from '../states/signinState';
+import { postSigninFunc, verifyMailFunc } from '../states/signinState';
 import { postLoginFunc, setIsLogged } from '../states/loginState';
 import { useNavigate } from 'react-router';
 import Spinner from 'react-bootstrap/Spinner';
 import countriesArray from '../assets/JSON/countriesIso2Arry.json';
 import phoneCodes from '../assets/JSON/countryPhoneCodes.json';
 import { setDistributionArea, delDistributionArea, setSellingAreaExcluded, delSellingAreaExcluded, clearSellingAreaExcluded, clearDistributionArea } from '../states/generalState';
-import { getCitiesFunc } from '../states/geonamesState';
+import { getCitiesFunc, searchCity, clearSearchCity } from '../states/geonamesState';
 
 
 const _Signin = () => {
@@ -22,8 +22,10 @@ const _Signin = () => {
     const [email, setEmail] = useState("");
     const [pssw, setPssw] = useState("");
     const [country, setCountry] = useState("");
-    const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [address, setAddress] = useState("");
+    const [streetNumber, setStreetNumber] = useState("");
     const [zipCode, setZipCode] = useState("");
     const [phone, setPhone] = useState("");
     const [phoneCode, setPhoneCode] = useState("");
@@ -42,6 +44,7 @@ const _Signin = () => {
     const distributionAreaISO = useSelector((state) => state.general.distributionAreaISO);
     const sellingAreaExcludedISO = useSelector((state) => state.general.sellingAreaExcludedISO);
     const allCities = useSelector((state) => state.geonames.allCities);
+    const allCitiesFiltered = useSelector((state) => state.geonames.allCitiesFiltered);
     const isLoading = useSelector((state) => state.geonames.isLoading);
 
     const registerUser = async () => {
@@ -52,13 +55,18 @@ const _Signin = () => {
                 companyName: companyName,
                 email: email,
                 pssw: pssw,
-                country: country,
-                address: address,
+                distributionArea: distributionAreaISO.map((el)=>{return el.split(":")[1]}),
+                sellingAreaExcluded: sellingAreaExcludedISO.map((el)=>{return el.split(":")[1]}),
+                country: country.split(":")[1],
                 city: city,
+                state: state,
+                address: address,
+                streetNumber: streetNumber,
                 zipCode: zipCode,
                 phone: `${phoneCode}-${phone.toString()}`,
                 manufacturer: typeOfJob === "Manufacturer" ? 1 : 0,
-                dealer: typeOfJob === "Dealer" ? 1 : 0
+                dealer: typeOfJob === "Dealer" ? 1 : 0,
+                accountActive: 0
 
             };
 
@@ -115,6 +123,7 @@ const _Signin = () => {
     const specialCharacter = ["!", "#", "$", "%", "&", "@", "<", ">", "="];
     const isEmailValid = email.includes("@") && email.includes(".") && email.length > 6;
     const isPsswValid = pssw.split("").some((x) => specialCharacter.includes(x)) && pssw.length > 7;
+    const [isCityValid, setIsCityValid] = useState(false);
 
     useEffect(() => {
         country && phoneCodes.map((el) => { if (el.code === country.split(":")[1]) { setPhoneCode(el.dial_code) } });
@@ -300,12 +309,12 @@ const _Signin = () => {
                                 <h4 className=' text-secondary fw-light mb-4'>Company location</h4>
 
                                 <div className="mb-3 d-flex gap-2 align-items-center">
-                                    <InputGroup className="mb-3">
+                                    <InputGroup >
                                         <InputGroup.Text id="basic-addon1"><i className="bi bi-globe-americas"></i></InputGroup.Text>
                                         <DropdownButton className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={country ? country.split(":")[0] : "select a country"}>
                                             {
                                                 countriesArray && countriesArray.iso2.map((el) => {
-                                                    return <Dropdown.Item onClick={() => { setCountry(el); dispatch(getCitiesFunc(el.split(":")[1])) }}>{el.split(":")[0]}</Dropdown.Item>
+                                                    return <Dropdown.Item onClick={() => { setCountry(el); dispatch(getCitiesFunc(el.split(":")[1])); dispatch(clearSearchCity()); setCity(""); setIsCityValid(false) }}>{el.split(":")[0]}</Dropdown.Item>
                                                 })
                                             }
                                         </DropdownButton>
@@ -313,8 +322,8 @@ const _Signin = () => {
                                     {country ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
                                 </div>
 
-                                <div className="mb-3 d-flex gap-2 align-items-center">
-                                    <InputGroup className="mb-3">
+                                {/* <div className="mb-3 d-flex gap-2 align-items-center">
+                                    <InputGroup >
                                         <InputGroup.Text id="basic-addon1" disabled={country && city ? false : true} ><i className="bi bi-geo-fill"></i></InputGroup.Text>
                                         <DropdownButton disabled={country ? false : true} className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={city ? city.split(":")[0] : "select a city"}>
                                             {
@@ -328,10 +337,55 @@ const _Signin = () => {
                                     </InputGroup>
                                     {isLoading ? <Spinner animation="border" size="sm" /> : null}
                                     {city ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                </div> */}
+
+                                <div className="mb-3">
+                                    <div className='d-flex gap-2 align-items-center'>
+                                        <InputGroup >
+                                            <InputGroup.Text id="basic-addon1"><i className="bi bi-geo-fill"></i></InputGroup.Text>
+                                            <Form.Control
+                                                disabled={country ? false : true}
+                                                placeholder="City"
+                                                aria-label="City"
+                                                aria-describedby="basic-addon1"
+                                                onChange={(e) => { dispatch(searchCity(e.target.value)); setCity(e.target.value); setIsCityValid(false) }}
+                                                value={city}
+                                            />
+                                        </InputGroup>
+                                        {isCityValid && city ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                    </div>
+                                    {
+                                        allCitiesFiltered.length !== 0 ?
+                                            <div className='position-relative'>
+                                                <div className='border w-100 p-3 customDropdown position-absolute bg-light'>
+                                                    {
+                                                        allCitiesFiltered && allCitiesFiltered.map((el) => {
+                                                            return <div className='px-2 rounded-5 myCursor' onClick={()=>{setCity(el.name); dispatch(clearSearchCity()); setIsCityValid(true)}}>{el.name}</div>
+                                                        })
+                                                    }
+                                                </div>
+                                            </div>
+                                            : null
+                                    }
                                 </div>
 
                                 <div className="mb-3 d-flex gap-2 align-items-center">
-                                    <InputGroup className="mb-3">
+                                    <InputGroup >
+                                        <InputGroup.Text id="basic-addon1"><i className="bi bi-map-fill"></i></InputGroup.Text>
+                                        <Form.Control
+                                            disabled={country && city ? false : true}
+                                            placeholder="State/Province"
+                                            aria-label="State/Province"
+                                            aria-describedby="basic-addon1"
+                                            onChange={(e) => { setState(e.target.value) }}
+                                            value={state}
+                                        />
+                                    </InputGroup>
+                                    {state ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                </div>
+
+                                <div className="mb-3 d-flex gap-2 align-items-center">
+                                    <InputGroup >
                                         <InputGroup.Text id="basic-addon1"><i className="bi bi-geo-alt-fill"></i></InputGroup.Text>
                                         <Form.Control
                                             disabled={country && city ? false : true}
@@ -346,7 +400,22 @@ const _Signin = () => {
                                 </div>
 
                                 <div className="mb-3 d-flex gap-2 align-items-center">
-                                    <InputGroup className="mb-3">
+                                    <InputGroup >
+                                        <InputGroup.Text id="basic-addon1"><i className="bi bi-signpost-fill"></i></InputGroup.Text>
+                                        <Form.Control
+                                            disabled={country && city ? false : true}
+                                            placeholder="Street Number"
+                                            aria-label="Street Number"
+                                            aria-describedby="basic-addon1"
+                                            onChange={(e) => { setStreetNumber(e.target.value) }}
+                                            value={streetNumber}
+                                        />
+                                    </InputGroup>
+                                    {streetNumber ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                                </div>
+
+                                <div className="mb-3 d-flex gap-2 align-items-center">
+                                    <InputGroup>
                                         <InputGroup.Text id="basic-addon1"><i className="bi bi-mailbox2-flag"></i></InputGroup.Text>
                                         <Form.Control
                                             disabled={country && city ? false : true}
@@ -361,7 +430,7 @@ const _Signin = () => {
                                 </div>
 
                                 <div className="mb-3 d-flex gap-2 align-items-center">
-                                    <InputGroup className="mb-3">
+                                    <InputGroup>
                                         <InputGroup.Text id="basic-addon1"><i className="bi bi-telephone-fill"></i></InputGroup.Text>
                                         <DropdownButton disabled={country ? false : true} className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={phoneCode ? phoneCode : "select a prefix"}>
                                             {
@@ -395,7 +464,7 @@ const _Signin = () => {
                                 : step === 1 ?
                                     <div className='d-flex gap-4 align-items-center'>
                                         <h5 className='bi bi-arrow-return-left myCursor m-0' variant="secondary" onClick={() => { manageStep(false) }}> back</h5>
-                                        <Button variant="primary" /* disabled={companyName && isEmailValid && isPsswValid ? false : true} */ onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>{signinLoading ? <Spinner animation="border" size='sm' /> : "done"}</Button>
+                                        <Button variant="primary" /* disabled={companyName && isEmailValid && isPsswValid ? false : true} */ onClick={() => { manageStep(true); dispatch(verifyMailFunc({email: email, companyName: companyName})) }}><i className="bi bi-check2-square me-2"></i>{signinLoading ? <Spinner animation="border" size='sm' /> : "done"}</Button>
                                     </div>
                                     : step === 2 ?
                                         <div className='d-flex gap-4 align-items-center'>

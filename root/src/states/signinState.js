@@ -18,7 +18,7 @@ export const postSigninFunc = createAsyncThunk(
             });
             const data = await response.json();
             return data;
-            
+
         } catch (error) {
             console.log(error);
         }
@@ -26,11 +26,31 @@ export const postSigninFunc = createAsyncThunk(
     }
 );
 
+export const verifyMailFunc = createAsyncThunk(
+    'api/verifyMailFunc',
+    async (input) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/mailer/verifyaccount`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(input),
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 const signinSlice = createSlice({
     name: 'signinApi',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        //post Signin
         builder.addCase(postSigninFunc.pending, (state) => {
             state.loading = true;
         });
@@ -38,6 +58,17 @@ const signinSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(postSigninFunc.rejected, (state) => {
+            state.loading = false;
+            state.error = true;
+        });
+        //verify email
+        builder.addCase(verifyMailFunc.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(verifyMailFunc.fulfilled, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(verifyMailFunc.rejected, (state) => {
             state.loading = false;
             state.error = true;
         });

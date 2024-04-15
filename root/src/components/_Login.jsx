@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { postLoginFunc } from '../states/loginState';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import {setIsLogged} from '../states/loginState';
+import { setIsLogged } from '../states/loginState';
 import Spinner from 'react-bootstrap/Spinner';
 
 
@@ -16,8 +16,8 @@ const _Login = () => {
     const [serverResponse, setServerResponse] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const loginLoading = useSelector((state)=>state.login.loading)
-    const formOk = email&&pssw;
+    const loginLoading = useSelector((state) => state.login.loading)
+    const formOk = email && pssw;
 
     const handleSubmit = async () => {
 
@@ -26,7 +26,7 @@ const _Login = () => {
             pssw: pssw
         }
 
-        if(formOk){
+        if (formOk) {
             dispatch(postLoginFunc(loginPayload))
                 .then((res) => {
                     if (res.payload.statusCode === 200) {
@@ -34,7 +34,7 @@ const _Login = () => {
                         dispatch(setIsLogged(true));
                         setEmail('');
                         setPssw('');
-                        navigate('/');
+                        navigate('/account');
                     } else {
                         setServerResponse(res.payload.message);
                         console.error('login error');
@@ -67,9 +67,9 @@ const _Login = () => {
                         value={pssw}
                     />
                 </InputGroup>
-                <button className="btn btn-primary w-100" onClick={() => { handleSubmit(); setFirstSendTry(false) }}>{loginLoading?<Spinner animation="border" size='sm' />:"login"}</button>
-                <p className="mt-3 text-center">{firstSendTry||formOk?"":<i className="bi bi-exclamation-triangle-fill text-danger"> Fill the form correctly</i>}</p>
-                {serverResponse?<p className="mt-3 text-center text-danger"><i className="bi bi-exclamation-circle"> {serverResponse}</i></p>:<p></p>}
+                <button className="btn btn-primary w-100" onClick={() => { handleSubmit(); setFirstSendTry(false) }}>{loginLoading ? <Spinner animation="border" size='sm' /> : "login"}</button>
+                <p className="mt-3 text-center">{firstSendTry || formOk ? "" : <i className="bi bi-exclamation-triangle-fill text-danger"> Fill the form correctly</i>}</p>
+                {serverResponse ? <p className="mt-3 text-center text-danger"><i className="bi bi-exclamation-circle"> {serverResponse}</i></p> : <p></p>}
             </div>
         </div>
     )

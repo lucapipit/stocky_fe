@@ -35,9 +35,6 @@ export const orderFunc = createAsyncThunk(
 
 
 
-
-
-
 const orderSlice = createSlice({
     name: 'orderApi',
     initialState,

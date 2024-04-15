@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
     allCities: [],
-    isLoading: false
+    isLoading: false,
+    allCitiesFiltered: []
 }
 
 export const getCitiesFunc = createAsyncThunk(
@@ -23,7 +24,14 @@ export const getCitiesFunc = createAsyncThunk(
 const geonamesSlice = createSlice({
     name: 'geonameStore',
     initialState,
-    reducers: {},
+    reducers: {
+        searchCity: (state, action) => {
+            state.allCitiesFiltered = state.allCities.filter((el)=>el.name.toLowerCase().includes(action.payload.toLowerCase()));
+        },
+        clearSearchCity: (state, action) =>{
+            state.allCitiesFiltered = []
+        }
+    },
 
     extraReducers: (builder) => {
         //detCities
@@ -41,5 +49,5 @@ const geonamesSlice = createSlice({
     }
 });
 
-export const {} = geonamesSlice.actions;
+export const {searchCity, clearSearchCity} = geonamesSlice.actions;
 export default geonamesSlice.reducer
