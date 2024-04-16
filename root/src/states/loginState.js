@@ -75,7 +75,7 @@ const loginSlice = createSlice({
         });
         builder.addCase(getSingleUserFunc.fulfilled, (state, action) => {
             state.loadingUser = false;
-            state.userData = action.payload
+            state.userData = action.payload.data
         });
         builder.addCase(getSingleUserFunc.rejected, (state) => {
             state.loadingUser = false;

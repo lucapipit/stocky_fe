@@ -17,6 +17,7 @@ import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import AnnounceCreatedSuccessPage from "./pages/AnnounceCreatedSuccessPage";
 import PendingAnnouncementsPage from "./pages/PendingAnnouncementsPage";
 import RejectedAnnouncementsPage from "./pages/RejectedAnnouncementsPage";
+import VerifyAccountPage from "./pages/VerifyAccountPage";
 
 
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/store" element={<StorePage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/verifyaccount/:verifycode" element={<VerifyAccountPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>

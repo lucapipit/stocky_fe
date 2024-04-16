@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router';
 import Spinner from 'react-bootstrap/Spinner';
 import countriesArray from '../assets/JSON/countriesIso2Arry.json';
 import phoneCodes from '../assets/JSON/countryPhoneCodes.json';
-import { setDistributionArea, delDistributionArea, setSellingAreaExcluded, delSellingAreaExcluded, clearSellingAreaExcluded, clearDistributionArea } from '../states/generalState';
+import { setDistributionArea, delDistributionArea, setSellingAreaExcluded, delSellingAreaExcluded, clearSellingAreaExcluded, decodeTkn } from '../states/generalState';
 import { getCitiesFunc, searchCity, clearSearchCity } from '../states/geonamesState';
 
 
@@ -29,6 +29,7 @@ const _Signin = () => {
     const [zipCode, setZipCode] = useState("");
     const [phone, setPhone] = useState("");
     const [phoneCode, setPhoneCode] = useState("");
+    const [verifyCode, setVerifyCode] = useState(Math.ceil(Math.random() * 1000000000))
 
     const [firstSendTry, setFirstSendTry] = useState(true);
     const [serverResponse, setServerResponse] = useState("");
@@ -43,6 +44,7 @@ const _Signin = () => {
     const signinLoading = useSelector((state) => state.signin.loading);
     const distributionAreaISO = useSelector((state) => state.general.distributionAreaISO);
     const sellingAreaExcludedISO = useSelector((state) => state.general.sellingAreaExcludedISO);
+    const dcdTkn = useSelector((state) => state.general.dcdTkn);
     const allCities = useSelector((state) => state.geonames.allCities);
     const allCitiesFiltered = useSelector((state) => state.geonames.allCitiesFiltered);
     const isLoading = useSelector((state) => state.geonames.isLoading);
@@ -55,8 +57,8 @@ const _Signin = () => {
                 companyName: companyName,
                 email: email,
                 pssw: pssw,
-                distributionArea: distributionAreaISO.map((el)=>{return el.split(":")[1]}),
-                sellingAreaExcluded: sellingAreaExcludedISO.map((el)=>{return el.split(":")[1]}),
+                distributionArea: distributionAreaISO.map((el) => { return el.split(":")[1] }),
+                sellingAreaExcluded: sellingAreaExcludedISO.map((el) => { return el.split(":")[1] }),
                 country: country.split(":")[1],
                 city: city,
                 state: state,
@@ -66,6 +68,7 @@ const _Signin = () => {
                 phone: `${phoneCode}-${phone.toString()}`,
                 manufacturer: typeOfJob === "Manufacturer" ? 1 : 0,
                 dealer: typeOfJob === "Dealer" ? 1 : 0,
+                verifyCode: verifyCode,
                 accountActive: 0
 
             };
@@ -74,16 +77,23 @@ const _Signin = () => {
                 .then((res) => {
                     if (res.payload.statusCode === 200) {
 
-                        dispatch(postLoginFunc({ email: email, pssw: pssw }))
+                        dispatch(verifyMailFunc({ email: email, companyName: companyName, verifyCode: `${res.payload.data}-${verifyCode}` }))
                             .then((res) => {
                                 if (res.payload.statusCode === 200) {
-                                    localStorage.setItem('token', res.payload.token);
-                                    dispatch(setIsLogged(true));
-                                } else {
-                                    setServerResponse(res.payload.message);
-                                    console.error('login error');
+
+                                    dispatch(postLoginFunc({ email: email, pssw: pssw }))
+                                        .then((res) => {
+                                            if (res.payload.statusCode === 200) {
+                                                localStorage.setItem('token', res.payload.token);
+                                                dispatch(decodeTkn());
+                                                dispatch(setIsLogged(true));
+                                            } else {
+                                                setServerResponse(res.payload.message);
+                                                console.error('login error');
+                                            }
+                                        });
                                 }
-                            });
+                            })
 
                         setCompanyName("");
                         setEmail("");
@@ -322,23 +332,6 @@ const _Signin = () => {
                                     {country ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
                                 </div>
 
-                                {/* <div className="mb-3 d-flex gap-2 align-items-center">
-                                    <InputGroup >
-                                        <InputGroup.Text id="basic-addon1" disabled={country && city ? false : true} ><i className="bi bi-geo-fill"></i></InputGroup.Text>
-                                        <DropdownButton disabled={country ? false : true} className="mb-3 w-100" variant='dark' id="dropdown-basic-button" title={city ? city.split(":")[0] : "select a city"}>
-                                            {
-                                                isLoading ?
-                                                    <Spinner className='mt-3' animation="border"/>
-                                                    : allCities.map((el) => {
-                                                        return <Dropdown.Item onClick={() => setCity(`${el.name}:${el.geonameid}`)}>{el.name} ({el.admin1})</Dropdown.Item>
-                                                    })
-                                            }
-                                        </DropdownButton>
-                                    </InputGroup>
-                                    {isLoading ? <Spinner animation="border" size="sm" /> : null}
-                                    {city ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
-                                </div> */}
-
                                 <div className="mb-3">
                                     <div className='d-flex gap-2 align-items-center'>
                                         <InputGroup >
@@ -360,7 +353,7 @@ const _Signin = () => {
                                                 <div className='border w-100 p-3 customDropdown position-absolute bg-light'>
                                                     {
                                                         allCitiesFiltered && allCitiesFiltered.map((el) => {
-                                                            return <div className='px-2 rounded-5 myCursor' onClick={()=>{setCity(el.name); dispatch(clearSearchCity()); setIsCityValid(true)}}>{el.name}</div>
+                                                            return <div className='px-2 rounded-5 myCursor' onClick={() => { setCity(el.name); dispatch(clearSearchCity()); setIsCityValid(true) }}>{el.name}</div>
                                                         })
                                                     }
                                                 </div>
@@ -464,7 +457,7 @@ const _Signin = () => {
                                 : step === 1 ?
                                     <div className='d-flex gap-4 align-items-center'>
                                         <h5 className='bi bi-arrow-return-left myCursor m-0' variant="secondary" onClick={() => { manageStep(false) }}> back</h5>
-                                        <Button variant="primary" /* disabled={companyName && isEmailValid && isPsswValid ? false : true} */ onClick={() => { manageStep(true); dispatch(verifyMailFunc({email: email, companyName: companyName})) }}><i className="bi bi-check2-square me-2"></i>{signinLoading ? <Spinner animation="border" size='sm' /> : "done"}</Button>
+                                        <Button variant="primary" /* disabled={companyName && isEmailValid && isPsswValid ? false : true} */ onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>{signinLoading ? <Spinner animation="border" size='sm' /> : "done"}</Button>
                                     </div>
                                     : step === 2 ?
                                         <div className='d-flex gap-4 align-items-center'>

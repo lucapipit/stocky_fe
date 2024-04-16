@@ -178,3 +178,13 @@
     background: #2a606c;
     color: #fff;
 }
+
+/* active user/account icon */
+.activeUserIcon{
+    top: -62px;
+    right: -20px;
+    height: 32px;
+    width: 32px;
+    border-radius: 16px;
+    font-size: 100%;
+}

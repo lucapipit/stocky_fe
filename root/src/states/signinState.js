@@ -16,8 +16,7 @@ export const postSigninFunc = createAsyncThunk(
                 },
                 body: JSON.stringify(input),
             });
-            const data = await response.json();
-            return data;
+            return await response.json();
 
         } catch (error) {
             console.log(error);
@@ -37,8 +36,29 @@ export const verifyMailFunc = createAsyncThunk(
                 },
                 body: JSON.stringify(input),
             });
-            const data = await response.json();
-            return data;
+            return await response.json();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
+export const activateAccountFunc = createAsyncThunk(
+    'api/activateAccountFunc',
+    async (input) => {
+        const {token, payload} = input;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/editaccount`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload),
+            });
+            return await response.json();
+
         } catch (error) {
             console.log(error);
         }
@@ -69,6 +89,17 @@ const signinSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(verifyMailFunc.rejected, (state) => {
+            state.loading = false;
+            state.error = true;
+        });
+        //activate account
+        builder.addCase(activateAccountFunc.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(activateAccountFunc.fulfilled, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(activateAccountFunc.rejected, (state) => {
             state.loading = false;
             state.error = true;
         });

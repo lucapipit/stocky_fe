@@ -58,34 +58,6 @@ const Home = () => {
 
         <h2 className='text-black p-4 font-monserrat text-center'>How does the portal work</h2>
 
-        {/* <div>
-
-          <div className='d-flex justify-content-center p-3'>
-            <div className='d-flex align-items-center gap-5 flex-wrap' >
-              <img className='myMaxW500 img-fluid'
-                src="https://static.vecteezy.com/system/resources/previews/002/923/747/original/global-network-connection-world-map-point-and-line-composition-concept-of-global-business-illustration-free-vector.jpg" alt="" />
-              <h3 className='p-3 fw-light myMaxW700'>
-                Alcune funzionalità del sito possono richiedere la registrazione. Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.
-                Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.
-                I contenuti, i marchi e altri diritti di proprietà intellettuale presenti sul sito sono di nostra proprietà o concessi in licenza a noi.
-              </h3>
-            </div>
-          </div>
-
-          <div className='d-flex justify-content-center mt-5'>
-            <div className='d-flex align-items-center flex-wrap gap-5' >
-              <h3 className='p-3 fw-light myMaxW700'>
-                Alcune funzionalità del sito possono richiedere la registrazione. Se scegli di registrarti, sei responsabile di mantenere la riservatezza delle tue informazioni di accesso.
-                Ci riserviamo il diritto di sospendere o chiudere il tuo account in qualsiasi momento per violazione di questi Termini.
-                I contenuti, i marchi e altri diritti di proprietà intellettuale presenti sul sito sono di nostra proprietà o concessi in licenza a noi.
-              </h3>
-              <img className='myMaxW700 img-fluid'
-                src="https://thumbs.dreamstime.com/b/rete-di-computer-comunicazione-internet-nel-fondo-tecnologia-rappresentazione-d-127354210.jpg" alt="" />
-            </div>
-          </div>
-
-        </div> */}
-
       </div>
 
       <div className='p-4 py-5 bg-dark' >
