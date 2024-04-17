@@ -4,7 +4,7 @@ import MainLayout from '../Layouts/MainLayout';
 
 const AccountPage = () => {
     return (
-        <MainLayout>
+        <MainLayout >
             <_Account />
         </MainLayout>
     )

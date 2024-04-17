@@ -4,6 +4,7 @@ import { getSingleUserFunc } from '../states/loginState';
 import { getAllAnnouncementsByIdOwnerFunc } from '../states/storeState';
 import { jwtDecode } from 'jwt-decode';
 import CardPenRejAnnouncementReduced from './CardPenRejAnnouncementReduced';
+import CardPenRejAnnouncementLine from './CardPenRejAnnouncementLine';
 import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 import { verifyMailFunc } from '../states/signinState';
@@ -17,7 +18,8 @@ const _Account = () => {
   const loading = useSelector((state) => state.signin.loading);
   const [isResended, setIsResended] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [holding, setHolding] = useState(false);
+  const [typeOfView, setTypeOfView] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -38,8 +40,14 @@ const _Account = () => {
           setErrorMessage(res.payload.message)
         }
       })
-  }
+  };
 
+
+  const triggerHolding = () => {
+    setTimeout(() => {
+      setHolding(true)
+    }, "8000")
+  }
 
 
   return (
@@ -85,7 +93,7 @@ const _Account = () => {
                     <div>
                       You account is not active. To get into the Outlet Store and to use myStocker services the account must be activated. Click on the "Resend" button below to send another verification mail. Inside the email you will receive (in at least some minutes) there is a link, please click on it to activate your account.
                     </div>
-                    <Button className='mt-3' variant="dark" onClick={() => resendVerification()}>
+                    <Button className='mt-3' variant="dark" onClick={() => { resendVerification(); triggerHolding() }}>
                       {
                         loading ?
                           <i>Sending <Spinner className='ms-1' animation="grow" size="sm" /></i>
@@ -95,7 +103,24 @@ const _Account = () => {
                               <i className="bi bi-send-fill"> Resend</i>
                               : <i className="bi bi-send-x-fill text-danger"> Not sended</i>
                       }
+
                     </Button>
+                    {
+                      isResended && !holding ?
+                        <div className='w-100 px-5'>
+                          <div className='border rounded mt-2 mx-3'>
+                            <div className={`bg-info rounded ${isResended ? "percentageBar2" : null}`} style={{ height: "6px" }}></div>
+                          </div>
+                        </div>
+                        : null
+                    }
+
+                    {
+                      holding ?
+                        <div className='mt-3 text-dark fw-bold'><i>check your email <Spinner className='ms-1' animation="grow" size="sm" /></i></div>
+                        : null
+                    }
+
                     {isResended ? <h6 className='mt-3'>* If you dont receive any email check out first if your email is correct.</h6> : null}
                   </div>
                 </div>
@@ -105,7 +130,7 @@ const _Account = () => {
             {
               errorMessage ?
                 <div className='d-flex justify-content-center mt-3'>
-                  <div className='bg-danger text-light myMaxW700 p-3 text-center'>
+                  <div className='bg-danger text-light myMaxW700 p-3 pt-0 text-center'>
                     <div className='fw-bold'>Reason why the email has not been sended: </div>
                     {errorMessage}
                   </div>
@@ -118,11 +143,21 @@ const _Account = () => {
               allUserAnnouncements.length !== 0 ?
                 <div>
                   <hr className='mx-5' />
-                  <h1 className='my-5 text-center fw-light'>Announcements</h1>
+                  <h1 className='mt-5 mb-3 text-center fw-light'>Announcements</h1>
+
+                  <div className='d-flex justify-content-center align-items-center gap-2' style={{ fontSize: "1.5rem" }}>
+                    <div className={`myCursor border p-2 py-1 ${typeOfView === 0 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(0)}><i className="bi bi-list-task myCursor"></i></div>
+                    <div className={`myCursor border p-2 py-1 ${typeOfView === 1 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(1)}><i className="bi bi-columns-gap myCursor"></i></div>
+                  </div>
+
                   <div className='d-flex flex-wrap justify-content-center align-items-center my-5'>
                     {
                       allUserAnnouncements && allUserAnnouncements.map((el) => {
-                        return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
+                        if (typeOfView === 1) {
+                          return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
+                        } else {
+                          return <CardPenRejAnnouncementLine singleData={el} isLoading={isLoading} />
+                        }
                       })
                     }
                   </div>

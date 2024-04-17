@@ -4,7 +4,7 @@ import Logo from '../assets/zeus2.jpg'
 
 const _Footer = () => {
   return (
-    <div className='footer'>
+    <div className='footer mt-5 pt-5'>
          <img src={Logo} alt="logo" />
          {/* <span>Made with our Stocky</span> */}
          <small className='website-rights'>infodent © 2023</small>

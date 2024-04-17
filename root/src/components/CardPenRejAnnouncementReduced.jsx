@@ -27,7 +27,6 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
     return (
         <>
 
-            {/* rejection modal */}
             {
                 isPenRejModalEditing.value && isPenRejModalEditing.id === singleData.id || localStorage.getItem("editId") == singleData.id ?
 
@@ -129,7 +128,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                         <div>
                                                             {productCategories.map((item) => {
                                                                 if (item.id === +el) {
-                                                                    return <span className={`text-light p-1 px-3 m-1 ms-0 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`} style={{fontSize: ".7rem"}}> {minimize?item.code:item.eng} </span>
+                                                                    return <span className={`text-light p-1 px-3 m-1 ms-0 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`} style={{ fontSize: ".7rem" }}> {minimize ? item.code : item.eng} </span>
                                                                 }
                                                             })}
                                                         </div>

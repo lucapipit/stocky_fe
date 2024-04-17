@@ -5,6 +5,15 @@
 }
 
 
+.percentageBar2{
+    animation: progress;
+    animation-duration: 8000ms;
+    animation-timing-function: ease-in-out;
+}
+
+   
+
+/* -------- */
 @keyframes progress {
     from{
         width: 0%;
@@ -13,3 +22,5 @@
         width: 100%;
     }
 }
+
+  
