@@ -9,7 +9,7 @@ const MainLayout = ({children}) => {
             <main style={{minHeight: "80vh"}}>
                 {children}
             </main>
-            <_Footer />
+            {/* <_Footer /> */}
         </>
     )
 }

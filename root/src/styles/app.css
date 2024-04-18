@@ -30,6 +30,30 @@
 .imgGalleryCarouselActive {
     border: 4px solid #507598;
 }
+/* image gallery main picture style */
+.imgGalleryMain{
+    height: 300px;
+    width: 300px;
+    background-color: #fff;
+}
+@media only screen and (max-width: 1000px){
+    .imgGalleryMain{
+        height: 220px;
+        width: 220px;
+    }
+}
+@media only screen and (max-width: 700px){
+    .imgGalleryMain{
+        height: 150px;
+        width: 150px;
+    }
+}
+@media only screen and (max-width: 400px){
+    .imgGalleryMain{
+        height: 100px;
+        width: 100px;
+    }
+}
 
 /* CardPenRejAnnouncementReducedForm edit modal*/
 .announcementEditModal {

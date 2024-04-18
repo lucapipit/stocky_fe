@@ -34,6 +34,11 @@ h6 {
     width: 90%;
 }
 
+/* min width */
+.myMinW375{
+    min-width: 375px;
+}
+
 /* max width */
 .myMaxW100 {
     max-width: 100px !important;
@@ -114,10 +119,14 @@ h6 {
     background-position: center;
 }
 
-
 /* icons font size */
 .myIconLg {
     font-size: 50px;
+}
+
+/* font size */
+.myFontSize5{
+    font-size: .5rem;
 }
 
 /* text truncate and fading */
@@ -126,6 +135,7 @@ h6 {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     width: 100%;
+    height: 45px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -137,6 +147,25 @@ h6 {
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.line-clampBeta {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@media only screen and (min-width: 700px){
+    .line-clampBeta {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 .myFade {
@@ -164,4 +193,10 @@ h6 {
 }
 .myOverFlowXHidden{
     overflow-x: hidden;
+}
+
+/* status circular */
+.statusCircular{
+    height: 10px;
+    width: 10px;
 }

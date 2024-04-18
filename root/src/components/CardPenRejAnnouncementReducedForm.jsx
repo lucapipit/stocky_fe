@@ -104,17 +104,17 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         const payload = {
             idPackage: idPackage,
             status: singleData.status,
-            rejReasons: escapeString(rejReasons),
+            rejReasons: rejReasons,
             relevance: idPackage,
-            brandName: escapeString(brandName),
-            manufacturerName: escapeString(manufacturerName),
-            modelName: escapeString(modelName),
+            brandName: brandName,
+            manufacturerName: manufacturerName,
+            modelName: modelName,
             quantity: quantity,
             price: price,
             pics: newFile ? file.concat(input.img.split(",")).toString() : file.toString(),
-            productSize: escapeString(productSize),
-            description: escapeString(description),
-            techDetail: escapeString(techDetail),
+            productSize: productSize,
+            description: description,
+            techDetail: techDetail,
             category: categoriesProductId.toString(),
             dataApproved: singleData.dataApproved,
             expireDate: expireDate,
@@ -129,9 +129,10 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
             .then((response) => {
                 if (response.payload.statusCode === 200) {
                     if (singleData.status === 3) {
-                        dispatch(updateAnnouncementFunc({ payload: { ...payload, id: singleData.id, status: 0 }, token: localStorage.getItem("token") }))
+                        dispatch(updateAnnouncementFunc({ payload: { ...payload, id: singleData.id, status: 0, dataRejected: singleData.dataRejected }, token: localStorage.getItem("token") }))
                             .then((response) => {
                                 if (response.payload.statusCode === 200) {
+                                    dispatch(clearCategoriesProduct());
                                     window.location.reload()
                                 }
                             })
@@ -255,7 +256,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                             </Form.Group>
                         </div>
 
-                        <div>
+                        <div className='myMinW375'>
                             <Form.Group className="mb-3">
                                 <Form.Label>Brand Name</Form.Label>
                                 <Form.Control type="text" className="form-control" id="brandName" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
@@ -276,10 +277,10 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                                 <Form.Control type="number" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
                             </Form.Group>
 
-                            
+
                             <Form.Group className="mb-3">
                                 <Form.Label>Category</Form.Label>
-                                <DropdownButton id="dropdown-basic-button" title={categoriesProduct.length ? categoriesProduct.length === 1 ? "1 item" : `${categoriesProduct.length} items` : "select one or more categories"}>
+                                <DropdownButton id="dropdown-basic-button" drop='down-centered' title={categoriesProduct.length ? categoriesProduct.length === 1 ? "1 item" : `${categoriesProduct.length} items` : "select one or more categories"}>
                                     <h4 className='w-100 text-center mt-3'>Dental Categories</h4>
                                     <hr className='w-100 px-5 mt-1' />
                                     {
@@ -296,7 +297,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                                     }
                                 </DropdownButton>
 
-                                <div className='d-flex flex-wrap justify-content-center my-3 '>
+                                <div className='d-flex flex-wrap justify-content-center my-3 myMaxW700'>
                                     {
                                         categoriesProduct && categoriesProduct.map((el) => {
                                             return (

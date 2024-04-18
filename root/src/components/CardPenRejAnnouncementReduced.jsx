@@ -47,8 +47,6 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
                     </div>
 
-
-
                     : <div className="m-2 border myMaxW800" >
 
                         <div style={{ borderLeft: `3px solid ${singleData.status === 3 ? "red" : singleData.status === 0 ? "lightgray" : "yellowgreen"}` }}>
@@ -70,11 +68,10 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={12} style={{ height: `${minimize ? "200px" : "400px"}` }} /></Placeholder>
                                                 :
-                                                <div className='myMaxW300'>
-                                                    <div className='d-flex align-items-center' style={{ height: `${minimize ? "250px" : "100%"}`, overflowY: "hidden" }}>
-                                                        <img className='myMaxW300' src={`http://localhost:5050/uploads/${singleData.pics.split(",")[imgSelectionCounter]}`} alt="" />
-                                                    </div>
-                                                </div>
+                                                <div className={`myBgImgContain imgGalleryMain me-1 myCursor`}
+                                                    style={{ backgroundImage: `url(http://localhost:5050/uploads/${singleData.pics.split(",")[imgSelectionCounter]})` }}
+                                                ></div>
+
                                         }
                                     </div>
 
@@ -102,14 +99,14 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                         {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={4} /></Placeholder> :
-                                                <div className='d-flex flex-wrap align-items-center gap-1'>
-                                                    <div className='d-flex align-items-top my-3'>
+                                                <div className='d-flex flex-wrap align-items-center gap-2 py-2'>
+                                                    <div className='d-flex align-items-top '>
                                                         <h2 className='fw-normal'>{singleData.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h2>
-                                                        <p className='fw-light'>00$</p>
+                                                        <p className='fw-light m-0'>00$</p>
                                                     </div>
-                                                    <div className='d-flex align-items-top px-3 py-1 rounded-5 myBgWhite'>
+                                                    <div className='d-flex align-items-top rounded-5 myBgWhite'>
                                                         <h2 className='fw-normal'>{(Math.floor((singleData.price) / (singleData.quantity))).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h2>
-                                                        <p className='fw-light me-1'>{(Math.round((singleData.price) / (singleData.quantity) * 100) / 100).toString().split(".")[1]}</p>
+                                                        <p className='fw-light m-0 me-1'>{(Math.round((singleData.price) / (singleData.quantity) * 100) / 100).toString().split(".")[1]}</p>
                                                         <h4 className='fw-light'>$/item</h4>
                                                     </div>
                                                 </div>
@@ -128,7 +125,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                         <div>
                                                             {productCategories.map((item) => {
                                                                 if (item.id === +el) {
-                                                                    return <span className={`text-light p-1 px-3 m-1 ms-0 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`} style={{ fontSize: ".7rem" }}> {minimize ? item.code : item.eng} </span>
+                                                                    return <span className={`p-1 ${minimize ? "myFontSize5 px-2" : "px-3"} text-light px-2 m-1 ms-0 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`} > {minimize ? item.code : item.eng} </span>
                                                                 }
                                                             })}
                                                         </div>

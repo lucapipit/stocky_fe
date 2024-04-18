@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
+import Spinner from 'react-bootstrap/Spinner';
 
 const CardPenRejAnnouncementLine = ({ singleData, isLoading }) => {
 
@@ -7,28 +8,36 @@ const CardPenRejAnnouncementLine = ({ singleData, isLoading }) => {
     }, [])
 
     return (
-        <div className='border d-flex w-100 m-1 myOverFlowXHidden' style={{ height: "100px" }}>
+        <div className='w-100 d-flex justify-content-center'>
+            <div className='border d-flex w-100 m-1 myMaxW1200' style={{ height: "100px" }}>
 
-            <div className='myOverflowYHidden d-flex align-items-center bg-dark'>
-                <img className='myMaxW100 ' src={`http://localhost:5050/uploads/${singleData.pics.split(",")[0]}`} alt="" />
+                <div className=' myBgImgCover' style={{ backgroundImage: `url(http://localhost:5050/uploads/${singleData.pics.split(",")[0]})`, width: "200px" }}>
+                </div>
+
+                <div className='px-3 py-2 '>
+                    <div className='line-clampBeta'>
+                        <h5 className='me-3'> {singleData.modelName}</h5>
+                    </div>
+                    <div className='d-flex flex-wrap align-items-center mt-1'>
+                        <p className='m-0 me-3'> <span className='fw-bold'>{singleData.price}$</span> - <span className='bg-dark text-light px-2 rounded-1'>{singleData.quantity} items</span> </p>
+                        <p className='m-0 me-3 '>{singleData.brandName}</p>
+                        <h6 className='m-0'><i className="bi bi-eye-fill "></i> {singleData.views}</h6>
+                    </div>
+
+                </div>
+
+                <div className='position-relative'>
+                    <div className='position-absolute end-0 me-1'>
+                        {singleData.status === 0 ?
+                            <Spinner className='ms-1 statusCircular' animation="grow" size="sm" />
+                            : singleData.status === 1 ?
+                                <div className='rounded-5 bg-danger statusCircular mt-2' ></div>
+                                : <div className='rounded-5 bg-success statusCircular mt-2' ></div>
+                        }
+                    </div>
+                </div>
+
             </div>
-
-            <div className='border border-danger px-3 py-2 d-flex flex-column justify-content-between'>
-
-                <h5> {singleData.modelName}</h5>
-                <p className='m-0'> {singleData.price}$ - {singleData.quantity} items </p>
-                <p className='m-0'>Brand: {singleData.brandName}</p>
-
-            </div>
-
-            <div className='border border-danger px-3 py-2 d-flex flex-column justify-content-between'>
-
-                <h5> {singleData.modelName}</h5>
-                <p className='m-0'> {singleData.price}$ - {singleData.quantity} items </p>
-                <p className='m-0'>Brand: {singleData.brandName}</p>
-
-            </div>
-
         </div>
     )
 }

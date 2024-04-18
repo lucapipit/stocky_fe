@@ -51,7 +51,7 @@ const _Account = () => {
 
 
   return (
-    <div >
+    <div>
 
       {
         userData && userData.length > 0 ?
@@ -150,7 +150,11 @@ const _Account = () => {
                     <div className={`myCursor border p-2 py-1 ${typeOfView === 1 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(1)}><i className="bi bi-columns-gap myCursor"></i></div>
                   </div>
 
-                  <div className='d-flex flex-wrap justify-content-center align-items-center my-5'>
+                  <div className='d-flex align-items-center justify-content-center mt-3'>
+                      <div>{allUserAnnouncements.length} announcements</div>
+                  </div>
+
+                  <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
                     {
                       allUserAnnouncements && allUserAnnouncements.map((el) => {
                         if (typeOfView === 1) {

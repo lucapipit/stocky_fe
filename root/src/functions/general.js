@@ -1,4 +1,4 @@
  //escape string
- export const escapeString = (input) => {
-    return input.replaceAll("\\", "\\\\").replaceAll("'", "\\'")/* .replaceAll("%", "\\%") */
-}
+ /* export const escapeString = (input) => {
+    return input.replaceAll("\\", "\\\\").replace("'", "\\'").replaceAll("%", "\\%")
+} */

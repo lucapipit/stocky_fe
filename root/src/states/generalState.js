@@ -55,7 +55,7 @@ const generalSlice = createSlice({
         },
         clearCategoriesProduct: (state, action) => {
             state.categoriesProduct = [];
-            state.categoriesProduct.id = []
+            state.categoriesProductId = []
         },
         setDistributionArea: (state, action) => {
             state.sellingAreaExcludedISO = [];
