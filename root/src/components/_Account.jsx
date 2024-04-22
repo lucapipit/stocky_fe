@@ -146,8 +146,8 @@ const _Account = () => {
                   <h1 className='mt-5 mb-3 text-center fw-light'>Announcements</h1>
 
                   <div className='d-flex justify-content-center align-items-center gap-2' style={{ fontSize: "1.5rem" }}>
-                    <div className={`myCursor border p-2 py-1 ${typeOfView === 0 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(0)}><i className="bi bi-list-task myCursor"></i></div>
-                    <div className={`myCursor border p-2 py-1 ${typeOfView === 1 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(1)}><i className="bi bi-columns-gap myCursor"></i></div>
+                    <div className={`myCursor border p-2 py-1 ${typeOfView === 0 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(0)}><i className="bi bi-columns-gap myCursor"></i></div>
+                    <div className={`myCursor border p-2 py-1 ${typeOfView === 1 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(1)}><i className="bi bi-list-task myCursor"></i></div>
                   </div>
 
                   <div className='d-flex align-items-center justify-content-center mt-3'>
@@ -157,7 +157,7 @@ const _Account = () => {
                   <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
                     {
                       allUserAnnouncements && allUserAnnouncements.map((el) => {
-                        if (typeOfView === 1) {
+                        if (typeOfView === 0) {
                           return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
                         } else {
                           return <CardPenRejAnnouncementLine singleData={el} isLoading={isLoading} />

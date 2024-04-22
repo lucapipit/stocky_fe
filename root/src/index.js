@@ -7,7 +7,8 @@ import { Provider } from 'react-redux';
 import store from './states/store';
 import "./styles/custom.css";
 import "./styles/app.css";
-import "./styles/fonts.css"
+import "./styles/fonts.css";
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

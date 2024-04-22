@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import CardPenRejAnnouncementReducedForm from './CardPenRejAnnouncementReducedForm';
 import { setIsPenRejModalEditing } from '../states/generalState';
 import productCategories from '../assets/JSON/productCategories.json';
+import "../styles/accountCardBody.css";
 
 
 const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
@@ -47,28 +48,21 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
                     </div>
 
-                    : <div className="m-2 border myMaxW800" >
+                    : <div className="m-1 border myMaxW632" >
 
                         <div style={{ borderLeft: `3px solid ${singleData.status === 3 ? "red" : singleData.status === 0 ? "lightgray" : "yellowgreen"}` }}>
 
-                            <div className={`${minimize ? "myFade" : "position-relative"} p-3`}>
+                            <div className={`${minimize ? "myFade" : "position-relative p-3"}`}>
 
-                                <div className='d-flex gap-4'>
+                                {/* account card body. Css --> accountCardBody.css */}
+                                <div className='accountCardBody d-flex gap-3'>
 
-                                    {
-                                        singleData.status !== 1 ?
-                                            <div className='position-absolute editPencil myCursor' onClick={() => { document.body.style.overflow = 'hidden'; dispatch(setIsPenRejModalEditing({ value: true, id: singleData.id })) }}>
-                                                <i className="bi bi-pencil-fill text-secondary"></i>
-                                            </div>
-                                            : null
-                                    }
-
-                                    <div >
+                                    <div className='mainImage bg-light'>
                                         {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={12} style={{ height: `${minimize ? "200px" : "400px"}` }} /></Placeholder>
                                                 :
-                                                <div className={`myBgImgContain imgGalleryMain me-1 myCursor`}
+                                                <div className={`${minimize ? "myBgImgCover2" : "myBgImgContain"} imgGalleryMain myCursor`}
                                                     style={{ backgroundImage: `url(http://localhost:5050/uploads/${singleData.pics.split(",")[imgSelectionCounter]})` }}
                                                 ></div>
 
@@ -76,67 +70,66 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                     </div>
 
 
-                                    <div className='px-3' >
+                                    <div className='mainInfo pt-1' >
 
                                         {
                                             !singleData || isLoading ?
-                                                <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder> : <div className={`${minimize ? "line-clamp1" : ""} py-2 pe-5`}><h1 className='fw-light'>{singleData.modelName}</h1></div>
+                                                <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder>
+                                                : <div className={`${minimize ? "line-clamp1" : ""} py-2 pe-5`}><h4 className='fw-light'>{singleData.modelName}</h4></div>
                                         }
                                         {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={4} /></Placeholder> :
                                                 <div className='d-flex align-items-center gap-3'>
-                                                    <div className='d-flex align-items-center'>
-                                                        <h6 className='m-0 me-1'>Qnt:</h6>
-                                                        <span>{singleData.quantity}</span>
+                                                    <div className='d-flex'>
+                                                        <h6 className='fw-light bg-dark text-light px-2 rounded-5'>{singleData.quantity} items</h6>
                                                     </div>
-                                                    <div className='d-flex align-items-center'>
-                                                        <h6 className='m-0 me-1'>Brand:</h6>
-                                                        <span>{singleData.brandName}</span>
+                                                    <div className='d-flex align-items-center brandName'>
+                                                        <p className='m-0 fw-bold myPrimaryColor'>{singleData.brandName}</p>
                                                     </div>
                                                 </div>
                                         }
                                         {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={4} /></Placeholder> :
-                                                <div className='d-flex flex-wrap align-items-center gap-2 py-2'>
+                                                <div className='d-flex flex-wrap align-items-center gap-2 py-1'>
                                                     <div className='d-flex align-items-top '>
-                                                        <h2 className='fw-normal'>{singleData.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h2>
+                                                        <h3 className='fw-normal'>{singleData.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h3>
                                                         <p className='fw-light m-0'>00$</p>
                                                     </div>
                                                     <div className='d-flex align-items-top rounded-5 myBgWhite'>
-                                                        <h2 className='fw-normal'>{(Math.floor((singleData.price) / (singleData.quantity))).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h2>
+                                                        <h3 className='fw-normal'>{(Math.floor((singleData.price) / (singleData.quantity))).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h3>
                                                         <p className='fw-light m-0 me-1'>{(Math.round((singleData.price) / (singleData.quantity) * 100) / 100).toString().split(".")[1]}</p>
-                                                        <h4 className='fw-light'>$/item</h4>
+                                                        <p className='fw-light m-0'>$/item</p>
                                                     </div>
                                                 </div>
                                         }
                                         {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
-                                                <div className='mb-2 d-flex flex-wrap align-items-center'>
-                                                    <h5 className='m-0'><i className="bi bi-eye-fill "></i> {singleData.views}</h5>
+                                                <div className='mb-2 d-flex flex-wrap justify-content-end gap-3 align-items-center'>
+                                                    <h6 className='m-0'><i className="bi bi-eye-fill"></i> {singleData.views}</h6>
+                                                    <h6 className='m-0' style={{ color: "#E52C5D" }}><i className="bi bi-suit-heart-fill" ></i> {singleData.posClick}</h6>
+                                                    <h6 className='m-0'><i className="bi bi-chat-dots-fill text-secondary" style={{ color: "#84BD00" }}></i> </h6>
                                                 </div>
                                         }
-                                        <div className='my-3 d-flex flex-wrap align-items-center'>
-                                            {
-                                                singleData.category && singleData.category.split(",").map((el) => {
-                                                    return (
-                                                        <div>
-                                                            {productCategories.map((item) => {
-                                                                if (item.id === +el) {
-                                                                    return <span className={`p-1 ${minimize ? "myFontSize5 px-2" : "px-3"} text-light px-2 m-1 ms-0 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`} > {minimize ? item.code : item.eng} </span>
-                                                                }
-                                                            })}
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </div>
+
+
                                     </div>
 
+                                    {
+                                        singleData.status !== 1 ?
+                                            <div className='position-relative'>
+                                                <div className='position-absolute editPencil rounded-5 myCursor' onClick={() => { document.body.style.overflow = 'hidden'; dispatch(setIsPenRejModalEditing({ value: true, id: singleData.id })) }}>
+                                                    <i className="bi bi-pencil-fill text-secondary"></i>
+                                                </div>
+                                            </div>
+                                            : <div></div>
+                                    }
 
                                 </div>
+
+
 
                                 <div className='w-100'>
                                     {
@@ -159,22 +152,44 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                     }
                                 </div>
 
-                                <div className='mb-4 mt-3 text-start'>
+                                <div className='w-100'>
                                     {
-                                        !singleData || isLoading ?
-                                            <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
-                                            <div className={`${minimize ? "line-clamp2" : ""} mt-4`}>
-                                                <span className='p-1 px-2'>{singleData.status === 0 ? <i><Spinner animation="grow" size="sm" /> on approval</i> : singleData.status === 1 ? <i className="bi bi-check-circle-fill text-success"> approved</i> : <i className="bi bi-ban text-danger"> denied:</i>}</span>
-                                                <p className='text-danger px-3'>{singleData.rejReasons}</p>
+                                        !minimize ?
+                                            <div className='my-3 d-flex flex-wrap align-items-center'>
+                                                {
+                                                    singleData.category && singleData.category.split(",").map((el) => {
+                                                        return (
+                                                            <div>
+                                                                {productCategories.map((item) => {
+                                                                    if (item.id === +el) {
+                                                                        return <span className={`p-1 categoryTag px-3 text-light m-1 ms-0 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`} > {minimize ? item.code : item.eng} </span>
+                                                                    }
+                                                                })}
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
                                             </div>
+                                            : null
                                     }
-
                                 </div>
 
 
-                                <div className='myCursor minimizeArrow' onClick={() => setMinimize(!minimize)}>
-                                    <i className={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
-                                </div>
+                                {
+                                    minimize ?
+                                        null :
+                                        <div className='mb-4 mt-3 text-start'>
+                                            {
+                                                !singleData || isLoading ?
+                                                    <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
+                                                    <div className={`${minimize ? "line-clamp2" : ""} mt-4`}>
+                                                        <span className='p-1 px-2'>{singleData.status === 0 ? <i><Spinner animation="grow" size="sm" /> on approval</i> : singleData.status === 1 ? <i className="bi bi-check-circle-fill text-success"> approved</i> : <i className="bi bi-ban text-danger"> denied:</i>}</span>
+                                                        <p className='text-danger px-3'>{singleData.rejReasons}</p>
+                                                    </div>
+                                            }
+
+                                        </div>
+                                }
 
 
 
@@ -206,11 +221,11 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                     <Placeholder animation="glow"><Placeholder xs={12} /></Placeholder> :
                                                     <div className='my-5'>
                                                         <hr />
-                                                        <div className='d-flex flex-wrap'>
-                                                            <span className='border border-primary me-2 px-3 py-2 rounded-5 text-primary'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
-                                                            <span className='border border-info px-3 me-2 py-2 rounded-5 text-info'><i class="bi bi-pencil-fill me-2"></i> <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
-                                                            {singleData.dataApproved ? <span className='border border-success px-3 py-2 rounded-5 text-success'><i className="bi bi-check-circle-fill me-2"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span> : null}
-                                                            {singleData.dataRejected ? <span className='border border-danger px-3 py-2 rounded-5 text-danger'><i className="bi bi-ban me-2"></i> <i className='fw-bold'>{singleData.dataRejected.split("T")[0]}</i></span> : null}
+                                                        <div className='d-flex gap-2 flex-wrap myFontSize12px'>
+                                                            <span className='border border-primary  px-3 py-1 rounded-5 text-primary'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
+                                                            <span className='border border-info px-3 py-1  rounded-5 text-info'><i class="bi bi-pencil-fill me-2"></i> <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
+                                                            {singleData.dataApproved ? <span className='border border-success px-3 py-1 rounded-5 text-success'><i className="bi bi-check-circle-fill me-2"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span> : null}
+                                                            {singleData.dataRejected ? <span className='border border-danger px-3 py-1 rounded-5 text-danger'><i className="bi bi-ban me-2"></i> <i className='fw-bold'>{singleData.dataRejected.split("T")[0]}</i></span> : null}
                                                         </div>
                                                     </div>
                                             }
@@ -218,6 +233,11 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                         </div>
                                 }
 
+                                <div className='position-relative'>
+                                    <div className='myCursor minimizeArrow' onClick={() => setMinimize(!minimize)}>
+                                        <i className={`bi bi-caret-${minimize ? "down" : "up"}-fill text-secondary`}></i>
+                                    </div>
+                                </div>
 
 
                             </div>

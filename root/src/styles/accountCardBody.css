@@ -1,0 +1,195 @@
+/* 1 - visualizzation account announcements line */
+.lineCard {
+    height: 65px;
+}
+
+.lineCard > div:first-child {
+    height: 63px;
+    width: 60px;
+}
+
+.mainInfoLineCard h6,
+p,
+span {
+    font-size: 14px;
+}
+
+.mainInfoLineCard h5 {
+    font-size: 17px;
+}
+
+.statusCircular {
+    height: 7px;
+    width: 7px;
+}
+
+
+@media only screen and (max-width: 700px) {
+    .lineCard {
+        height: 55px;
+    }
+
+    .lineCard > div:first-child {
+        height: 53px;
+        width: 50px;
+    }
+
+    .mainInfoLineCard h6,
+    p,
+    span {
+        font-size: 9px;
+    }
+
+    .mainInfoLineCard h5 {
+        font-size: 14px;
+    }
+
+    .statusCircular {
+        height: 5px;
+        width: 5px;
+    }
+}
+
+
+
+/* 2 - visualizzation account announcements grid */
+.accountCardBody>.mainInfo {
+    width: 400px;
+}
+
+.mainInfo .brandName {
+    font-size: 12px;
+}
+
+.categoryTag {
+    font-size: 11px;
+}
+
+
+/* text truncate and fading */
+.line-clamp1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 100%;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.line-clamp2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* image gallery carousel style */
+.imgGalleryCarousel {
+    height: 70px;
+    width: 70px;
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+}
+
+.imgGalleryCarouselActive {
+    border: 4px solid #507598;
+}
+
+/* image gallery main picture style */
+.imgGalleryMain {
+    height: 160px;
+    width: 200px;
+}
+
+
+@media only screen and (max-width: 700px) {
+    .imgGalleryMain {
+        height: 120px;
+        width: 130px;
+    }
+
+    .imgGalleryCarousel {
+        height: 60px;
+        width: 60px;
+    }
+
+    .line-clamp1 {
+        height: 38px;
+    }
+
+    .accountCardBody > .mainInfo {
+        width: calc(100vw - 200px);
+    }
+
+    .mainInfo h4,
+    h3 {
+        font-size: 20px;
+    }
+
+    .mainInfo h6,
+    span,
+    p {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .imgGalleryMain {
+        height: 105px;
+        width: 100px;
+    }
+
+    .imgGalleryCarousel {
+        height: 50px;
+        width: 50px;
+    }
+
+    .line-clamp1 {
+        height: 32px;
+    }
+
+    .accountCardBody>.mainInfo {
+        width: calc(100vw - 150px);
+    }
+
+    .mainInfo h4,
+    h3 {
+        font-size: 18px;
+    }
+
+    .mainInfo h6,
+    span,
+    p {
+        font-size: 11px;
+    }
+
+    .categoryTag {
+        font-size: 9px;
+    }
+}
+
+
+
+/* position absolute icons */
+.minimizeArrow {
+    position: absolute;
+    bottom: -5px;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.minimizeArrow>i {
+    font-size: 1.5rem;
+}
+
+/* edit pencil */
+.editPencil {
+    right: 0px;
+    background-color: #fff;
+    padding: 10px;
+    z-index: 1;
+}
