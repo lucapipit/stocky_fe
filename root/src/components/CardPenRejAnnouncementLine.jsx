@@ -35,8 +35,8 @@ const CardPenRejAnnouncementLine = ({ singleData, isLoading }) => {
                         {singleData.status === 0 ?
                             <Spinner className='ms-1 statusCircular' animation="grow" size="sm" />
                             : singleData.status === 1 ?
-                                <div className='rounded-5 bg-danger statusCircular mt-2' ></div>
-                                : <div className='rounded-5 bg-success statusCircular mt-2' ></div>
+                                <div className='rounded-5 bg-success statusCircular mt-2' ></div>
+                                : <div className='rounded-5 bg-danger statusCircular mt-2' ></div>
                         }
                     </div>
                 </div>

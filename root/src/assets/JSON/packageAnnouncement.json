@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "name": "Freely",
+        "text1": " for each chat contact you want to unlock (unlimited messages)",
+        "text2": " - The announcement can be maintained on the platform forever.",
+        "text3": "Low relevance announcement*",
+        "bold1": "5,99€",
+        "bold2": "Free",
+        "price": "Free",
+        "period": " forever",
+        "extra": "Low relevance means that your announcement has a lightly lower possibility to appear on customer outlet store"
+    },
+    {
+        "id": 2,
+        "name": "Weekly",
+        "text1": "Unlimited free contacts",
+        "text2": "/week from the second week onwards",
+        "text3": "High relevance announcement*",
+        "bold1": "",
+        "bold2": "6,99€",
+        "price": "9,99€",
+        "period": " /week",
+        "extra": "* High relevance means that your announcement has high possibility to appear on customer outlet store"
+    },
+    {
+        "id": 3,
+        "name": "Monthly",
+        "text1": "Unlimited free contacts",
+        "text2": "/month from the second month onwards",
+        "text3": "Top relevance announcement*",
+        "bold1": "",
+        "bold2": "19,99€",
+        "price": "29,99€",
+        "period": " /month",
+        "extra": "Top relevance means that your announcement will be shown as a priority in the outlet"
+    }
+]

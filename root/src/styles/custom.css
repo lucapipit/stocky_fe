@@ -139,6 +139,9 @@ h6 {
 .myFontSize5 {
     font-size: .5rem;
 }
+.myFontSize6 {
+    font-size: .6rem;
+}
 .myFontSize12px{
     font-size: 12px;
 }
@@ -164,20 +167,20 @@ h6 {
     }
 }
 
-/* .myFade {
-    position: relative;
-    height: 402px;
-} 
+/* myGradients */
+.myGradientFreely{
+    background: linear-gradient(to top, #d08a6e 40%, #f2a080);
+}
+.myGradientWeekly{
+    background: linear-gradient(to top, #3a7469 20%, #66cfbc);
+}
+.myGradientMonthly{
+    background: linear-gradient(to top, #892060 20%, #e337a1);
+}
+.myBorderActive{
+    border: 3px solid rgb(61, 61, 61);
+}
 
-.myFade:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 70px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(255, 255, 255) 30%);
-} */
 
 /* overflow y */
 .myOverflowY {
@@ -192,4 +195,19 @@ h6 {
     overflow-x: hidden;
 }
 
+
+/* .myFade {
+    position: relative;
+    height: 402px;
+} 
+
+.myFade:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 70px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(255, 255, 255) 30%);
+} */
 

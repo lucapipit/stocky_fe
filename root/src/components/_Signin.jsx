@@ -44,9 +44,9 @@ const _Signin = () => {
     const signinLoading = useSelector((state) => state.signin.loading);
     const distributionAreaISO = useSelector((state) => state.general.distributionAreaISO);
     const sellingAreaExcludedISO = useSelector((state) => state.general.sellingAreaExcludedISO);
+    const allCitiesFiltered = useSelector((state) => state.geonames.allCitiesFiltered);
     const dcdTkn = useSelector((state) => state.general.dcdTkn);
     const allCities = useSelector((state) => state.geonames.allCities);
-    const allCitiesFiltered = useSelector((state) => state.geonames.allCitiesFiltered);
     const isLoading = useSelector((state) => state.geonames.isLoading);
 
     const registerUser = async () => {
@@ -143,7 +143,7 @@ const _Signin = () => {
     return (
         <div className='d-flex align-items-center justify-content-center ' style={{ height: "100vh" }}>
             <div className='bg-light border w-75 p-5 rounded-5 myMaxW800'>
-                <h1 className='text-center text-secondary fw-light displa-6'>Signin</h1>
+                <h1 className='text-center text-secondary fw-light'>Signin</h1>
 
                 {/* progress bar */}
                 <div className='d-flex justify-content-center mt-3'>

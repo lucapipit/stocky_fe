@@ -70,7 +70,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
     const formCheck = async () => {
 
-        const formFilled = brandName && manufacturerName && modelName && quantity /* && file */ && description && category;
+        const formFilled = brandName && modelName && quantity /* && file */ && description && category;
 
         if (formFilled) {
             setIsFormFilled(true);
@@ -207,7 +207,6 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
                         <div className='position-relative'>
 
-
                             {
                                 file.length > 1 ?
                                     <div className='position-absolute top-0 end-0 p-3'>
@@ -221,7 +220,6 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                                     </div>
                                     : null
                             }
-
 
                             <div>
 
