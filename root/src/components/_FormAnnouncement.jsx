@@ -31,6 +31,7 @@ function _FormAnnouncement() {
   const [price, setPrice] = useState("");
   const [productSize, setProductSize] = useState("");
   const [description, setDescription] = useState("");
+  const [techDetailView, setTechDetailView] = useState("");
   const [techDetail, setTechDetail] = useState("");
   const [expireDate, setExpireDate] = useState("");
   const [textFocus, setTextFocus] = useState("");
@@ -44,6 +45,9 @@ function _FormAnnouncement() {
 
   const [addArea, setAddArea] = useState(false);
   const [sellWholeWorld, setSellWholeWorld] = useState(true);
+
+  //errors
+  const [techDetailValueError, setTechDetailValueError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -69,6 +73,31 @@ function _FormAnnouncement() {
       console.log(error);
     }
   };
+
+  /* base64 image preview*/
+  const [base64Img, setBase64Img] = useState([]);
+  const uploadBase64 = async (e) => {
+    let img64Arry = [];
+    [...Array(e.target.files.length)].map(async (el, index) => {
+      const myFile = e.target.files[index];
+      const base64 = await convertBase64(myFile);
+      img64Arry.push(base64);
+      setBase64Img(img64Arry);
+    })
+  };
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      }
+    })
+  }
 
   const formCheck = async () => {
 
@@ -106,7 +135,7 @@ function _FormAnnouncement() {
       pics: input.img.toString(),
       productSize: productSize,
       description: description,
-      techDetail: techDetail,
+      techDetail: techDetail.toString(),
       category: categoriesProductId.toString(),
       expireDate: expireDate,
       textFocus: textFocus,
@@ -146,8 +175,8 @@ function _FormAnnouncement() {
       const myFile = e.target.files[index];
       const image = await resizeFile(myFile);
       imgArray.push(image);
+      setFile(imgArray);
     });
-    setFile(imgArray);
   }
 
   const manageCategory = (input) => {
@@ -169,6 +198,16 @@ function _FormAnnouncement() {
     }
   };
 
+  const deleteTechItem = (input) => {
+    let newTechDetailArry = []; 
+    techDetail.map((el) => {
+      if (el.split("£")[0] !== input) {
+        newTechDetailArry.push(el);
+      }
+    })
+    setTechDetail(newTechDetailArry)
+  }
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -177,10 +216,6 @@ function _FormAnnouncement() {
     }
   }, [])
 
-
-  useEffect(() => {
-    console.log(categoriesProductId);
-  }, [categoriesProductId])
 
   return (
 
@@ -224,53 +259,69 @@ function _FormAnnouncement() {
 
           {
             step === 0 ?
-              <Form.Group className="my-5 d-flex align-items-center justify-content-center">
-                <label className='myCursor myInputFile border rounded-5 d-flex align-items-center' htmlFor="upload-input">
-                  <div className='bg-light fw-bold text-dark p-1 px-3 rounded-5'>choose a file</div>
-                  <p className='text-light m-0 p1 px-3'>{!file ? "select one or multiple images" : file.length == 1 ? JSON.stringify(file[0].name) : `${JSON.stringify(file.length)} images selected`}</p>
-                </label>
-                <input type='file' style={{ display: "none" }} id="upload-input" multiple onChange={(e) => { myResize(e) }} />
-              </Form.Group>
+              <div>
+                <Form.Group className="my-5 d-flex align-items-center justify-content-center">
+                  <label className='myCursor myInputFile border rounded-5 d-flex align-items-center' htmlFor="upload-input">
+                    <div className='bg-light fw-bold text-dark p-1 px-3 rounded-5'>choose a file</div>
+                    <p className='text-light m-0 p1 px-3'>{!file ? "select one or multiple images" : file.length == 1 ? JSON.stringify(file[0].name) : `${JSON.stringify(file.length)} images selected`}</p>
+                  </label>
+                  <input type='file' style={{ display: "none" }} id="upload-input" multiple onChange={(e) => { myResize(e); uploadBase64(e) }} />
+                </Form.Group>
+
+                <div className='d-flex justify-content-center myOverFlowXHidden'>
+                  {
+                    base64Img && base64Img.map((el) => {
+                      return <div className='mySquare80 myOverflowYHidden border d-flex align-items-center'><img className='w-100' src={el} alt="" /></div>
+                    })
+                  }
+                </div>
+
+              </div>
               : null
           }
 
-          {step === 1 ?
-            <div>
-              <Form.Group className="mb-3">
-                <Form.Label>Brand Name</Form.Label>
-                <Form.Control type="text" className="form-control" id="brandName" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
-              </Form.Group>
+          {
+            step === 1 ?
+              <div className='px-2 mt-5'>
+                <Form.Group className="mb-3">
+                  {brandName ? <Form.Label className='ms-3'>Brand Name</Form.Label> : null}
+                  <Form.Control type="text" placeholder="Brand name" className="form-control" id="brandName" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
+                </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Model Name</Form.Label>
-                <Form.Control type="text" className="form-control" id="modelName" value={modelName} onChange={(e) => setModelName(e.target.value)} />
-              </Form.Group>
+                <Form.Group className="mb-3">
+                  {modelName ? <Form.Label className='ms-3'>Model Name</Form.Label> : null}
+                  <Form.Control type="text" placeholder="Model name" className="form-control" id="modelName" value={modelName} onChange={(e) => setModelName(e.target.value)} />
+                </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Quantity</Form.Label>
-                <Form.Control type="number" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-              </Form.Group>
+                <Form.Group className="mb-3">
+                  {price ? <Form.Label className='ms-3'>Price</Form.Label> : null}
+                  <Form.Control type="number" placeholder="Price" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
+                </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Price</Form.Label>
-                <Form.Control type="number" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
-              </Form.Group>
+                <Form.Group >
+                  {quantity ? <Form.Label className='ms-3'>Quantity</Form.Label> : null}
+                  <Form.Control type="number" placeholder="Quantity" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                </Form.Group>
 
-              <Form.Group className='mb-3'>
-                <Form.Label>Product Size</Form.Label>
-                <Form.Control type='text' className='form-control' id="productSize" value={productSize} onChange={(e) => setProductSize(e.target.value)} />
-              </Form.Group>
-            </div>
-            : null
+                <div className='text-center my-4'><span className=' display-6 bg-dark text-light py-2 px-4 rounded-5'>{price && quantity && quantity != 0 ? (Math.round(price * 1000 / quantity) / 1000) : 0} € /item</span></div>
+
+                <Form.Group className='mb-3 pt-2'>
+                  {productSize ? <Form.Label className='ms-3'>Product Size</Form.Label> : null}
+                  <div className='d-flex flex-column align-items-center'>
+                    <Form.Control disabled={productSize === "Spaceless" ? true : false} type='text' placeholder='Product size' className='form-control' id="productSize" value={productSize} onChange={(e) => setProductSize(e.target.value)} />
+                    <Form className='mt-2'><Form.Check defaultChecked={productSize === "Spaceless" ? "checked" : ""} type="switch" id="custom-switch" label="The product is spaceless" onClick={() => { setProductSize(productSize === "Spaceless" ? "" : "Spaceless") }} /></Form>
+                  </div>
+                </Form.Group>
+              </div>
+              : null
           }
-
 
           {
             step === 2 ?
               <Form.Group className="mb-3">
                 <div className='d-flex flex-wrap justify-content-center w-100 pt-5 pb-3'>
                   <div>
-                    <Form.Label className='text-center'>Select one or more categories</Form.Label>
+                    <div className='d-flex justify-content-center'><Form.Label >Select one or more categories</Form.Label></div>
 
                     <h4 className='w-100 text-center mt-3'>Dental Categories</h4>
                     <hr className='w-100 px-5 mt-1' />
@@ -314,15 +365,29 @@ function _FormAnnouncement() {
 
           {
             step === 3 ?
-              <div>
+              <div className='px-2 mt-5'>
                 <Form.Group className="mb-3">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control type="text" as="textarea" rows={5} className="form-control" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                  {description ? <Form.Label className='ms-3'>Description</Form.Label> : null}
+                  <Form.Control type="text" placeholder='Description' as="textarea" rows={5} className="form-control" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
                 </Form.Group>
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Tech Detail</Form.Label>
-                  <Form.Control type="text" as="textarea" rows={5} className="form-control" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
+                <Form.Group className="mb-3 mt-5">
+                  <Form.Label className='ms-3'>Tech Detail</Form.Label>
+                  {techDetail ?
+                    <ul className='bg-light py-2 rounded-2'>
+                      {
+                        techDetail && techDetail.map((el) => {
+                          return <li className='me-3 mt-2' style={{ borderBottom: "1px solid lightGray" }}>{el.split("£")[1]}<i className="bi bi-x-lg text-danger ms-2 myCursor" onClick={() => { deleteTechItem(el.split("£")[0]) }}></i></li>
+                        })
+                      }
+                    </ul>
+                    : null
+                  }
+                  <div className='d-flex gap-1 rounded-5 align-items-center pe-1 bg-dark border'>
+                    <Form.Control type="text" placeholder='type a detail and click plus' className="form-control" id="techDetail" value={techDetailView} onChange={(e) => { if (e.nativeEvent.data !== "£") { setTechDetailView(e.target.value) } else { setTechDetailValueError(true) } }} />
+                    <button className={`rounded-5 ${techDetailView ? "bg-info" : "bg-secondary"}`} disabled={techDetailView ? false : true} onClick={() => { setTechDetail([...techDetail, `${techDetail.length + 1}£` + techDetailView]); setTechDetailView("") }}><i className="bi bi-plus-lg text-light text-info" ></i></button>
+                  </div>
+                  {techDetailValueError ? <div className='mt-2 ms-3'>The "£" value is not permitted!</div> : null}
                 </Form.Group>
               </div>
               : null
@@ -330,7 +395,7 @@ function _FormAnnouncement() {
 
           {
             step === 4 ?
-              <div className='py-4'>
+              <div className='py-4 px-3'>
                 <div>{/* per i Produttori */}
                   <h4 className='text-secondary fw-light mb-2'>Selling Area</h4>
                   <p className='text-secondary fw-light mb-4'>Select country/ies you would like to exclude from your Selling Area. Your announcements will not be visible in selected country/ies automatically. This preferences affects only this announcement.</p>
@@ -346,8 +411,8 @@ function _FormAnnouncement() {
                         </DropdownButton>
                         :
                         <div className='d-flex gap-4 align-items-center flex-wrap'>
-                          <div className={`${sellWholeWorld ? "disabledPlus" : null} d-flex align-items-center flex-wrap gap-2 text-primary myCursor`} onClick={() => { setAddArea(true) }}><div className='myBgWhite plusDistributionArea d-flex align-items-center justify-content-center border' ><i className="bi bi-plus-lg text-primary"></i></div>exclude a country</div>
                           <Form><Form.Check defaultChecked={sellWholeWorld ? "checked" : ""} type="switch" id="custom-switch" label="I wanto to sell to the entire world" onClick={() => { setSellWholeWorld(!sellWholeWorld); dispatch(clearSellingAreaExcluded()) }} /></Form>
+                          <div className={`${sellWholeWorld ? "disabledPlus" : null} d-flex align-items-center flex-wrap gap-2 text-primary myCursor`} onClick={() => { setAddArea(true) }}><div className='myBgWhite plusDistributionArea d-flex align-items-center justify-content-center border' ><i className="bi bi-plus-lg text-primary"></i></div>exclude a country</div>
                         </div>
                     }
 
@@ -364,12 +429,6 @@ function _FormAnnouncement() {
               :
               null
           }
-
-
-
-
-
-
 
           {
             step === 5 ?
@@ -410,22 +469,22 @@ function _FormAnnouncement() {
               step === 0 ?
                 <Button variant="primary" disabled={file ? false : true} onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>done</Button>
                 : step === 1 ?
-                  <div className='d-flex gap-4 align-items-center'>
+                  <div className='d-flex gap-4 align-items-center mb-5'>
                     <h5 className='bi bi-arrow-return-left myCursor m-0' variant="secondary" onClick={() => { manageStep(false) }}> back</h5>
-                    <Button variant="primary" disabled={brandName && modelName && quantity && price && productSize ? false : true} onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>done</Button>
+                    <Button variant="primary" disabled={brandName && modelName && quantity && quantity != 0 && price && price != 0 && productSize ? false : true} onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>done</Button>
                   </div>
                   : step === 2 ?
-                    <div className='d-flex gap-4 align-items-center'>
+                    <div className='d-flex gap-4 align-items-center mb-5'>
                       <h5 className='bi bi-arrow-return-left myCursor m-0' variant="secondary" onClick={() => { manageStep(false) }}> back</h5>
                       <Button variant="primary" disabled={categoriesProduct.length > 0 ? false : true} onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>done</Button>
                     </div>
                     : step === 3 ?
-                      <div className='d-flex gap-4 align-items-center'>
+                      <div className='d-flex gap-4 align-items-center mb-5'>
                         <h5 className='bi bi-arrow-return-left myCursor m-0' variant="secondary" onClick={() => { manageStep(false) }}> back</h5>
                         <Button variant="primary" disabled={description && techDetail ? false : true} onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>done</Button>
                       </div>
                       : step === 4 ?
-                        <div className='d-flex gap-4 align-items-center'>
+                        <div className='d-flex gap-4 align-items-center mb-5'>
                           <h5 className='bi bi-arrow-return-left myCursor m-0' variant="secondary" onClick={() => { manageStep(false) }}> back</h5>
                           <Button variant="primary" disabled={sellingAreaExcludedISO.length > 0 || sellWholeWorld ? false : true} onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>done</Button>
                         </div>

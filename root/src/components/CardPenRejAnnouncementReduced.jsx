@@ -212,7 +212,11 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                     <div className='my-5'>
                                                         <hr />
                                                         <h5 className='fw-normal'> Technical detail</h5>
-                                                        <p>{singleData.techDetail}</p>
+                                                        <ul className='mt-3'>
+                                                            {singleData.techDetail && singleData.techDetail.split(",").map((el)=>{
+                                                                return <li>{el.split("£")[1]}</li>
+                                                            })}
+                                                        </ul>
                                                     </div>
                                             }
 
