@@ -6,6 +6,8 @@ import CardPenRejAnnouncementReducedForm from './CardPenRejAnnouncementReducedFo
 import { setIsPenRejModalEditing } from '../states/generalState';
 import productCategories from '../assets/JSON/productCategories.json';
 import "../styles/accountCardBody.css";
+import { generateScore } from '../states/annScoreState';
+
 
 
 const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
@@ -15,7 +17,8 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
     const [minimize, setMinimize] = useState(true);
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
-    const [category, setCategory] = useState(singleData.category)
+    const [category, setCategory] = useState(singleData.category);
+    const [score, setScore] = useState(0);
 
     //loading states
     const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
@@ -24,6 +27,16 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
     //open and keep edit modal open state. 
     const isPenRejModalEditing = useSelector((state) => state.general.isPenRejModalEditing);
 
+    //announcement score
+    const finalScore = useSelector((state) => state.annScore.finalScore);
+
+    useEffect(() => {
+        dispatch(generateScore(singleData))
+    }, [])
+
+    useEffect(() => {
+        finalScore && finalScore.map((el) => { if (singleData.id === el.id) { setScore(el.score) } })
+    }, [finalScore])
 
     return (
         <>
@@ -106,6 +119,16 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                         }
                                         {
                                             !singleData || isLoading ?
+                                                null :
+                                                <div className='w-100 d-flex align-items-center mb-2'>
+                                                    <div className='m-0 border w-100 rounded-5' style={{ height: "6px" }}>
+                                                        <div className={`scoreBarLow rounded-5 h-100 ${score > 91 ? "scoreBarLegend" : score > 79 ? "scoreBarHigh" : score > 59 ? "scoreBarMedium" : null}`} style={{ width: `${score}%` }}></div>
+                                                    </div>
+                                                    <h6 className='ms-2'>{score/10}</h6>
+                                                </div>
+                                        }
+                                        {
+                                            !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
                                                 <div className='mb-2 d-flex flex-wrap justify-content-end gap-3 align-items-center'>
                                                     <h6 className='m-0'><i className="bi bi-eye-fill"></i> {singleData.views}</h6>
@@ -113,8 +136,6 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                     <h6 className='m-0'><i className="bi bi-chat-dots-fill text-secondary" style={{ color: "#84BD00" }}></i> </h6>
                                                 </div>
                                         }
-
-
                                     </div>
 
                                     {
@@ -213,7 +234,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                         <hr />
                                                         <h5 className='fw-normal'> Technical detail</h5>
                                                         <ul className='mt-3'>
-                                                            {singleData.techDetail && singleData.techDetail.split(",").map((el)=>{
+                                                            {singleData.techDetail && singleData.techDetail.split(",").map((el) => {
                                                                 return <li>{el.split("£")[1]}</li>
                                                             })}
                                                         </ul>
@@ -226,10 +247,10 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                     <div className='my-5'>
                                                         <hr />
                                                         <div className='d-flex gap-2 flex-wrap myFontSize12px'>
-                                                            <span className='border border-primary  px-3 py-1 rounded-5 text-primary'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
-                                                            <span className='border border-info px-3 py-1  rounded-5 text-info'><i class="bi bi-pencil-fill me-2"></i> <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
-                                                            {singleData.dataApproved ? <span className='border border-success px-3 py-1 rounded-5 text-success'><i className="bi bi-check-circle-fill me-2"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span> : null}
-                                                            {singleData.dataRejected ? <span className='border border-danger px-3 py-1 rounded-5 text-danger'><i className="bi bi-ban me-2"></i> <i className='fw-bold'>{singleData.dataRejected.split("T")[0]}</i></span> : null}
+                                                            <span className='px-3 py-1 text-dark'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
+                                                            <span className='px-3 py-1 text-dark'><i class="bi bi-pencil-fill me-2"></i> <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
+                                                            {singleData.dataApproved ? <span className='px-3 py-1 text-dark'><i className="bi bi-check-circle-fill me-2 text-success"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span> : null}
+                                                            {singleData.dataRejected ? <span className='px-3 py-1 text-dark'><i className="bi bi-ban me-2 text-danger"></i> <i className='fw-bold'>{singleData.dataRejected.split("T")[0]}</i></span> : null}
                                                         </div>
                                                     </div>
                                             }

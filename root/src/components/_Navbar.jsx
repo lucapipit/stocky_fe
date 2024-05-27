@@ -8,6 +8,8 @@ import { setIsLogged } from '../states/loginState';
 import { jwtDecode } from 'jwt-decode';
 import { setIsHamMenuOpen } from '../states/generalState';
 import { clearCategoriesProduct } from '../states/generalState';
+import { clearAnnouncements } from '../states/storeState';
+import { clearScore } from '../states/annScoreState';
 
 
 const _Navbar = () => {
@@ -15,6 +17,14 @@ const _Navbar = () => {
     const isLogged = useSelector((state) => state.login.isLogged);
     const dispatch = useDispatch();
     const [decodedTkn, setDecodedTkn] = useState("");
+
+    const logOut = () => {
+        dispatch(setIsLogged(false));
+        localStorage.clear();
+        dispatch(clearAnnouncements());
+        dispatch(clearScore());
+        dispatch(setIsHamMenuOpen(!isHamMenuOpen))
+    }
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -60,7 +70,7 @@ const _Navbar = () => {
                                                 </div> :
                                                 <div>
                                                     <Link to={"/account"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Account</span> </li></Link>
-                                                    <Link to={"/"}><li> <span onClick={() => { dispatch(setIsLogged(false)); localStorage.clear(); dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Logout</span> </li></Link>
+                                                    <Link to={"/"}><li> <span onClick={logOut}>Logout</span> </li></Link>
                                                     <Link to={"/createannouncement"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)); dispatch(clearCategoriesProduct()) }}>Form Announcement</span> </li></Link>
                                                     <Link to={"/pendingannouncements"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Pending Announcements</span> </li></Link>
                                                     <Link to={"/rejectedannouncements"}><li> <span onClick={() => { dispatch(setIsHamMenuOpen(!isHamMenuOpen)) }}>Rejected Announcements</span> </li></Link>

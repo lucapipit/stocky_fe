@@ -57,6 +57,15 @@
 .borderActive {
     border: 3px solid #2a606c
 }
+.borderActiveWhite {
+    border: 3px solid #ffffff
+}
+
+/* price package border */
+.myBorderActive {
+    border: 3px solid rgb(125, 125, 125);
+}
+
 
 /* Distribution area plus and trash button */
 .plusDistributionArea {
@@ -157,4 +166,8 @@
     width: 32px;
     border-radius: 16px;
     font-size: 100%;
+}
+
+label.form-label{
+    font-weight: 600;
 }

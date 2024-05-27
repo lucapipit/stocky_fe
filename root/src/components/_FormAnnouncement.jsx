@@ -31,8 +31,8 @@ function _FormAnnouncement() {
   const [price, setPrice] = useState("");
   const [productSize, setProductSize] = useState("");
   const [description, setDescription] = useState("");
-  const [techDetailView, setTechDetailView] = useState("");
   const [techDetail, setTechDetail] = useState("");
+  const [techDetailView, setTechDetailView] = useState("");
   const [expireDate, setExpireDate] = useState("");
   const [textFocus, setTextFocus] = useState("");
   const [picsFocus, setPicsFocus] = useState("");
@@ -199,7 +199,7 @@ function _FormAnnouncement() {
   };
 
   const deleteTechItem = (input) => {
-    let newTechDetailArry = []; 
+    let newTechDetailArry = [];
     techDetail.map((el) => {
       if (el.split("£")[0] !== input) {
         newTechDetailArry.push(el);
@@ -373,21 +373,22 @@ function _FormAnnouncement() {
 
                 <Form.Group className="mb-3 mt-5">
                   <Form.Label className='ms-3'>Tech Detail</Form.Label>
-                  {techDetail ?
-                    <ul className='bg-light py-2 rounded-2'>
-                      {
-                        techDetail && techDetail.map((el) => {
-                          return <li className='me-3 mt-2' style={{ borderBottom: "1px solid lightGray" }}>{el.split("£")[1]}<i className="bi bi-x-lg text-danger ms-2 myCursor" onClick={() => { deleteTechItem(el.split("£")[0]) }}></i></li>
-                        })
-                      }
-                    </ul>
-                    : null
+                  {
+                    techDetail ?
+                      <ul className='bg-light py-2 rounded-2'>
+                        {
+                          techDetail && techDetail.map((el) => {
+                            return <li className='me-3 mt-2' style={{ borderBottom: "1px solid lightGray" }}>{el.split("£")[1]}<i className="bi bi-x-lg text-danger ms-2 myCursor" onClick={() => { deleteTechItem(el.split("£")[0]) }}></i></li>
+                          })
+                        }
+                      </ul>
+                      : null
                   }
                   <div className='d-flex gap-1 rounded-5 align-items-center pe-1 bg-dark border'>
-                    <Form.Control type="text" placeholder='type a detail and click plus' className="form-control" id="techDetail" value={techDetailView} onChange={(e) => { if (e.nativeEvent.data !== "£") { setTechDetailView(e.target.value) } else { setTechDetailValueError(true) } }} />
+                    <Form.Control type="text" placeholder='type a detail and click plus' className="form-control" id="techDetail" value={techDetailView} onChange={(e) => { if (e.nativeEvent.data !== "£" && e.nativeEvent.data !== ",") { setTechDetailView(e.target.value) } else { setTechDetailValueError(true) } }} />
                     <button className={`rounded-5 ${techDetailView ? "bg-info" : "bg-secondary"}`} disabled={techDetailView ? false : true} onClick={() => { setTechDetail([...techDetail, `${techDetail.length + 1}£` + techDetailView]); setTechDetailView("") }}><i className="bi bi-plus-lg text-light text-info" ></i></button>
                   </div>
-                  {techDetailValueError ? <div className='mt-2 ms-3'>The "£" value is not permitted!</div> : null}
+                  {techDetailValueError ? <div className='mt-2 ms-3'>The "£" and "," values are not permitted!</div> : null}
                 </Form.Group>
               </div>
               : null

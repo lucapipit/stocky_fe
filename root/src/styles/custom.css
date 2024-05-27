@@ -33,6 +33,7 @@ h6 {
 .myW9 {
     width: 90%;
 }
+
 /* height & width */
 .mySquare80 {
     width: 80px;
@@ -194,10 +195,21 @@ h6 {
     background: linear-gradient(to top, #892060 20%, #e337a1);
 }
 
-.myBorderActive {
-    border: 3px solid rgb(125, 125, 125);
+.scoreBarLow {
+    background: linear-gradient(to right, rgb(255, 60, 0) 10%, rgb(255, 225, 0));
 }
 
+.scoreBarMedium {
+    background: linear-gradient(to right, rgb(255, 238, 0) 10%, rgb(140, 255, 0));
+}
+
+.scoreBarHigh {
+    background: linear-gradient(to right, rgb(0, 255, 213) 10%, rgb(0, 147, 252));
+}
+
+.scoreBarLegend {
+    background: linear-gradient(to right, rgb(255, 0, 217) 10%, rgb(181, 0, 252));
+}
 
 /* overflow y */
 .myOverflowY {

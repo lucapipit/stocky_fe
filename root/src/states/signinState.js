@@ -65,6 +65,27 @@ export const activateAccountFunc = createAsyncThunk(
     }
 )
 
+export const updateAccountFunc = createAsyncThunk(
+    'api/updateAccountFunc',
+    async (input) => {
+        const {token, payload} = input;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/editaccount`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload),
+            });
+            return await response.json();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 const signinSlice = createSlice({
     name: 'signinApi',
     initialState,
@@ -100,6 +121,17 @@ const signinSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(activateAccountFunc.rejected, (state) => {
+            state.loading = false;
+            state.error = true;
+        });
+        //update account
+        builder.addCase(updateAccountFunc.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateAccountFunc.fulfilled, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(updateAccountFunc.rejected, (state) => {
             state.loading = false;
             state.error = true;
         });

@@ -158,6 +158,9 @@ const sliceStore = createSlice({
     reducers: {
         saveAnnouncementPayload: (state, action) => {
             state.announcementPayload = action.payload
+        },
+        clearAnnouncements: (state, action) => {
+            state.allData = [];
         }
     },
 
@@ -261,5 +264,5 @@ const sliceStore = createSlice({
     }
 });
 
-export const { saveAnnouncementPayload } = sliceStore.actions;
+export const { saveAnnouncementPayload, clearAnnouncements } = sliceStore.actions;
 export default sliceStore.reducer

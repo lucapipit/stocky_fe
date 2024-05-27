@@ -8,6 +8,7 @@ import orderSlice from './orderState';
 import userLocationSlice from './userLocationState';
 import geonamesSlice from './geonamesState';
 import uploadFile from './uploadFileState';
+import annScoreSlice from './annScoreState';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 
@@ -21,8 +22,8 @@ const rootReducer = combineReducers({
     order: orderSlice,
     userLocation: userLocationSlice,
     uploadFile: uploadFile,
-    geonames: geonamesSlice
-
+    geonames: geonamesSlice,
+    annScore: annScoreSlice
 })
 const store = configureStore({
     reducer: rootReducer

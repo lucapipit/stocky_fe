@@ -8,6 +8,7 @@ import CardPenRejAnnouncementLine from './CardPenRejAnnouncementLine';
 import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 import { verifyMailFunc } from '../states/signinState';
+import CategoriesPreferences from './CategoriesPreferences';
 
 const _Account = () => {
 
@@ -20,6 +21,7 @@ const _Account = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [holding, setHolding] = useState(false);
   const [typeOfView, setTypeOfView] = useState(0);
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -41,7 +43,6 @@ const _Account = () => {
         }
       })
   };
-
 
   const triggerHolding = () => {
     setTimeout(() => {
@@ -138,6 +139,10 @@ const _Account = () => {
                 : null
             }
 
+            {
+              <CategoriesPreferences userData={userData[0]} />
+            }
+
 
             {
               allUserAnnouncements.length !== 0 ?
@@ -151,7 +156,7 @@ const _Account = () => {
                   </div>
 
                   <div className='d-flex align-items-center justify-content-center mt-3'>
-                      <div>{allUserAnnouncements.length} announcements</div>
+                    <div>{allUserAnnouncements.length} announcements</div>
                   </div>
 
                   <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>

@@ -27,7 +27,8 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     const [price, setPrice] = useState(singleData.price);
     const [productSize, setProductSize] = useState(singleData.productSize);
     const [description, setDescription] = useState(singleData.description);
-    const [techDetail, setTechDetail] = useState(singleData.techDetail);
+    const [techDetail, setTechDetail] = useState(singleData.techDetail.split(","));
+    const [techDetailView, setTechDetailView] = useState("");
     const [category, setCategory] = useState(singleData.category.split(","));
     const [expireDate, setExpireDate] = useState(singleData.expireDate);
     const [textFocus, setTextFocus] = useState(singleData.textFocus);
@@ -49,6 +50,8 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
     /* category states */
     const categoriesProduct = useSelector((state) => state.general.categoriesProduct);
     const categoriesProductId = useSelector((state) => state.general.categoriesProductId);
+    //errors
+    const [techDetailValueError, setTechDetailValueError] = useState(false);
 
     const uploadFile = async (newFile) => {
         const fileData = new FormData();
@@ -70,7 +73,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
     const formCheck = async () => {
 
-        const formFilled = brandName && modelName && quantity /* && file */ && description && category;
+        const formFilled = brandName && modelName && price && quantity && file && description && category;
 
         if (formFilled) {
             setIsFormFilled(true);
@@ -114,9 +117,10 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
             pics: newFile ? file.concat(input.img.split(",")).toString() : file.toString(),
             productSize: productSize,
             description: description,
-            techDetail: techDetail,
+            techDetail: techDetail.toString(),
             category: categoriesProductId.toString(),
             dataApproved: singleData.dataApproved,
+            dataRejected: singleData.dataRejected,
             expireDate: expireDate,
             /* textFocus: textFocus,
             picsFocus: picsFocus, */
@@ -180,6 +184,16 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
         }
 
     };
+
+    const deleteTechItem = (input) => {
+        let newTechDetailArry = [];
+        techDetail.map((el) => {
+            if (el.split("£")[0] !== input) {
+                newTechDetailArry.push(el);
+            }
+        })
+        setTechDetail(newTechDetailArry)
+    }
 
     useEffect(() => {
         category.map((el) => {
@@ -316,15 +330,12 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                     </div>
 
                     <div className='w-100 my-4 d-flex flex-wrap justify-content-center gap-5'>
-                        {/* <Form.Group className="mb-3">
-                            <Form.Label>expireDate</Form.Label>
-                            <Form.Control type="date" className="form-control" id="expireDate" value={expireDate} onChange={(e) => setExpireDate(e.target.value)} />
-                        </Form.Group> */}
 
                         <Form.Group className='mb-3'>
                             <Form.Label>productSize</Form.Label>
                             <Form.Control type='text' className='form-control' id="productSize" value={productSize} onChange={(e) => setProductSize(e.target.value)} />
                         </Form.Group>
+
                     </div>
 
                     <div className='w-100 my-5'>
@@ -333,11 +344,26 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                             <Form.Control as="textarea" rows={10} type="text" className="form-control p-3" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
                         </Form.Group>
 
-
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Tech Detail</Form.Label>
-                            <Form.Control as="textarea" rows={10} type="text" className="form-control p-3" id="techDetail" value={techDetail} onChange={(e) => setTechDetail(e.target.value)} />
+                        <Form.Group className="mb-3 mt-5">
+                            <Form.Label className='ms-3'>Tech Detail</Form.Label>
+                            {
+                                techDetail ?
+                                    <ul className='bg-light py-2 rounded-2'>
+                                        {
+                                            techDetail && techDetail.map((el) => {
+                                                if (el.length > 0) {
+                                                    return <li className='me-3 mt-2 text-dark' style={{ borderBottom: "1px solid lightGray" }}>{el.split("£")[1]}<i className="bi bi-x-lg text-danger ms-2 myCursor" onClick={() => { deleteTechItem(el.split("£")[0]) }}></i></li>
+                                                }
+                                            })
+                                        }
+                                    </ul>
+                                    : null
+                            }
+                            <div className='d-flex gap-1 rounded-5 align-items-center pe-1 bg-dark border'>
+                                <Form.Control type="text" placeholder='type a detail and click plus' className="form-control" id="techDetail" value={techDetailView} onChange={(e) => { if (e.nativeEvent.data !== "£" && e.nativeEvent.data !== ",") { setTechDetailView(e.target.value) } else { setTechDetailValueError(true) } }} />
+                                <button className={`rounded-5 ${techDetailView ? "bg-info" : "bg-secondary"}`} disabled={techDetailView ? false : true} onClick={() => { setTechDetail([...techDetail, `${techDetail.length + 1}£` + techDetailView]); setTechDetailView("") }}><i className="bi bi-plus-lg text-light text-info" ></i></button>
+                            </div>
+                            {techDetailValueError ? <div className='mt-2 ms-3'>The "£" and "," values are not permitted!</div> : null}
                         </Form.Group>
                     </div>
 
