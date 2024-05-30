@@ -9,6 +9,9 @@ import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 import { verifyMailFunc } from '../states/signinState';
 import CategoriesPreferences from './CategoriesPreferences';
+import AccountEditAnagraphic from './AccountEditAnagraphic';
+
+
 
 const _Account = () => {
 
@@ -19,8 +22,10 @@ const _Account = () => {
   const loading = useSelector((state) => state.signin.loading);
   const [isResended, setIsResended] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [holding, setHolding] = useState(false);
   const [typeOfView, setTypeOfView] = useState(0);
+
+  const [isEditingAnagraphic, setIsEditingAnagraphic] = useState(false);
+
 
 
   useEffect(() => {
@@ -46,8 +51,8 @@ const _Account = () => {
 
   const triggerHolding = () => {
     setTimeout(() => {
-      setHolding(true)
-    }, "8000")
+      setIsResended(false);
+    }, "30000")
   }
 
 
@@ -56,7 +61,7 @@ const _Account = () => {
 
       {
         userData && userData.length > 0 ?
-          <div className='position-relative' >
+          <div className='position-relative'>
 
             <h1 className='fw-light text-center pt-5'><i className="bi bi-person-circle"></i> Account</h1>
 
@@ -73,16 +78,22 @@ const _Account = () => {
                   </div>
                 </div>
 
-                <h2>{userData[0].companyName}</h2>
+                {
+                  isEditingAnagraphic ?
+                    <AccountEditAnagraphic userData={userData[0]} />
+                    : <h2>{userData[0].companyName}</h2>
+                }
                 <hr />
                 <div className={userData[0].manufacturer ? "text-info" : "text-success"}><i className="bi bi-person-vcard-fill me-2"></i>{userData[0].manufacturer ? "Manufacturer" : "Dealer"}</div>
                 <p className='mt-3'><i className="bi bi-envelope-at-fill me-2"></i><i>{userData[0].email}</i></p>
                 <div className='my-3'>
-                  <p><i className="bi bi-geo-alt-fill me-2"></i>{`${userData[0].address[0].toUpperCase()}${userData[0].address.slice(1)} (${userData[0].zipCode}) - ${userData[0].city} - ${userData[0].country} `}</p>
+                  <p><i className="bi bi-geo-alt-fill me-2"></i>{`${userData[0].address[0].toUpperCase()}${userData[0].address.slice(1)}, ${userData[0].streetNumber} (${userData[0].zipCode}) - ${userData[0].city} (${userData[0].state}) - ${userData[0].country} `}</p>
                 </div>
                 <p><i className="bi bi-telephone-fill me-2"></i>{userData[0].phone}</p>
 
+                <i className='bi bi-pencil-fill text-light myCursor' onClick={() => setIsEditingAnagraphic(!isEditingAnagraphic)}></i>
               </div>
+
             </div>
 
             {
@@ -90,42 +101,42 @@ const _Account = () => {
                 null
                 :
                 <div className='d-flex justify-content-center'>
-                  <div className='bg-danger text-light myMaxW700 p-3 text-center'>
+                  <div className='bg-danger text-light myMaxW700 p-3 pt-4 text-center'>
                     <div>
                       You account is not active. To get into the Outlet Store and to use myStocker services the account must be activated. Click on the "Resend" button below to send another verification mail. Inside the email you will receive (in at least some minutes) there is a link, please click on it to activate your account.
                     </div>
-                    <Button className='mt-3' variant="dark" onClick={() => { resendVerification(); triggerHolding() }}>
+                    {/* resending verification mail logic */}
+                    <Button className='mt-3' disabled={isResended && !errorMessage ? true : false} variant="dark" onClick={() => { resendVerification(); triggerHolding() }}>
                       {
                         loading ?
                           <i>Sending <Spinner className='ms-1' animation="grow" size="sm" /></i>
                           : isResended && !errorMessage ?
                             <i class="bi bi-send-check-fill text-success"> Resended</i>
-                            : !isResended && !errorMessage ?
+                            :
+                            !isResended && !errorMessage ?
                               <i className="bi bi-send-fill"> Resend</i>
                               : <i className="bi bi-send-x-fill text-danger"> Not sended</i>
                       }
-
                     </Button>
+
                     {
-                      isResended && !holding ?
-                        <div className='w-100 px-5'>
-                          <div className='border rounded mt-2 mx-3'>
-                            <div className={`bg-info rounded ${isResended ? "percentageBar2" : null}`} style={{ height: "6px" }}></div>
+                      isResended ?
+                        <div>
+                          <div className='mt-3 text-dark fw-bold'><i>check your email <Spinner className='ms-1' animation="grow" size="sm" /></i></div>
+                          <div className='w-100 px-5 mt-2'>
+                            <p className='text-light mb-1'>next try in:</p>
+                            <div className='border rounded mx-3'>
+                              <div className={`bg-light rounded ${isResended ? "percentageBar2" : null}`} style={{ height: "6px" }}></div>
+                            </div>
                           </div>
                         </div>
                         : null
                     }
 
-                    {
-                      holding ?
-                        <div className='mt-3 text-dark fw-bold'><i>check your email <Spinner className='ms-1' animation="grow" size="sm" /></i></div>
-                        : null
-                    }
 
                     {isResended ? <h6 className='mt-3'>* If you dont receive any email check out first if your email is correct.</h6> : null}
                   </div>
                 </div>
-
             }
 
             {
@@ -147,7 +158,6 @@ const _Account = () => {
             {
               allUserAnnouncements.length !== 0 ?
                 <div>
-                  <hr className='mx-5' />
                   <h1 className='mt-5 mb-3 text-center fw-light'>Announcements</h1>
 
                   <div className='d-flex justify-content-center align-items-center gap-2' style={{ fontSize: "1.5rem" }}>

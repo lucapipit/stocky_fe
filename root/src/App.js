@@ -18,6 +18,8 @@ import AnnounceCreatedSuccessPage from "./pages/AnnounceCreatedSuccessPage";
 import PendingAnnouncementsPage from "./pages/PendingAnnouncementsPage";
 import RejectedAnnouncementsPage from "./pages/RejectedAnnouncementsPage";
 import VerifyAccountPage from "./pages/VerifyAccountPage";
+import PsswResetPage from "./pages/PsswResetPage";
+import PsswChangePage from "./pages/PsswChangePage"
 
 
 
@@ -42,6 +44,8 @@ function App() {
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/verifyaccount/:verifycode" element={<VerifyAccountPage />} />
+        <Route path="/changepssw/:email/:id" element={<PsswChangePage />} />
+        <Route path="/resetpssw/:email" element={<PsswResetPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>

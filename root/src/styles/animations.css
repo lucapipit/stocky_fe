@@ -7,11 +7,11 @@
 
 .percentageBar2{
     animation: progress;
-    animation-duration: 8000ms;
-    animation-timing-function: ease-in-out;
+    animation-duration: 30s;
+    animation-timing-function: linear;
 }
 
-   
+ 
 
 /* -------- */
 @keyframes progress {

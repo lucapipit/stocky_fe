@@ -11,7 +11,8 @@ const CategoriesPreferences = ({ userData }) => {
     const categoriesProduct = useSelector((state) => state.general.categoriesProduct);
     const categoriesProductId = useSelector((state) => state.general.categoriesProductId);
     const [errorMessage, setErrorMessage] = useState("");
-    const [minimize, setMinimize] = useState(true)
+    const [isEditing, setIsEditing] = useState(false)
+    const [zoomIn, setZoomIn] = useState({ field: "", value: false });
 
     const dispatch = useDispatch();
 
@@ -58,36 +59,51 @@ const CategoriesPreferences = ({ userData }) => {
             <Form.Group className="mb-3 pb-5 bg-dark text-light">
                 <div className='d-flex flex-wrap justify-content-center w-100 pt-5 pb-3'>
                     <div>
-                        <div className='d-flex justify-content-center'><Form.Label >Select your area of interests</Form.Label></div>
+                        <h1 className={`d-flex justify-content-center ${isEditing ? "mb-5" : null}`}>Areas of interests</h1>
 
-                        {!minimize ?
+                        {isEditing ?
                             <div>
                                 <h5 className='w-100 text-center mt-3 fw-light'>Dental Categories</h5>
                                 <hr className='w-100 px-5 mt-1' />
+                                <div className='d-flex justify-content-center gap-3 mb-3 display-6'>
+                                    {
+                                        zoomIn.value && zoomIn.field === "den" ?
+                                            <i className="bi bi-zoom-out myCursor" onClick={() => { setZoomIn({ field: "den", value: false }) }}></i>
+                                            : <i className="bi bi-zoom-in myCursor" onClick={() => { setZoomIn({ field: "den", value: true }) }}></i>
+                                    }
+                                </div>
                                 <div className='d-flex flex-wrap justify-content-center'>
                                     {
                                         productCategories.map((el) => {
                                             if (el.area === "dental") {
                                                 return <span
-                                                    className={`${userData.interests.split(",").includes(el.id.toString()) ? "borderActiveWhite" : ""} text-light px-2 m-1 rounded-5 myBgAcqua myCursor myBorderAcqua`}
+                                                    className={`${userData.interests.split(",").includes(el.id.toString()) ? "borderActiveWhite" : ""} ${zoomIn.value && zoomIn.field === "den" ? "display-6 px-4 py-1" : "px-2"} m-1 text-center text-light rounded-5 myBgAcqua myCursor myBorderAcqua`}
                                                     onClick={(e) => { manageCategory({ el, e }) }}>{el.eng}</span>
                                             }
                                         })
                                     }
                                 </div>
-                                <h5 className='w-100 text-center mt-3 fw-light'>Medical Categories</h5>
+                                <h5 className='w-100 text-center mt-5 fw-light'>Medical Categories</h5>
                                 <hr className='w-100 px-5 mt-1' />
+                                <div className='d-flex justify-content-center gap-3 mb-3 display-6'>
+                                    {
+                                        zoomIn.value && zoomIn.field === "med" ?
+                                            <i className="bi bi-zoom-out myCursor" onClick={() => { setZoomIn({ field: "med", value: false }) }}></i>
+                                            : <i className="bi bi-zoom-in myCursor" onClick={() => { setZoomIn({ field: "med", value: true }) }}></i>
+                                    }
+                                </div>
                                 <div className="d-flex flex-wrap justify-content-center">
                                     {
                                         productCategories && productCategories.map((el) => {
                                             if (el.area === "medical") {
                                                 return <span
-                                                    className={`${userData.interests.split(",").includes(el.id.toString()) ? "borderActiveWhite" : ""} text-light px-2 m-1 rounded-5 myBgRed myCursor myBorderRed`}
+                                                    className={`${userData.interests.split(",").includes(el.id.toString()) ? "borderActiveWhite" : ""}  ${zoomIn.value && zoomIn.field === "med" ? "display-6 px-4 py-1" : "px-2"} text-light text-center m-1 rounded-5 myBgRed myCursor myBorderRed`}
                                                     onClick={(e) => { manageCategory({ el, e }) }}>{el.eng}</span>
                                             }
                                         })
                                     }
                                 </div>
+                                <hr className='w-100 px-5 mt-3' />
                             </div>
                             : null
                         }
@@ -97,8 +113,8 @@ const CategoriesPreferences = ({ userData }) => {
 
                 {
                     categoriesProduct.length > 0 ?
-                        <div className='border border-secondary bg-dark rounded-4 mt-3 p-2 mx-3'>
-                            <h6 className='text-center text-light fw-light'>Selected category/ies:</h6>
+                        <div className='bg-dark rounded-4 mt-1 p-2 mx-3'>
+                            <h6 className='text-center text-light fw-light'>Selected area/s:</h6>
                             <div className='d-flex flex-wrap justify-content-center my-3'>
                                 {
                                     categoriesProduct && categoriesProduct.map((el) => {
@@ -121,10 +137,10 @@ const CategoriesPreferences = ({ userData }) => {
 
                 <div className='d-flex justify-content-center mt-3'>
                     {
-                        minimize ?
+                        !isEditing ?
                             categoriesProduct.length > 0 ?
-                                <i className="bi bi-pencil-fill text-light myCursor" onClick={() => setMinimize(false)}> edit preferences</i>
-                                : <i className="bi bi-plus-lg text-info myCursor" onClick={() => setMinimize(false)}> add preferences</i>
+                                <i className="bi bi-pencil-fill text-light myCursor" onClick={() => setIsEditing(true)}> edit preferences</i>
+                                : <i className="bi bi-plus-lg text-info myCursor" onClick={() => setIsEditing(true)}> add area</i>
                             : <Button variant="primary" disabled={categoriesProduct ? false : true} onClick={() => { handleUpdateAccount() }}><i className="bi bi-check2-square me-2"></i>done</Button>
                     }
                 </div>

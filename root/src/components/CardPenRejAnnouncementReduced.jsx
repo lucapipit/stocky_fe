@@ -70,7 +70,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                 {/* account card body. Css --> accountCardBody.css */}
                                 <div className='accountCardBody d-flex gap-3'>
 
-                                    <div className='mainImage bg-light'>
+                                    <div className='d-flex align-items-center bg-light'>
                                         {
                                             !singleData || isLoading ?
                                                 <Placeholder animation="glow"><Placeholder xs={12} style={{ height: `${minimize ? "200px" : "400px"}` }} /></Placeholder>

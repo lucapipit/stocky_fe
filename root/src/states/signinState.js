@@ -44,10 +44,29 @@ export const verifyMailFunc = createAsyncThunk(
     }
 )
 
+export const psswChangedMailFunc = createAsyncThunk(
+    'api/psswChangedMailFunc',
+    async (input) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/mailer/passwordchanged`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(input),
+            });
+            return await response.json();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 export const activateAccountFunc = createAsyncThunk(
     'api/activateAccountFunc',
     async (input) => {
-        const {token, payload} = input;
+        const { token, payload } = input;
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/editaccount`, {
                 method: 'PATCH',
@@ -68,9 +87,30 @@ export const activateAccountFunc = createAsyncThunk(
 export const updateAccountFunc = createAsyncThunk(
     'api/updateAccountFunc',
     async (input) => {
-        const {token, payload} = input;
+        const { token, payload } = input;
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/editaccount`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload),
+            });
+            return await response.json();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
+export const changePsswFunc = createAsyncThunk(
+    'api/changePsswFunc',
+    async (input) => {
+        const { token, payload } = input;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/changemypssw`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,6 +153,17 @@ const signinSlice = createSlice({
             state.loading = false;
             state.error = true;
         });
+        //password changed email
+        builder.addCase(psswChangedMailFunc.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(psswChangedMailFunc.fulfilled, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(psswChangedMailFunc.rejected, (state) => {
+            state.loading = false;
+            state.error = true;
+        });
         //activate account
         builder.addCase(activateAccountFunc.pending, (state) => {
             state.loading = true;
@@ -132,6 +183,17 @@ const signinSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(updateAccountFunc.rejected, (state) => {
+            state.loading = false;
+            state.error = true;
+        });
+        //change password
+        builder.addCase(changePsswFunc.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(changePsswFunc.fulfilled, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(changePsswFunc.rejected, (state) => {
             state.loading = false;
             state.error = true;
         });
