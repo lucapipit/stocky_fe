@@ -44,7 +44,6 @@ const PsswChange = ({ param }) => {
             setStep(1)
           } else {
             setServerResponse(res.payload.message);
-            console.error('login error');
           }
         })
         .catch((err) => {
@@ -60,13 +59,14 @@ const PsswChange = ({ param }) => {
       } else {
         dispatch(changePsswFunc({ payload: { pssw: pssw2, id: param.id }, token: localStorage.getItem("token") }))
           .then((res) => {
-            console.log(res.payload.statusCode);
             if (res.payload.statusCode === 200) {
               dispatch(psswChangedMailFunc({ email: param.email }))
               setStep(2)
               setTimeout(() => {
                 navigate("/account")
               }, "3000")
+            } else {
+              setServerResponse(res.payload.message);
             }
           })
       }
@@ -91,7 +91,7 @@ const PsswChange = ({ param }) => {
               </InputGroup>
 
               <div className='d-flex align-items-center justify-content-center pt-3'>
-                <Button variant="primary" /* disabled={isPsswValid ? false : true} */ onClick={() => { validatePssw()}}><i className="bi bi-check2-square me-2"></i>{loginLoading ? <Spinner animation="border" size='sm' /> : "done"}</Button>
+                <Button variant="primary" disabled={isPsswValid ? false : true} onClick={() => { validatePssw() }}><i className="bi bi-check2-square me-2"></i>{loginLoading ? <Spinner animation="border" size='sm' /> : "done"}</Button>
               </div>
               {serverResponse ? <p className="mt-3 text-center text-danger"><i className="bi bi-exclamation-circle"> {serverResponse}</i></p> : <p></p>}
             </div>
@@ -122,7 +122,7 @@ const PsswChange = ({ param }) => {
               </div>
 
               <div className='d-flex align-items-center justify-content-center pt-3'>
-                <Button variant="primary" disabled={isPssw2Valid && isPsswRValid ? false : true} onClick={() => { changeMyPssw()}}><i className="bi bi-check2-square me-2"></i>{loginLoading ? <Spinner animation="border" size='sm' /> : "done"}</Button>
+                <Button variant="primary" disabled={isPssw2Valid && isPsswRValid ? false : true} onClick={() => { changeMyPssw() }}><i className="bi bi-check2-square me-2"></i>{loginLoading ? <Spinner animation="border" size='sm' /> : "done"}</Button>
               </div>
               {error ? <p className="mt-3 text-center text-danger"><i className="bi bi-exclamation-circle"> {error}</i></p> : <p></p>}
               {serverResponse ? <p className="mt-3 text-center text-danger"><i className="bi bi-exclamation-circle"> {serverResponse}</i></p> : <p></p>}
@@ -134,7 +134,7 @@ const PsswChange = ({ param }) => {
           step === 2 ?
             <div className='d-flex flex-column align-items-center gap-3 m-3'>
               <h3>Password has been changed succesfully!</h3>
-              <i className="bi bi-check-circle-fill text-info display-4"></i>
+              <i className="bi bi-check-circle-fill text-info display-6"></i>
             </div>
             : null
         }

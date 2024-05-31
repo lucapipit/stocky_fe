@@ -49,6 +49,12 @@ const _Signin = () => {
     const allCities = useSelector((state) => state.geonames.allCities);
     const isLoading = useSelector((state) => state.geonames.isLoading);
 
+    //inputs validation
+    const specialCharacter = ["!", "#", "$", "%", "&", "@", "<", ">", "="];
+    const isEmailValid = email.includes("@") && email.includes(".") && email.length > 6;
+    const isPsswValid = pssw.split("").some((x) => specialCharacter.includes(x)) && pssw.length > 7;
+    const [isCityValid, setIsCityValid] = useState(false);
+
     const registerUser = async () => {
 
         if (formOk) {
@@ -127,13 +133,6 @@ const _Signin = () => {
         }
     };
 
-
-
-    //inputs validation
-    const specialCharacter = ["!", "#", "$", "%", "&", "@", "<", ">", "="];
-    const isEmailValid = email.includes("@") && email.includes(".") && email.length > 6;
-    const isPsswValid = pssw.split("").some((x) => specialCharacter.includes(x)) && pssw.length > 7;
-    const [isCityValid, setIsCityValid] = useState(false);
 
     useEffect(() => {
         country && phoneCodes.map((el) => { if (el.code === country.split(":")[1]) { setPhoneCode(el.dial_code) } });

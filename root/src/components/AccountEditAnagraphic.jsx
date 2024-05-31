@@ -115,7 +115,6 @@ const AccountEditAnagraphic = ({ userData }) => {
                 </div>
                 <div className='d-flex flex-wrap justify-content-center gap-3'>
                     <Link to={`/changepssw/${userData.email}/${userData.id}`}><a className='myCursor link-light'>change password</a></Link>
-                    <a href='#' className='myCursor link-light'>forgot password</a>
                 </div>
 
                 {/* -------------------- */}

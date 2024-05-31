@@ -63,6 +63,25 @@ export const psswChangedMailFunc = createAsyncThunk(
     }
 )
 
+export const resetPsswMailFunc = createAsyncThunk(
+    'api/resetPsswMailFunc',
+    async (input) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/mailer/resetpssw`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(input),
+            });
+            return await response.json();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
 export const activateAccountFunc = createAsyncThunk(
     'api/activateAccountFunc',
     async (input) => {
@@ -161,6 +180,17 @@ const signinSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(psswChangedMailFunc.rejected, (state) => {
+            state.loading = false;
+            state.error = true;
+        });
+        //reset password email
+        builder.addCase(resetPsswMailFunc.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(resetPsswMailFunc.fulfilled, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(resetPsswMailFunc.rejected, (state) => {
             state.loading = false;
             state.error = true;
         });

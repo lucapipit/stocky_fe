@@ -29,6 +29,26 @@ export const postLoginFunc = createAsyncThunk(
     }
 );
 
+export const userSearchFunc = createAsyncThunk(
+    'api/userSearchFunc',
+    async (input) => {
+
+        try {
+            const response = await fetch(`http://localhost:5050/usersearch`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(input),
+            });
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+);
+
 export const getSingleUserFunc = createAsyncThunk(
     'api/getSingleUser',
     async (input) => {
@@ -66,6 +86,17 @@ const loginSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(postLoginFunc.rejected, (state) => {
+            state.loading = false;
+            state.error = "server error extrareducers";
+        });
+        //userSearch
+        builder.addCase(userSearchFunc.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(userSearchFunc.fulfilled, (state) => {
+            state.loading = false;
+        });
+        builder.addCase(userSearchFunc.rejected, (state) => {
             state.loading = false;
             state.error = "server error extrareducers";
         });

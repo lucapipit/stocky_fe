@@ -45,7 +45,7 @@ function App() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/verifyaccount/:verifycode" element={<VerifyAccountPage />} />
         <Route path="/changepssw/:email/:id" element={<PsswChangePage />} />
-        <Route path="/resetpssw/:email" element={<PsswResetPage />} />
+        <Route path="/resetpssw/:email/:id" element={<PsswResetPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
