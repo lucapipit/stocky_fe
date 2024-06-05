@@ -490,7 +490,6 @@ function _FormAnnouncement() {
                           <Button variant="primary" disabled={sellingAreaExcludedISO.length > 0 || sellWholeWorld ? false : true} onClick={() => { manageStep(true) }}><i className="bi bi-check2-square me-2"></i>done</Button>
                         </div>
                         : null
-
             }
           </div>
 

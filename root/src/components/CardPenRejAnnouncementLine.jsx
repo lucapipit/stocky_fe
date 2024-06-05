@@ -4,9 +4,6 @@ import "../styles/accountCardBody.css";
 
 const CardPenRejAnnouncementLine = ({ singleData, isLoading }) => {
 
-    useEffect(() => {
-        console.log(singleData);
-    }, [])
 
     return (
         <div className='w-100 d-flex justify-content-center'>

@@ -10,12 +10,14 @@ import Button from 'react-bootstrap/Button';
 import { verifyMailFunc } from '../states/signinState';
 import CategoriesPreferences from './CategoriesPreferences';
 import AccountEditAnagraphic from './AccountEditAnagraphic';
-
+import { setIsLogged } from '../states/loginState';
+import { useNavigate } from 'react-router';
 
 
 const _Account = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userData = useSelector((state) => state.login.userData);
   const allUserAnnouncements = useSelector((state) => state.myStore.allData);
   const isLoading = useSelector((state) => state.myStore.isLoading);
@@ -35,6 +37,13 @@ const _Account = () => {
       const tkn = jwtDecode(token, process.env.JWT_SECRET);
       dispatch(getSingleUserFunc({ id: tkn.id, token: token }));
       dispatch(getAllAnnouncementsByIdOwnerFunc({ idOwner: tkn.id, token: token }))
+        .then((res) => {
+          if (res.payload.statusCode === 408) {
+            dispatch(setIsLogged(false));
+            navigate('/login');
+            localStorage.clear()
+          }
+        })
     }
   }, [])
 
@@ -156,7 +165,7 @@ const _Account = () => {
 
 
             {
-              allUserAnnouncements.length !== 0 ?
+              allUserAnnouncements && allUserAnnouncements.length !== 0 ?
                 <div>
                   <h1 className='mt-5 mb-3 text-center fw-light'>Announcements</h1>
 

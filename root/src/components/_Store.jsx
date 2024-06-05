@@ -34,7 +34,7 @@ const _Store = () => {
     if (localStorage.getItem("token")) {
       const myDcdTkn = jwtDecode(localStorage.getItem("token"), process.env.JWT_SECRET);
       setDecodedTkn(myDcdTkn);
-      myInterests = myDcdTkn.interests.split(",").filter((el) => el.length === categoryLevel).map((it) => it.substring(0, 2)).join("-");
+      myInterests = myDcdTkn.interests;
 
       if (myInterests === "") {
         setCategoryLevel(categoryLevel - 1);
@@ -64,8 +64,6 @@ const _Store = () => {
 
 
   useEffect(() => {
-    /* dispatch(getAllCountsFunc()); */
-    // dispatch(getSingleAnnouncementFunc({ id: counter, token: tkn }));
     if (myInterests !== "") {
       setCounter(0);
       setIsReverseActive({ ...isReverseActive, isFirstOpen: true })
