@@ -1,14 +1,17 @@
 
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
 import boxDraw from '../assets/box draw.png';
+import { getUserOutletFunc, createUserOutletFunc } from '../states/outletStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { jwtDecode } from 'jwt-decode';
+import Spinner from 'react-bootstrap/Spinner';
 
 
 
 const Home = () => {
-
 
   const backgroundStore = {
     minHeight: "calc(100vh - 59px)",
@@ -23,24 +26,85 @@ const Home = () => {
     fontSize: "20px",
     marginTop: "30px",
     marginBottom: "30px",
-
   };
+
+  const [decodedTkn, setDecodedTkn] = useState("");
+  const [firstEnter, setFirstEnter] = useState(false);
+  const isLogged = useSelector((state) => state.login.isLogged);
+  const isLoading = useSelector((state) => state.outlet.isLoading);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const enterOutlet = async () => {
+    if (decodedTkn) {
+      dispatch(getUserOutletFunc({ idOwner: decodedTkn.id, token: localStorage.getItem("token") }))
+        .then((res) => {
+          if (res.payload.data) {
+            navigate('/store')
+          } else {
+            setFirstEnter(true);
+          }
+        })
+    } else {
+      navigate('/login')
+    }
+  };
+
+  const firstOutletEnter = async () => {
+
+    const payload = {
+      idOwner: decodedTkn.id,
+      outletSet: "",
+      outletHistory: "",
+      outletLikes: "",
+      resetOutletTime: ""
+    };
+    dispatch(createUserOutletFunc({ payload: payload, token: localStorage.getItem("token") }))
+      .then((res) => {
+        if (res.payload.statusCode === 200) {
+          setFirstEnter(false);
+          navigate('/store')
+        }
+      })
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const tkn = jwtDecode(token, process.env.JWT_SECRET);
+      setDecodedTkn(tkn);
+    } else {
+      setDecodedTkn("")
+    }
+  }, [isLogged])
 
 
   return (
     <div>
 
       <div style={backgroundStore} className='text-light py-5 px-3 d-flex justify-content-center flex-column'>
-        <div>
+        <div className='mb-4'>
           <img className='img-fluid myMaxW300' src={boxDraw} alt="" />
           <h1 className='font-monserrat display-6 fw-bold'>myStocker</h1>
           <h3 className='nycd display-6' >
             Get in the Outlet and make a deal!
           </h3>
         </div>
-        <Link to={"/store"}>
-          <Button variant="btn btn-secondary mt-5">Store</Button>
-        </Link>
+        {
+          firstEnter ?
+            <h5 className='text-center myLightGrayColor fw-light mb-3'>This is your first enter in the Outlet with this account.<br/><b> Are you ready to make a Deal?</b></h5>
+            : null
+        }
+        <div className='d-flex justify-content-center'>
+          {
+            firstEnter ?
+              <Button variant="btn btn-primary w-50 fw-bold" onClick={firstOutletEnter}>{isLoading ? <Spinner animation="border" size='sm' /> : "Enter"}</Button>
+              :
+              <Button variant="btn btn-info w-50 fw-bold" onClick={enterOutlet}>{isLoading ? <Spinner animation="border" size='sm' /> : "Store"}</Button>
+          }
+        </div>
+
       </div>
 
 

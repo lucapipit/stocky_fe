@@ -16,15 +16,13 @@ const _Store = () => {
   const isLoading = useSelector((state) => state.myStore.isLoading);
   const countByInterest = useSelector((state) => state.myStore.countByInterest)
 
-  const [isReverseActive, setIsReverseActive] = useState({ isFirstOpen: true, value: false });
   const [counter, setCounter] = useState(0);
   const [numOfAnnouncements, setNumOfAnnouncements] = useState(countByInterest);
   const [categoryLevel, setCategoryLevel] = useState(7);
   const [tkn, setTkn] = useState("");
-  const [decodedTkn, setDecodedTkn] = useState("x");
+  const [decodedTkn, setDecodedTkn] = useState("");
 
   let myInterests = "";
-  // questa variabile è un let
 
   useEffect(() => {
     setTkn(localStorage.getItem("token"));
@@ -43,12 +41,10 @@ const _Store = () => {
   }, [categoryLevel])
 
   const modifyCounter = (input) => {
-    if (input) { setCounter(counter + 1); setIsReverseActive({ isFirstOpen: false, value: true }) } else { setCounter(counter - 1); setIsReverseActive({ ...isReverseActive, value: false }) };
+    if (input) { setCounter(counter + 1); } else { setCounter(counter - 1); };
     input ? setNumOfAnnouncements(numOfAnnouncements - 1) : setNumOfAnnouncements(numOfAnnouncements + 1);
 
-    if (numOfAnnouncements === 2) {
-      setIsReverseActive({ ...isReverseActive, isFirstOpen: true })
-    }
+
     if (numOfAnnouncements === 1) {
       setCategoryLevel(categoryLevel - 1)
       if (categoryLevel === 4) {
@@ -66,7 +62,6 @@ const _Store = () => {
   useEffect(() => {
     if (myInterests !== "") {
       setCounter(0);
-      setIsReverseActive({ ...isReverseActive, isFirstOpen: true })
       dispatch(getAnnouncementsByInterestsFunc({ interests: myInterests, token: tkn }));
     }
 
@@ -76,11 +71,21 @@ const _Store = () => {
   return (
     <>
       <_Navbar />
-      <div className='myVh100 d-flex align-items-center justify-content-center p-3 py-5' >
-
-        {isReverseActive.isFirstOpen || !isReverseActive.value ? <div style={{ width: "100px" }}></div> : <i className="bi bi-arrow-counterclockwise myIconLg me-5 myLightGray myCursor" onClick={() => modifyCounter(0)}></i>}
+      <div className='myVh100 d-flex flex-column align-items-center pb-5' >
+        <div className='w-100 d-flex justify-content-center bg-dark mb-3 py-1'>
+          <div className='w-100 d-flex justify-content-between myMaxW700 '>
+            <i className="bi bi-trash3-fill myIconLg text-light myCursor ms-4" onClick={() => modifyCounter(0)}></i>
+            <i className="bi bi-heart myIconLg text-light myCursor me-4" onClick={() => modifyCounter(1)}></i>
+          </div>
+        </div>
+        <div className='d-flex justify-content-center mb-3'>
+          {
+            dataByInterests && dataByInterests.map((el, index) => {
+              return <div className={`border px-1 ${index === counter ? "bg-info" : index < counter ? "bg-dark" : "bg-secondary"} rounded-5 myCursor`} style={{ height: "10px", margin: "0 1px" }} ></div>
+            })
+          }
+        </div>
         <CardAnnouncement singleData={[dataByInterests[counter]]} isLoading={isLoading} />
-        <i className="bi bi-caret-right-fill myIconLg ms-5 myLightGray myCursor" onClick={() => modifyCounter(1)}></i>
 
       </div>
     </>

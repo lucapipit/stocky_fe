@@ -9,6 +9,7 @@ import userLocationSlice from './userLocationState';
 import geonamesSlice from './geonamesState';
 import uploadFile from './uploadFileState';
 import annScoreSlice from './annScoreState';
+import outletSlice from './outletStore';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
     userLocation: userLocationSlice,
     uploadFile: uploadFile,
     geonames: geonamesSlice,
-    annScore: annScoreSlice
+    annScore: annScoreSlice,
+    outlet: outletSlice
 })
 const store = configureStore({
     reducer: rootReducer

@@ -13,7 +13,7 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
     return (
 
 
-        <div className='p-3 rounded-5 bg-light border myMaxW500 myW9'>
+        <div className='p-3 rounded-5 bg-light border myMaxW700 myW9'>
             {
                 !singleData[0] || isLoading ?
                     <Placeholder animation="glow"><Placeholder xs={12} style={{ height: '400px' }} /></Placeholder>
@@ -86,7 +86,7 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
                     <div>
                         <hr />
                         <h5 className='mb-1 fw-normal'>Description</h5>
-                        <h5 className='fw-light'>{singleData[0].description}</h5>
+                        <h5 className='fw-light mt-3'>{singleData[0].description}</h5>
                     </div>
             }
             {
@@ -95,10 +95,18 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
                     <div className='mt-5'>
                         <hr />
                         <h5 className='fw-normal'> Technical detail</h5>
-                        <p>{singleData[0].techDetail}</p>
+                        <div>
+                            <ul className='mt-3'>
+                                {
+                                    singleData[0].techDetail && singleData[0].techDetail.split(",").map((el)=>{
+                                        return <li>{el.split("£")[1]}</li>
+                                    })
+                                }
+                            </ul>
+                        </div>
                     </div>
             }
-            <div className='mb-5 mt-4 d-flex justify-content-center'>
+            <div className='my-5 d-flex justify-content-center'>
                 {!singleData[0] || isLoading ? <Placeholder.Button xs={4} aria-hidden="true" /> : <Button variant="success">Chat</Button>}
             </div>
         </div>

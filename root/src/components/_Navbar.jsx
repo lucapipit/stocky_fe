@@ -44,8 +44,8 @@ const _Navbar = () => {
                     <div className='d-flex align-items-center justify-content-between py-1' >
                         <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} onClick={() => { dispatch(setIsHamMenuOpen(false)) }} /></Link> <i>Infodent Srl</i></div>
                         <div className='d-flex align-items-center'>
-                            <div>{decodedTkn.email}</div>
-                            <div className="myCursor"><i className='bi bi-grid-fill m-2' onClick={() => dispatch(setIsHamMenuOpen(!isHamMenuOpen))} style={{ fontSize: "30px" }}></i></div>
+                            <div className='line-clampUserName'>{decodedTkn.email}</div>
+                            <div className="myCursor"><i className={`bi ${decodedTkn.email ? "bi-person-circle" : "bi-grid-fill"} m-2`} onClick={() => dispatch(setIsHamMenuOpen(!isHamMenuOpen))} style={{ fontSize: "30px" }}></i></div>
                         </div>
                     </div>
                 </Container>

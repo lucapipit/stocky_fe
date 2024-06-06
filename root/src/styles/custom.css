@@ -94,11 +94,11 @@ h6 {
 .myPrimaryColor {
     color: #2a606c;
 }
+.myLightGrayColor {
+    color: #dfdfdf;
+}
 
 /* background color */
-.myLightGray {
-    color: rgb(169, 169, 169);
-}
 
 .myBgWhite {
     background-color: #fff;
@@ -162,6 +162,15 @@ h6 {
 }
 
 /* text truncate and fading */
+.line-clampUserName {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 100px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+
 .line-clampBeta {
     display: -webkit-box;
     -webkit-line-clamp: 1;
