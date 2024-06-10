@@ -5,6 +5,8 @@ const initialState = {
     singleData: [],
     dataByInterests: [],
     announcementPayload: {},
+    outletData: [],
+    outletCounts: 0,
     isLoading: false,
     allCounts: 1,
     countByInterest: 0,
@@ -151,6 +153,21 @@ export const getAnnouncementsByInterestsFunc = createAsyncThunk(
     }
 )
 
+export const getAnnouncementsByIdFunc = createAsyncThunk(
+    'api/getAnnouncementsByIdFunc',
+    async (input) => {
+        const { idSet, token } = input;
+        const response = await fetch(`http://localhost:5050/announcementsbyid/${idSet}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return await response.json()
+    }
+)
+
 
 const sliceStore = createSlice({
     name: 'apiStore',
@@ -258,6 +275,19 @@ const sliceStore = createSlice({
             state.isLoading = false
         })
         builder.addCase(getAnnouncementsByInterestsFunc.rejected, (state) => {
+            state.isLoading = false;
+            state.error = " server error"
+        })
+        //announcementsById
+        builder.addCase(getAnnouncementsByIdFunc.pending, (state) => {
+            state.isLoading = true;
+        })
+        builder.addCase(getAnnouncementsByIdFunc.fulfilled, (state, action) => {
+            state.outletData = action.payload.data;
+            state.outletCounts = action.payload.count;
+            state.isLoading = false
+        })
+        builder.addCase(getAnnouncementsByIdFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = " server error"
         })

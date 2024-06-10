@@ -8,6 +8,7 @@ import { getUserOutletFunc, createUserOutletFunc } from '../states/outletStore';
 import { useDispatch, useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import Spinner from 'react-bootstrap/Spinner';
+import { setIsLogged } from '../states/loginState';
 
 
 
@@ -40,10 +41,16 @@ const Home = () => {
     if (decodedTkn) {
       dispatch(getUserOutletFunc({ idOwner: decodedTkn.id, token: localStorage.getItem("token") }))
         .then((res) => {
-          if (res.payload.data) {
-            navigate('/store')
+          if (res.payload.statusCode === 408) {
+            dispatch(setIsLogged(false));
+            localStorage.clear();
+            navigate('/login')
           } else {
-            setFirstEnter(true);
+            if (res.payload.data.length !== 0) {
+              navigate('/store')
+            } else {
+              setFirstEnter(true);
+            }
           }
         })
     } else {
@@ -93,7 +100,7 @@ const Home = () => {
         </div>
         {
           firstEnter ?
-            <h5 className='text-center myLightGrayColor fw-light mb-3'>This is your first enter in the Outlet with this account.<br/><b> Are you ready to make a Deal?</b></h5>
+            <h5 className='text-center myLightGrayColor fw-light mb-3'>This is your first enter in the Outlet with this account.<br /><b> Are you ready to make a Deal?</b></h5>
             : null
         }
         <div className='d-flex justify-content-center'>
