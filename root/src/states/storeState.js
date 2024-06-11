@@ -141,8 +141,8 @@ export const getSingleAnnouncementFunc = createAsyncThunk(
 export const getAnnouncementsByInterestsFunc = createAsyncThunk(
     'api/getAnnouncementsByInterests',
     async (input) => {
-        const { interests, token } = input;
-        const response = await fetch(`http://localhost:5050/announcementsbyinterests/${interests}`, {
+        const { interests, outletHistory, token } = input;
+        const response = await fetch(`http://localhost:5050/announcementsbyinterests/${interests}/${outletHistory}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

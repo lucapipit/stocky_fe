@@ -35,16 +35,64 @@ const _Store = () => {
 
 
 
-  const modifyCounter = (input) => {
-    if (input) { setCounter(counter + 1); } else { setCounter(counter - 1); };
-    input ? setNumOfAnnouncements(numOfAnnouncements - 1) : setNumOfAnnouncements(numOfAnnouncements + 1);
+  const iDontCare = async () => {
 
-    if (numOfAnnouncements === 1) {
-      setCategoryLevel(categoryLevel - 1)
-      if (categoryLevel === 4) {
-        setCategoryLevel(6);
-        setNumOfAnnouncements(countByInterest);
-      }
+    if (!outletData[counter].resetOutletTime) {
+
+      const myOutletUserData = outletUserData[0];
+      dispatch(updateUserOutlet({
+        payload: {
+          ...myOutletUserData,
+          outletHistory: [outletUserData.outletHistory, outletData[counter].id]
+        }, token: localStorage.getItem("token")
+      }))
+        .then((res) => {
+
+          if (res.payload.statusCode === 200) {
+
+            const newOutletData = []
+
+            if (outletData.length === 1) { //se è l'ultimo elemento
+
+              outletData.map((el) => {
+                if (el.id !== outletData[counter].id) {
+                  newOutletData.push(el)
+                }
+              });
+              const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
+
+              dispatch(updateUserOutlet({
+                payload: {
+                  ...myOutletUserData,
+                  resetOutletTime: new Date(),
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...myOutletUserData.outletHistory.split(","), outletData[counter].id] : [outletData[counter].id],
+                  outletSet: myNewOutletSetArray
+                }, token: localStorage.getItem("token")
+              }))
+                .then((res) => { if (res.payload.statusCode === 200) { window.location.reload() } })
+
+            } else {//non è l'ultimo elemento
+
+              outletData.map((el) => {
+                if (el.id !== outletData[counter].id) {
+                  newOutletData.push(el)
+                }
+              });
+              const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
+
+              dispatch(updateUserOutlet({
+                payload: {
+                  ...myOutletUserData,
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...myOutletUserData.outletHistory.split(","), outletData[counter].id] : [outletData[counter].id],
+                  outletSet: myNewOutletSetArray
+                }, token: localStorage.getItem("token")
+              }))
+                .then((res) => { if (res.payload.statusCode === 200) { window.location.reload() } })
+            }
+          } else {
+            setError(res.payload.error)
+          }
+        })
     }
   }
 
@@ -133,10 +181,12 @@ const _Store = () => {
       const myDcdTkn = jwtDecode(localStorage.getItem("token"), process.env.JWT_SECRET);
       myInterests = myDcdTkn.interests;
 
-      if (!outletUserData[0].outletSet && !outletUserData[0].resetOutletTime) {//#2 se l'outlet set di questo utente NON contiene degli id
-        console.log(outletUserData[0].resetOutletTime);
+      if (!outletUserData[0].outletSet && !outletUserData[0].resetOutletTime) {//#2 se l'outlet set di questo utente NON contiene degli id e non è presente il reset time
+
         setCounter(0);
-        dispatch(getAnnouncementsByInterestsFunc({ interests: myInterests, token: localStorage.getItem("token") }))
+        const myOutletHistory = outletUserData[0].outletHistory ? outletUserData[0].outletHistory : "0";
+        const myOwnInterests = myInterests ? myInterests : "0";
+        dispatch(getAnnouncementsByInterestsFunc({ interests: myOwnInterests, outletHistory: myOutletHistory, token: localStorage.getItem("token") }))
           .then((res) => {
             if (res.payload.statusCode === 200 && res.payload.data.length !== 0 && outletUserData) {
               const myOutletSetArray = `${res.payload.data.map((el) => { return el.id })}`;
@@ -145,8 +195,17 @@ const _Store = () => {
                 .then((res) => { if (res.payload.statusCode === 200) { window.location.reload() } })
             }
           })
-      } else if (outletUserData[0].resetOutletTime) {
-        setWaitForTimeReset(true)
+      } else if (outletUserData[0].resetOutletTime) {//se è presente il tempo di reset
+        setWaitForTimeReset(true);
+        const seconds = (new Date().getTime() - new Date(outletUserData[0].resetOutletTime).getTime()) / 1000;
+        const myRemainingTime = Math.round((28800 - seconds) / 36) / 100
+
+        if (myRemainingTime <= 0) {//ripristina l'outlet allo scadere del timer
+          const myOutletUserData = outletUserData[0];
+          dispatch(updateUserOutlet({ payload: { ...myOutletUserData, resetOutletTime: "" }, token: localStorage.getItem("token") }))
+            .then((res) => { if (res.payload.statusCode === 200) { window.location.reload() } })
+        }
+
       } else {//#2
         dispatch(getAnnouncementsByIdFunc({ idSet: outletUserData[0].outletSet, token: localStorage.getItem("token") }))
       }
@@ -156,13 +215,12 @@ const _Store = () => {
   }, [outletUserData])
 
 
-  useEffect(() => {
+  useEffect(() => {//set time left
 
     if (outletUserData.length > 0) {
       const seconds = (new Date().getTime() - new Date(outletUserData[0].resetOutletTime).getTime()) / 1000;
-      const myPercentage = Math.floor((seconds / 86400) * 10000) / 100;
-      const myRemainingTime = Math.round((86400 - seconds) / 3600)
-
+      const myPercentage = Math.floor((seconds / 28800) * 100);
+      const myRemainingTime = Math.round((28800 - seconds) / 36) / 100
       setRemainingPercentage(myPercentage);
       setRemainingTime(myRemainingTime);
     }
@@ -178,7 +236,7 @@ const _Store = () => {
           outletData.length > 0 ?
             <div className='w-100 d-flex justify-content-center bg-dark mb-3 py-1'>
               <div className='w-100 d-flex justify-content-between myMaxW700 '>
-                <i className="bi bi-trash3-fill myIconLg text-light myCursor ms-4" onClick={() => modifyCounter(0)}></i>
+                <i className="bi bi-trash3-fill myIconLg text-light myCursor ms-4" onClick={() => iDontCare()}></i>
                 <i className="bi bi-heart myIconLg text-light myCursor me-4" onClick={() => iLikeIt()}></i>
               </div>
             </div>
@@ -197,12 +255,16 @@ const _Store = () => {
             <div className='w-100 px-2 pt-5 text-center'>
               <h3 className='text-center fw-light'>Time left to the next outlet</h3>
               <div className='p-4 pb-4 d-flex justify-content-center align-items-center'>
-                <div className='border rounded mx-3 myMaxW1000 w-100'>
-                  <div className='bg-primary rounded' style={{ height: "6px", width: `${remainingPercentage}%` }}></div>
+                <div className='border rounded-5 mx-3 myMaxW1000 w-100'>
+                  <div className='bg-primary rounded-5  position-relative' style={{ height: "10px", width: `${remainingPercentage}%` }}>
+                    <div className={`h-100 ${remainingPercentage > 5 ? "percentageBarGlow" : ""} top-0 position-absolute`} style={{ width: "5vw", zIndex: 9 }}></div>
+                  </div>
                 </div>
                 <h5>{remainingPercentage}%</h5>
               </div>
-              <h5 className=''>Time left: <b>{remainingTime} hours</b></h5>
+              <h5 className=''>Time left: <b>
+                {remainingTime < 1 ? null : `${Math.floor(remainingTime)} hours`} {Math.floor(remainingTime * 60) % 60} minutes
+              </b></h5>
             </div>
             : <CardAnnouncement singleData={[outletData[counter]]} isLoading={isLoading} />
         }
