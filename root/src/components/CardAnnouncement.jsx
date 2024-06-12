@@ -32,6 +32,14 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
             {
                 !singleData[0] || isLoading ?
                     <Placeholder animation="glow"><Placeholder xs={4} /></Placeholder> :
+                    <div>
+                        <h3>views: {singleData[0].views}</h3>
+                        <h3>Likes: {singleData[0].posClick}</h3>
+                    </div>
+            }
+            {
+                !singleData[0] || isLoading ?
+                    <Placeholder animation="glow"><Placeholder xs={4} /></Placeholder> :
                     <div className='d-flex justify-content-between gap-3'>
                         <span>Qnt: {singleData[0].quantity}</span>
                         <span className='fw-light'>Brand: {singleData[0].brandName}</span>
@@ -98,7 +106,7 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
                         <div>
                             <ul className='mt-3'>
                                 {
-                                    singleData[0].techDetail && singleData[0].techDetail.split(",").map((el)=>{
+                                    singleData[0].techDetail && singleData[0].techDetail.split(",").map((el) => {
                                         return <li>{el.split("£")[1]}</li>
                                     })
                                 }

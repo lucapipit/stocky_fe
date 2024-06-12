@@ -3,7 +3,7 @@ import _Navbar from './_Navbar';
 import CardAnnouncement from './CardAnnouncement';
 import { useDispatch, useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
-import { getAnnouncementsByInterestsFunc, getAnnouncementsByIdFunc } from '../states/storeState';
+import { getAnnouncementsByInterestsFunc, getAnnouncementsByIdFunc, updateAnnouncementFunc } from '../states/storeState';
 import { getUserOutletFunc, updateUserOutlet } from '../states/outletStore';
 import { useNavigate } from 'react-router';
 
@@ -12,16 +12,12 @@ const _Store = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const outletData = useSelector((state) => state.myStore.outletData);
-  const outletCounts = useSelector((state) => state.myStore.outletCounts);
   const outletUserData = useSelector((state) => state.outlet.outletUserData);
 
   const isLoading = useSelector((state) => state.myStore.isLoading);
-  const countByInterest = useSelector((state) => state.myStore.countByInterest)
 
   const [counter, setCounter] = useState(0);
-  const [numOfAnnouncements, setNumOfAnnouncements] = useState(countByInterest);
-  const [categoryLevel, setCategoryLevel] = useState(7);
-  const [tkn, setTkn] = useState("");
+
   const [error, setError] = useState("");
   const [waitForTimeReset, setWaitForTimeReset] = useState(false);
   const [remainingPercentage, setRemainingPercentage] = useState(0);
@@ -29,142 +25,108 @@ const _Store = () => {
 
   let myInterests = "";
 
-  useEffect(() => {
-    setTkn(localStorage.getItem("token"));
-  }, [])
-
-
-
   const iDontCare = async () => {
 
-    if (!outletData[counter].resetOutletTime) {
+    if (!outletUserData[0].resetOutletTime) {
 
-      const myOutletUserData = outletUserData[0];
-      dispatch(updateUserOutlet({
-        payload: {
-          ...myOutletUserData,
-          outletHistory: [outletUserData.outletHistory, outletData[counter].id]
-        }, token: localStorage.getItem("token")
-      }))
+      const myOutletData = outletData[counter];
+      dispatch(updateAnnouncementFunc({ payload: { ...myOutletData, views: outletData[counter].views + 1, negClick: outletData[counter].negClick + 1 }, token: localStorage.getItem("token") }))
         .then((res) => {
-
           if (res.payload.statusCode === 200) {
 
-            const newOutletData = []
-
+            const myOutletUserData = outletUserData[0];
+            const newOutletData = [];
+            outletData.map((el) => {
+              if (el.id !== outletData[counter].id) {
+                newOutletData.push(el)
+              }
+            });
+            const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
+            const checkHistoryDuplicates = [...myOutletUserData.outletHistory.split(",")].map((el) => { if (+el !== outletData[counter].id) { return el } });
             if (outletData.length === 1) { //se è l'ultimo elemento
-
-              outletData.map((el) => {
-                if (el.id !== outletData[counter].id) {
-                  newOutletData.push(el)
-                }
-              });
-              const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
 
               dispatch(updateUserOutlet({
                 payload: {
                   ...myOutletUserData,
                   resetOutletTime: new Date(),
-                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...myOutletUserData.outletHistory.split(","), outletData[counter].id] : [outletData[counter].id],
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...checkHistoryDuplicates, outletData[counter].id] : [outletData[counter].id],
                   outletSet: myNewOutletSetArray
                 }, token: localStorage.getItem("token")
               }))
-                .then((res) => { if (res.payload.statusCode === 200) { window.location.reload() } })
+                .then((res) => {
+                  if (res.payload.statusCode === 200) { window.location.reload() } else { setError(res.payload.error) }
+                })
 
             } else {//non è l'ultimo elemento
-
-              outletData.map((el) => {
-                if (el.id !== outletData[counter].id) {
-                  newOutletData.push(el)
-                }
-              });
-              const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
 
               dispatch(updateUserOutlet({
                 payload: {
                   ...myOutletUserData,
-                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...myOutletUserData.outletHistory.split(","), outletData[counter].id] : [outletData[counter].id],
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...checkHistoryDuplicates, outletData[counter].id] : [outletData[counter].id],
                   outletSet: myNewOutletSetArray
                 }, token: localStorage.getItem("token")
               }))
                 .then((res) => { if (res.payload.statusCode === 200) { window.location.reload() } })
             }
-          } else {
-            setError(res.payload.error)
+
           }
         })
+
     }
   }
 
   const iLikeIt = async () => {
 
-    if (!outletData[counter].resetOutletTime) {
+    if (!outletUserData[0].resetOutletTime) {
 
-      const myOutletUserData = outletUserData[0];
-      dispatch(updateUserOutlet({
-        payload: {
-          ...myOutletUserData,
-          outletLikes: [outletUserData.outletLikes, outletData[counter].id],
-          outletHistory: [outletUserData.outletHistory, outletData[counter].id]
-        }, token: localStorage.getItem("token")
-      }))
+      const myOutletData = outletData[counter];
+      dispatch(updateAnnouncementFunc({ payload: { ...myOutletData, views: outletData[counter].views + 1, posClick: outletData[counter].posClick + 1 }, token: localStorage.getItem("token") }))
         .then((res) => {
-
           if (res.payload.statusCode === 200) {
 
+            const myOutletUserData = outletUserData[0];
             const newOutletData = []
-
+            outletData.map((el) => {
+              if (el.id !== outletData[counter].id) {
+                newOutletData.push(el)
+              }
+            });
+            const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
+            const checkHistoryDuplicates = [...myOutletUserData.outletHistory.split(",")].map((el) => { if (+el !== outletData[counter].id) { return el } });
+            const checkLikesDuplicates = [...myOutletUserData.outletLikes.split(",")].map((el) => { if (+el !== outletData[counter].id) { return el } });
             if (outletData.length === 1) { //se è l'ultimo elemento
-
-              outletData.map((el) => {
-                if (el.id !== outletData[counter].id) {
-                  newOutletData.push(el)
-                }
-              });
-              const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
 
               dispatch(updateUserOutlet({
                 payload: {
                   ...myOutletUserData,
                   resetOutletTime: new Date(),
-                  outletLikes: myOutletUserData.outletLikes.length > 0 ? [...myOutletUserData.outletLikes.split(","), outletData[counter].id] : [outletData[counter].id],
-                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...myOutletUserData.outletHistory.split(","), outletData[counter].id] : [outletData[counter].id],
+                  outletLikes: myOutletUserData.outletLikes.length > 0 ? [...checkLikesDuplicates, outletData[counter].id] : [outletData[counter].id],
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...checkHistoryDuplicates, outletData[counter].id] : [outletData[counter].id],
                   outletSet: myNewOutletSetArray
                 }, token: localStorage.getItem("token")
               }))
-                .then((res) => { if (res.payload.statusCode === 200) { window.location.reload() } })
+                .then((res) => {
+                  if (res.payload.statusCode === 200) { window.location.reload() } else { setError(res.payload.error) }
+                })
 
             } else {//non è l'ultimo elemento
 
-              outletData.map((el) => {
-                if (el.id !== outletData[counter].id) {
-                  newOutletData.push(el)
-                }
-              });
-              const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
               dispatch(updateUserOutlet({
                 payload: {
                   ...myOutletUserData,
-                  outletLikes: myOutletUserData.outletLikes.length > 0 ? [...myOutletUserData.outletLikes.split(","), outletData[counter].id] : [outletData[counter].id],
-                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...myOutletUserData.outletHistory.split(","), outletData[counter].id] : [outletData[counter].id],
+                  outletLikes: myOutletUserData.outletLikes.length > 0 ? [...checkLikesDuplicates, outletData[counter].id] : [outletData[counter].id],
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...checkHistoryDuplicates, outletData[counter].id] : [outletData[counter].id],
                   outletSet: myNewOutletSetArray
                 }, token: localStorage.getItem("token")
               }))
                 .then((res) => { if (res.payload.statusCode === 200) { window.location.reload() } })
             }
-          } else {
-            setError(res.payload.error)
+
           }
         })
+
     }
   }
-
-  useEffect(() => {
-
-    setNumOfAnnouncements(countByInterest);
-  }, [outletCounts])
-
-
 
 
   useEffect(() => { // step 1
