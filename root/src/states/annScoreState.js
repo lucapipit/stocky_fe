@@ -10,7 +10,6 @@ const annScoreSlice = createSlice({
     reducers: {
         generateScore: (state, action) => {
 
-
             let score = 0;
             const idAnn = action.payload.id;
             if (action.payload.brandName) { score += 6 };

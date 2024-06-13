@@ -3,21 +3,18 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 import CardPenRejAnnouncementReducedForm from './CardPenRejAnnouncementReducedForm';
-import { setIsPenRejModalEditing } from '../states/generalState';
-import productCategories from '../assets/JSON/productCategories.json';
 import "../styles/accountCardBody.css";
 import { generateScore } from '../states/annScoreState';
 
 
 
-const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
+const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
 
     const dispatch = useDispatch();
 
 
     const [minimize, setMinimize] = useState(true);
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
-    const [category, setCategory] = useState(singleData.category);
     const [score, setScore] = useState(0);
 
     //loading states
@@ -61,9 +58,9 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
 
                     </div>
 
-                    : <div className="m-1 border myMaxW632" >
+                    : <div className="m-1 border myMaxW632 pe-3" >
 
-                        <div style={{ borderLeft: `3px solid ${singleData.status === 3 ? "red" : singleData.status === 0 ? "lightgray" : "yellowgreen"}` }}>
+                        <div>
 
                             <div className={`${minimize ? "myFade" : "position-relative p-3"}`}>
 
@@ -124,7 +121,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                     <div className='m-0 border w-100 rounded-5' style={{ height: "6px" }}>
                                                         <div className={`scoreBarLow rounded-5 h-100 ${score > 91 ? "scoreBarLegend" : score > 79 ? "scoreBarHigh" : score > 59 ? "scoreBarMedium" : null}`} style={{ width: `${score}%` }}></div>
                                                     </div>
-                                                    <h6 className='ms-2'>{score/10}</h6>
+                                                    <h6 className='ms-2'>{score / 10}</h6>
                                                 </div>
                                         }
                                         {
@@ -137,16 +134,6 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                 </div>
                                         }
                                     </div>
-
-                                    {
-                                        singleData.status !== 1 ?
-                                            <div className='position-relative'>
-                                                <div className='position-absolute editPencil rounded-5 myCursor' onClick={() => { document.body.style.overflow = 'hidden'; dispatch(setIsPenRejModalEditing({ value: true, id: singleData.id })) }}>
-                                                    <i className="bi bi-pencil-fill text-secondary"></i>
-                                                </div>
-                                            </div>
-                                            : <div></div>
-                                    }
 
                                 </div>
 
@@ -172,45 +159,6 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                             </div>
                                     }
                                 </div>
-
-                                <div className='w-100'>
-                                    {
-                                        !minimize ?
-                                            <div className='my-3 d-flex flex-wrap align-items-center'>
-                                                {
-                                                    singleData.category && singleData.category.split(",").map((el) => {
-                                                        return (
-                                                            <div>
-                                                                {productCategories.map((item) => {
-                                                                    if (item.id === +el) {
-                                                                        return <span className={`p-1 categoryTag px-3 text-light m-1 ms-0 rounded-5 d-flex align-iems-center ${item.area == "dental" ? "myBgAcqua" : "myBgRed"}`} > {minimize ? item.code : item.eng} </span>
-                                                                    }
-                                                                })}
-                                                            </div>
-                                                        )
-                                                    })
-                                                }
-                                            </div>
-                                            : null
-                                    }
-                                </div>
-
-
-                                {
-                                    minimize ?
-                                        null :
-                                        <div className='mb-4 mt-3 text-start'>
-                                            {
-                                                !singleData || isLoading ?
-                                                    <Placeholder animation="glow"><Placeholder xs={6} /></Placeholder> :
-                                                    <div className={`${minimize ? "line-clamp2" : ""} mt-4`}>
-                                                        <span className='p-1 px-2'>{singleData.status === 0 ? <i><Spinner animation="grow" size="sm" /> on approval</i> : singleData.status === 1 ? <i className="bi bi-check-circle-fill text-success"> approved</i> : <i className="bi bi-ban text-danger"> denied:</i>}</span>
-                                                        <p className='text-danger px-3'>{singleData.rejReasons}</p>
-                                                    </div>
-                                            }
-
-                                        </div>
-                                }
 
 
 
@@ -247,10 +195,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                     <div className='my-5'>
                                                         <hr />
                                                         <div className='d-flex gap-2 flex-wrap myFontSize12px'>
-                                                            <span className='px-3 py-1 text-dark'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
-                                                            <span className='px-3 py-1 text-dark'><i class="bi bi-pencil-fill me-2"></i> <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
                                                             {singleData.dataApproved ? <span className='px-3 py-1 text-dark'><i className="bi bi-check-circle-fill me-2 text-success"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span> : null}
-                                                            {singleData.dataRejected ? <span className='px-3 py-1 text-dark'><i className="bi bi-ban me-2 text-danger"></i> <i className='fw-bold'>{singleData.dataRejected.split("T")[0]}</i></span> : null}
                                                         </div>
                                                     </div>
                                             }
@@ -276,4 +221,4 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
     )
 }
 
-export default CardPenRejAnnouncementReduced
+export default CardFavouritesAnnouncement

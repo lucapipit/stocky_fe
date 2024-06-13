@@ -1,3 +1,9 @@
+:root{
+    --bluPetrol: #2a606c;
+    --fucsiaRed: #E52C5D;
+}
+
+
 h1,
 h2,
 h3,
@@ -92,10 +98,13 @@ h6 {
 
 /* color */
 .myPrimaryColor {
-    color: #2a606c;
+    color: var(--bluPetrol);
 }
 .myLightGrayColor {
     color: #dfdfdf;
+}
+.myFucsiaRed{
+    color: var(--fucsiaRed);
 }
 
 /* background color */
@@ -112,8 +121,15 @@ h6 {
     background-color: #d21b4c;
 }
 
+.myBgPrimary{
+    background-color: var(--bluPetrol);
+}
+.myBgFucsiaRed{
+    background-color: var(--fucsiaRed);
+}
+
 .myMainGradient {
-    background: linear-gradient(to bottom, #333, #2a606c);
+    background: linear-gradient(to bottom, #333, var(--bluPetrol));
 }
 
 .myBgTransparentHigh {

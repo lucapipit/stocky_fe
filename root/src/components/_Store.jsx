@@ -196,10 +196,10 @@ const _Store = () => {
       <div className='myVh100 d-flex flex-column align-items-center pb-5' >
         {
           outletData.length > 0 ?
-            <div className='w-100 d-flex justify-content-center bg-dark mb-3 py-1'>
+            <div className='w-100 d-flex justify-content-center align-items-center bg-dark mb-3 py-1'>
               <div className='w-100 d-flex justify-content-between myMaxW700 '>
                 <i className="bi bi-trash3-fill myIconLg text-light myCursor ms-4" onClick={() => iDontCare()}></i>
-                <i className="bi bi-heart myIconLg text-light myCursor me-4" onClick={() => iLikeIt()}></i>
+                <i className="bi bi-heart-fill myIconLg myFucsiaRed myCursor me-4" onClick={() => iLikeIt()}></i>
               </div>
             </div>
             : null
@@ -224,7 +224,7 @@ const _Store = () => {
                 </div>
                 <h5>{remainingPercentage}%</h5>
               </div>
-              <h5 className=''>Time left: <b>
+              <h5 >Time left: <b>
                 {remainingTime < 1 ? null : `${Math.floor(remainingTime)} hours`} {Math.floor(remainingTime * 60) % 60} minutes
               </b></h5>
             </div>

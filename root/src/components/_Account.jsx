@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleUserFunc } from '../states/loginState';
-import { getAllAnnouncementsByIdOwnerFunc } from '../states/storeState';
+import { getAllAnnouncementsByIdOwnerFunc, getAnnouncementsByIdFunc } from '../states/storeState';
 import { jwtDecode } from 'jwt-decode';
 import CardPenRejAnnouncementReduced from './CardPenRejAnnouncementReduced';
 import CardPenRejAnnouncementLine from './CardPenRejAnnouncementLine';
@@ -12,6 +12,8 @@ import CategoriesPreferences from './CategoriesPreferences';
 import AccountEditAnagraphic from './AccountEditAnagraphic';
 import { setIsLogged } from '../states/loginState';
 import { useNavigate } from 'react-router';
+import { getUserOutletFunc } from '../states/outletStore';
+import CardFavouritesAnnouncement from './CardFavouritesAnnouncement';
 
 
 const _Account = () => {
@@ -22,9 +24,11 @@ const _Account = () => {
   const allUserAnnouncements = useSelector((state) => state.myStore.allData);
   const isLoading = useSelector((state) => state.myStore.isLoading);
   const loading = useSelector((state) => state.signin.loading);
+  const outletData = useSelector((state) => state.myStore.outletData);
   const [isResended, setIsResended] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [typeOfView, setTypeOfView] = useState(0);
+  const [announcementTypeMenu, setAnnouncementTypeMenu] = useState(0);
 
   const [isEditingAnagraphic, setIsEditingAnagraphic] = useState(false);
 
@@ -42,6 +46,12 @@ const _Account = () => {
             dispatch(setIsLogged(false));
             navigate('/login');
             localStorage.clear()
+          }
+        });
+      dispatch(getUserOutletFunc({ idOwner: tkn.id, token: token }))
+        .then((res) => {
+          if (res.payload.data.length > 0) {
+            dispatch(getAnnouncementsByIdFunc({ idSet: res.payload.data[0].outletLikes, token: token }))
           }
         })
     }
@@ -163,34 +173,60 @@ const _Account = () => {
               <CategoriesPreferences userData={userData[0]} />
             }
 
+            <div className='d-flex justify-content-center align-items-start gap-5 mt-5 pb-4'>
+              <div className='d-flex flex-column align-items-center position-relative'>
+                <i class={`bi bi-heart-fill myFucsiaRed display-6 myCursor`} onClick={()=>setAnnouncementTypeMenu(0)}></i>
+                {announcementTypeMenu===0 ? <i class="bi bi-caret-up-fill display-5 myFucsiaRed position-absolute favourites-announcementArrow" ></i>:null}
+              </div>
+              <div className='d-flex flex-column align-items-center position-relative'>
+                <i class={`bi bi-megaphone-fill display-6 myPrimaryColor myCursor`} onClick={()=>setAnnouncementTypeMenu(1)}></i>
+                {announcementTypeMenu===1 ? <i class="bi bi-caret-up-fill display-5 myPrimaryColor position-absolute favourites-announcementArrow" ></i>:null}
+              </div>
+            </div>
 
             {
-              allUserAnnouncements && allUserAnnouncements.length !== 0 ?
+              !announcementTypeMenu ?
                 <div>
-                  <h1 className='mt-5 mb-3 text-center fw-light'>Announcements</h1>
-
-                  <div className='d-flex justify-content-center align-items-center gap-2' style={{ fontSize: "1.5rem" }}>
-                    <div className={`myCursor border p-2 py-1 ${typeOfView === 0 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(0)}><i className="bi bi-columns-gap myCursor"></i></div>
-                    <div className={`myCursor border p-2 py-1 ${typeOfView === 1 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(1)}><i className="bi bi-list-task myCursor"></i></div>
-                  </div>
-
-                  <div className='d-flex align-items-center justify-content-center mt-3'>
-                    <div>{allUserAnnouncements.length} announcements</div>
-                  </div>
-
+                  <div className='mb-3 text-center'> <span className='myBgFucsiaRed text-light display-6 fw-light px-4 py-1 rounded-5'>Favourites</span></div>
                   <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
                     {
-                      allUserAnnouncements && allUserAnnouncements.map((el) => {
-                        if (typeOfView === 0) {
-                          return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
-                        } else {
-                          return <CardPenRejAnnouncementLine singleData={el} isLoading={isLoading} />
-                        }
+                      outletData && outletData.map((el) => {
+                        return <CardFavouritesAnnouncement singleData={el} isLoading={isLoading} />
                       })
                     }
                   </div>
                 </div>
-                : null
+                :
+                <div>
+                  {
+                    allUserAnnouncements && allUserAnnouncements.length !== 0 ?
+                      <div>
+                         <div className='mb-3 text-center'> <span className='myBgPrimary text-light display-6 fw-light px-4 py-1 rounded-5'>Announcements</span></div>
+
+                        <div className='d-flex justify-content-center align-items-center gap-2 mt-5' style={{ fontSize: "1.5rem" }}>
+                          <div className={`myCursor border p-2 py-1 ${typeOfView === 0 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(0)}><i className="bi bi-columns-gap myCursor"></i></div>
+                          <div className={`myCursor border p-2 py-1 ${typeOfView === 1 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(1)}><i className="bi bi-list-task myCursor"></i></div>
+                        </div>
+
+                        <div className='d-flex align-items-center justify-content-center mt-3'>
+                          <div>{allUserAnnouncements.length} announcements</div>
+                        </div>
+
+                        <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
+                          {
+                            allUserAnnouncements && allUserAnnouncements.map((el) => {
+                              if (typeOfView === 0) {
+                                return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
+                              } else {
+                                return <CardPenRejAnnouncementLine singleData={el} isLoading={isLoading} />
+                              }
+                            })
+                          }
+                        </div>
+                      </div>
+                      : null
+                  }
+                </div>
             }
 
           </div>
@@ -199,7 +235,7 @@ const _Account = () => {
             <Spinner animation="border" variant='dark' />
           </div>
       }
-    </div>
+    </div >
   )
 
 }

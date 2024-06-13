@@ -21,8 +21,8 @@ const CardPenRejAnnouncementLine = ({ singleData, isLoading }) => {
                         <p className='m-0'> <span className='fw-bold'>{singleData.price}$</span> - <span className='bg-dark text-light px-2 rounded-1'>{singleData.quantity} items</span> </p>
                         <p className='m-0 fw-bold myPrimaryColor'>{singleData.brandName}</p>
                         <h6 className='m-0'><i className="bi bi-eye-fill"></i> {singleData.views}</h6>
-                        <h6 className='m-0' style={{ color: "#E52C5D" }}><i className="bi bi-suit-heart-fill" ></i> {singleData.posClick}</h6>
-                        <h6 className='m-0'><i className="bi bi-chat-dots-fill text-secondary" style={{ color: "#84BD00" }}></i> </h6>
+                        <h6 className='m-0 myFucsiaRed'><i className="bi bi-suit-heart-fill" ></i> {singleData.posClick}</h6>
+                        <h6 className='m-0'><i className="bi bi-chat-dots-fill text-secondary"></i> </h6>
                     </div>
 
                 </div>

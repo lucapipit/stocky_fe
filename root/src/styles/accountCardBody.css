@@ -186,6 +186,21 @@ span {
     font-size: 1.5rem;
 }
 
+/* account page --> favourite/announcements */
+.favourites-announcementArrow{
+    bottom: -44px;
+}
+@media only screen and (max-width: 1000px){
+    .favourites-announcementArrow{
+        bottom: -39px;
+    }
+}
+@media only screen and (max-width: 500px){
+    .favourites-announcementArrow{
+        bottom: -35px;
+    }
+}
+
 /* edit pencil */
 .editPencil {
     right: 0px;
