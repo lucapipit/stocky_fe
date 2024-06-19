@@ -1,6 +1,7 @@
 :root{
     --bluPetrol: #2a606c;
     --fucsiaRed: #E52C5D;
+    --chatColor: rgb(144, 216, 0); 
 }
 
 
@@ -106,7 +107,9 @@ h6 {
 .myFucsiaRed{
     color: var(--fucsiaRed);
 }
-
+.myChatColor{
+    color: var(--chatColor);
+}
 /* background color */
 
 .myBgWhite {
@@ -127,7 +130,9 @@ h6 {
 .myBgFucsiaRed{
     background-color: var(--fucsiaRed);
 }
-
+.myBgChat{
+    background-color: var(--chatColor);
+}
 .myMainGradient {
     background: linear-gradient(to bottom, #333, var(--bluPetrol));
 }
@@ -249,18 +254,3 @@ h6 {
     overflow-x: hidden;
 }
 
-
-/* .myFade {
-    position: relative;
-    height: 402px;
-} 
-
-.myFade:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 70px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(255, 255, 255) 30%);
-} */

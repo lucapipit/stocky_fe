@@ -15,6 +15,7 @@ const _Store = () => {
   const outletUserData = useSelector((state) => state.outlet.outletUserData);
 
   const isLoading = useSelector((state) => state.myStore.isLoading);
+  const [dcdTkn, setDcdTkn] = useState("");
 
   const [counter, setCounter] = useState(0);
 
@@ -30,6 +31,7 @@ const _Store = () => {
     if (!outletUserData[0].resetOutletTime) {
 
       const myOutletData = outletData[counter];
+
       dispatch(updateAnnouncementFunc({ payload: { ...myOutletData, views: outletData[counter].views + 1, negClick: outletData[counter].negClick + 1 }, token: localStorage.getItem("token") }))
         .then((res) => {
           if (res.payload.statusCode === 200) {
@@ -42,14 +44,19 @@ const _Store = () => {
               }
             });
             const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
-            const checkHistoryDuplicates = [...myOutletUserData.outletHistory.split(",")].map((el) => { if (+el !== outletData[counter].id) { return el } });
+            //per pulire gli array da valori vuoti expl.[1,4,,3]
+            let cleanHistoryArray = [];
+            let cleanLikesArray = [];
+            [...myOutletUserData.outletHistory.split(",")].map((el) => { if (+el !== outletData[counter].id && el !== "" && el !== undefined) { return cleanHistoryArray.push(el) } });
+            [...myOutletUserData.outletLikes.split(",")].map((el) => { if (+el !== outletData[counter].id && el !== "" && el !== undefined) { return cleanLikesArray.push(el) } });
+
             if (outletData.length === 1) { //se è l'ultimo elemento
 
               dispatch(updateUserOutlet({
                 payload: {
                   ...myOutletUserData,
                   resetOutletTime: new Date(),
-                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...checkHistoryDuplicates, outletData[counter].id] : [outletData[counter].id],
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...cleanHistoryArray, outletData[counter].id] : [outletData[counter].id],
                   outletSet: myNewOutletSetArray
                 }, token: localStorage.getItem("token")
               }))
@@ -62,7 +69,7 @@ const _Store = () => {
               dispatch(updateUserOutlet({
                 payload: {
                   ...myOutletUserData,
-                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...checkHistoryDuplicates, outletData[counter].id] : [outletData[counter].id],
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...cleanHistoryArray, outletData[counter].id] : [outletData[counter].id],
                   outletSet: myNewOutletSetArray
                 }, token: localStorage.getItem("token")
               }))
@@ -80,7 +87,10 @@ const _Store = () => {
     if (!outletUserData[0].resetOutletTime) {
 
       const myOutletData = outletData[counter];
-      dispatch(updateAnnouncementFunc({ payload: { ...myOutletData, views: outletData[counter].views + 1, posClick: outletData[counter].posClick + 1 }, token: localStorage.getItem("token") }))
+      const cleanLikesIds = [];
+      [...myOutletData.likesArry.split(",")].map((el) => { if (+el !== dcdTkn.id && el !== "" && el !== undefined) { return cleanLikesIds.push(el) } });
+
+      dispatch(updateAnnouncementFunc({ payload: { ...myOutletData, views: outletData[counter].views + 1, posClick: outletData[counter].posClick + 1, likesArry: cleanLikesIds }, token: localStorage.getItem("token") }))
         .then((res) => {
           if (res.payload.statusCode === 200) {
 
@@ -92,16 +102,20 @@ const _Store = () => {
               }
             });
             const myNewOutletSetArray = `${newOutletData.map((el) => { return el.id })}`;
-            const checkHistoryDuplicates = [...myOutletUserData.outletHistory.split(",")].map((el) => { if (+el !== outletData[counter].id) { return el } });
-            const checkLikesDuplicates = [...myOutletUserData.outletLikes.split(",")].map((el) => { if (+el !== outletData[counter].id) { return el } });
+            //per pulire gli array da valori vuoti expl.[1,4,,3]
+            let cleanHistoryArray = [];
+            let cleanLikesArray = [];
+            [...myOutletUserData.outletHistory.split(",")].map((el) => { if (+el !== outletData[counter].id && el !== "" && el !== undefined) { return cleanHistoryArray.push(el) } });
+            [...myOutletUserData.outletLikes.split(",")].map((el) => { if (+el !== outletData[counter].id && el !== "" && el !== undefined) { return cleanLikesArray.push(el) } });
+
             if (outletData.length === 1) { //se è l'ultimo elemento
 
               dispatch(updateUserOutlet({
                 payload: {
                   ...myOutletUserData,
                   resetOutletTime: new Date(),
-                  outletLikes: myOutletUserData.outletLikes.length > 0 ? [...checkLikesDuplicates, outletData[counter].id] : [outletData[counter].id],
-                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...checkHistoryDuplicates, outletData[counter].id] : [outletData[counter].id],
+                  outletLikes: myOutletUserData.outletLikes.length > 0 ? [...cleanLikesArray, outletData[counter].id] : [outletData[counter].id],
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...cleanHistoryArray, outletData[counter].id] : [outletData[counter].id],
                   outletSet: myNewOutletSetArray
                 }, token: localStorage.getItem("token")
               }))
@@ -114,8 +128,8 @@ const _Store = () => {
               dispatch(updateUserOutlet({
                 payload: {
                   ...myOutletUserData,
-                  outletLikes: myOutletUserData.outletLikes.length > 0 ? [...checkLikesDuplicates, outletData[counter].id] : [outletData[counter].id],
-                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...checkHistoryDuplicates, outletData[counter].id] : [outletData[counter].id],
+                  outletLikes: myOutletUserData.outletLikes.length > 0 ? [...cleanLikesArray, outletData[counter].id] : [outletData[counter].id],
+                  outletHistory: myOutletUserData.outletHistory.length > 0 ? [...cleanHistoryArray, outletData[counter].id] : [outletData[counter].id],
                   outletSet: myNewOutletSetArray
                 }, token: localStorage.getItem("token")
               }))
@@ -128,15 +142,24 @@ const _Store = () => {
     }
   }
 
+  useEffect(() => {//step 0
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const tkn = jwtDecode(token, process.env.JWT_SECRET);
+      setDcdTkn(tkn)
+    }
+  })
+
 
   useEffect(() => { // step 1
+
     if (localStorage.getItem("token")) {
       const myDcdTkn = jwtDecode(localStorage.getItem("token"), process.env.JWT_SECRET);
-      dispatch(getUserOutletFunc({ idOwner: myDcdTkn.id, token: localStorage.getItem("token") }))
-        .then((res) => { if (res.payload.data.length === 0) { navigate("/") } })
+      myDcdTkn.id && dispatch(getUserOutletFunc({ idOwner: myDcdTkn.id, token: localStorage.getItem("token") }))
+        .then((res) => { if (!res.payload.data.length === 0) { navigate("/") } })
     }
-
-  }, [myInterests])
+  }, [])
 
   useEffect(() => {// step 2
     if (outletUserData.length !== 0) {
@@ -195,7 +218,7 @@ const _Store = () => {
       <_Navbar />
       <div className='myVh100 d-flex flex-column align-items-center pb-5' >
         {
-          outletData.length > 0 ?
+          outletData ?
             <div className='w-100 d-flex justify-content-center align-items-center bg-dark mb-3 py-1'>
               <div className='w-100 d-flex justify-content-between myMaxW700 '>
                 <i className="bi bi-trash3-fill myIconLg text-light myCursor ms-4" onClick={() => iDontCare()}></i>
@@ -208,7 +231,7 @@ const _Store = () => {
         <div className='d-flex justify-content-center mb-3'>
           {
             outletData && outletData.map((el, index) => {
-              return <div className={`border px-1 ${index === counter ? "bg-info" : index < counter ? "bg-dark" : "bg-secondary"} rounded-5 myCursor`} style={{ height: "10px", margin: "0 1px" }} ></div>
+              return <div className={`border px-1 ${index === counter ? "bg-info" : index < counter ? "bg-dark" : "bg-secondary"} rounded-5`} style={{ height: "10px", margin: "0 1px" }} ></div>
             })
           }
         </div>

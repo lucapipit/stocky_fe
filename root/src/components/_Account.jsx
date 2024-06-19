@@ -14,6 +14,8 @@ import { setIsLogged } from '../states/loginState';
 import { useNavigate } from 'react-router';
 import { getUserOutletFunc } from '../states/outletStore';
 import CardFavouritesAnnouncement from './CardFavouritesAnnouncement';
+import CardChatAnnouncement from './CardChatAnnouncement';
+import ChatAnnouncement from './ChatAnnouncement';
 
 
 const _Account = () => {
@@ -25,10 +27,14 @@ const _Account = () => {
   const isLoading = useSelector((state) => state.myStore.isLoading);
   const loading = useSelector((state) => state.signin.loading);
   const outletData = useSelector((state) => state.myStore.outletData);
+  const [dcdTkn, setDcdTkn] = useState("");
   const [isResended, setIsResended] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [typeOfView, setTypeOfView] = useState(0);
-  const [announcementTypeMenu, setAnnouncementTypeMenu] = useState(0);
+  const [typeSubMenu, setTypeSubMenu] = useState(2);
+
+  const [openChat, setOpenChat] = useState(false);
+  const [idChat, setIdChat] = useState(null);
 
   const [isEditingAnagraphic, setIsEditingAnagraphic] = useState(false);
 
@@ -39,6 +45,7 @@ const _Account = () => {
 
     if (token) {
       const tkn = jwtDecode(token, process.env.JWT_SECRET);
+      setDcdTkn(tkn)
       dispatch(getSingleUserFunc({ id: tkn.id, token: token }));
       dispatch(getAllAnnouncementsByIdOwnerFunc({ idOwner: tkn.id, token: token }))
         .then((res) => {
@@ -50,7 +57,7 @@ const _Account = () => {
         });
       dispatch(getUserOutletFunc({ idOwner: tkn.id, token: token }))
         .then((res) => {
-          if (res.payload.data.length > 0) {
+          if (res.payload.data.length > 0 && res.payload.data[0].outletLikes) {
             dispatch(getAnnouncementsByIdFunc({ idSet: res.payload.data[0].outletLikes, token: token }))
           }
         })
@@ -175,19 +182,23 @@ const _Account = () => {
 
             <div className='d-flex justify-content-center align-items-start gap-5 mt-5 pb-4'>
               <div className='d-flex flex-column align-items-center position-relative'>
-                <i class={`bi bi-heart-fill myFucsiaRed display-6 myCursor`} onClick={()=>setAnnouncementTypeMenu(0)}></i>
-                {announcementTypeMenu===0 ? <i class="bi bi-caret-up-fill display-5 myFucsiaRed position-absolute favourites-announcementArrow" ></i>:null}
+                <i class={`bi bi-heart-fill myFucsiaRed display-6 myCursor`} onClick={() => setTypeSubMenu(0)}></i>
+                {typeSubMenu === 0 ? <i class="bi bi-caret-up-fill display-5 myFucsiaRed position-absolute favourites-announcementArrow" ></i> : null}
               </div>
               <div className='d-flex flex-column align-items-center position-relative'>
-                <i class={`bi bi-megaphone-fill display-6 myPrimaryColor myCursor`} onClick={()=>setAnnouncementTypeMenu(1)}></i>
-                {announcementTypeMenu===1 ? <i class="bi bi-caret-up-fill display-5 myPrimaryColor position-absolute favourites-announcementArrow" ></i>:null}
+                <i class={`bi bi-chat-heart-fill display-6 myChatColor myCursor`} onClick={() => setTypeSubMenu(2)}></i>
+                {typeSubMenu === 2 ? <i class="bi bi-caret-up-fill display-5 myChatColor position-absolute favourites-announcementArrow" ></i> : null}
+              </div>
+              <div className='d-flex flex-column align-items-center position-relative'>
+                <i class={`bi bi-megaphone-fill display-6 myPrimaryColor myCursor`} onClick={() => setTypeSubMenu(1)}></i>
+                {typeSubMenu === 1 ? <i class="bi bi-caret-up-fill display-5 myPrimaryColor position-absolute favourites-announcementArrow" ></i> : null}
               </div>
             </div>
 
             {
-              !announcementTypeMenu ?
+              typeSubMenu === 0 ?
                 <div>
-                  <div className='mb-3 text-center'> <span className='myBgFucsiaRed text-light display-6 fw-light px-4 py-1 rounded-5'>Favourites</span></div>
+                  <div className='mb-3 text-center'> <span className='myBgFucsiaRed text-light display-6 fw-light px-4 py-1 rounded-5'>My Favourites</span></div>
                   <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
                     {
                       outletData && outletData.map((el) => {
@@ -196,37 +207,61 @@ const _Account = () => {
                     }
                   </div>
                 </div>
-                :
-                <div>
-                  {
-                    allUserAnnouncements && allUserAnnouncements.length !== 0 ?
-                      <div>
-                         <div className='mb-3 text-center'> <span className='myBgPrimary text-light display-6 fw-light px-4 py-1 rounded-5'>Announcements</span></div>
+                : typeSubMenu === 1 ?
+                  <div>
+                    {
+                      allUserAnnouncements && allUserAnnouncements.length !== 0 ?
+                        <div>
+                          <div className='mb-3 text-center'> <span className='myBgPrimary text-light display-6 fw-light px-4 py-1 rounded-5'>Announcements</span></div>
 
-                        <div className='d-flex justify-content-center align-items-center gap-2 mt-5' style={{ fontSize: "1.5rem" }}>
-                          <div className={`myCursor border p-2 py-1 ${typeOfView === 0 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(0)}><i className="bi bi-columns-gap myCursor"></i></div>
-                          <div className={`myCursor border p-2 py-1 ${typeOfView === 1 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(1)}><i className="bi bi-list-task myCursor"></i></div>
+                          <div className='d-flex justify-content-center align-items-center gap-2 mt-5' style={{ fontSize: "1.5rem" }}>
+                            <div className={`myCursor border p-2 py-1 ${typeOfView === 0 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(0)}><i className="bi bi-columns-gap myCursor"></i></div>
+                            <div className={`myCursor border p-2 py-1 ${typeOfView === 1 ? "bg-dark text-light" : ""} rounded-1`} onClick={() => setTypeOfView(1)}><i className="bi bi-list-task myCursor"></i></div>
+                          </div>
+
+                          <div className='d-flex align-items-center justify-content-center mt-3'>
+                            <div>{allUserAnnouncements.length} announcements</div>
+                          </div>
+
+                          <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
+                            {
+                              allUserAnnouncements && allUserAnnouncements.map((el) => {
+                                if (typeOfView === 0) {
+                                  return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
+                                } else {
+                                  return <CardPenRejAnnouncementLine singleData={el} isLoading={isLoading} />
+                                }
+                              })
+                            }
+                          </div>
                         </div>
+                        : null
+                    }
+                  </div>
+                  :
+                  <div>
+                    <div className='mb-3 text-center'> <span className='myBgChat text-light display-6 fw-light px-4 py-1 rounded-5'>Chat</span></div>
+                    <div className='d-flex align-items-center flex-column my-5'>
+                      {
 
-                        <div className='d-flex align-items-center justify-content-center mt-3'>
-                          <div>{allUserAnnouncements.length} announcements</div>
-                        </div>
+                        outletData && outletData.map((el) => {
 
-                        <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
-                          {
-                            allUserAnnouncements && allUserAnnouncements.map((el) => {
-                              if (typeOfView === 0) {
-                                return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
-                              } else {
-                                return <CardPenRejAnnouncementLine singleData={el} isLoading={isLoading} />
-                              }
-                            })
+                          if (openChat && el.id === idChat) {
+                            return <div className=' position-relative bg-light myMaxW1200 border pb-4 d-flex justify-content-center' >
+                              <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
+                              <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} />
+                            </div>
+                          } if (!openChat) {
+                            return <div className='w-100 d-flex justify-content-center' onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                              <CardChatAnnouncement singleData={el} isLoading={isLoading} />
+                            </div>
                           }
-                        </div>
-                      </div>
-                      : null
-                  }
-                </div>
+
+                        })
+
+                      }
+                    </div>
+                  </div>
             }
 
           </div>

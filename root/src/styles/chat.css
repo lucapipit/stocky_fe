@@ -1,0 +1,13 @@
+/* chat card minimize */
+.imgChatMain {
+    height: 60px;
+    width: 60px;
+}
+.line-clampChat {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
