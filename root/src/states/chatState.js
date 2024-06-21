@@ -70,7 +70,7 @@ const chatSlice = createSlice({
         });
         builder.addCase(getSingleChatFunc.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.singleChat = action.payload
+            state.singleChat = action.payload.data
         });
         builder.addCase(getSingleChatFunc.rejected, (state) => {
             state.isLoading = false;
