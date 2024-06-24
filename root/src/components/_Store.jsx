@@ -216,7 +216,7 @@ const _Store = () => {
   return (
     <>
       <_Navbar />
-      <div className='myVh100 d-flex flex-column align-items-center pb-5' >
+      <div className='myMinVh100 d-flex flex-column align-items-center pb-5' >
         {
           outletData ?
             <div className='w-100 d-flex justify-content-center align-items-center bg-dark mb-3 py-1'>

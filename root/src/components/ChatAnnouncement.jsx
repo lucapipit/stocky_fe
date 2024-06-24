@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useRef, useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
@@ -10,8 +10,9 @@ const socket = io.connect("http://localhost:5051");
 
 const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
 
-    const [conversation, setConversation] = useState("");
+    const [conversation, setConversation] = useState([]);
     const [message, setMessage] = useState("");
+    const [receivedMessage, setReceivedMessage] = useState("");
     const [chatAlreadyExists, setChatAlreadyExists] = useState(false);
     const [sended, setSended] = useState(false);
     const [room, setRoom] = useState(//capisce se l'utente loggato è proprietario dell'annuncio e crea una room per ogni utente che ha messo like
@@ -23,7 +24,8 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
             `${singleData.idOwner}$${singleData.id}$${idOwn}`
     );
     const [isMyAnnouncement, setIsMyOwnAnnouncement] = useState(typeof (room) === "object" ? true : false);
-    const singleChat = useSelector((state) => state.chat.singleChat)
+    const singleChat = useSelector((state) => state.chat.singleChat);
+    const scrollRef = useRef();
 
     const dispatch = useDispatch();
 
@@ -46,7 +48,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
             userCheck: 0
         }
 
-        setConversation(mssg.messages);
+
 
         socket.emit("send_message", mssg);
         if (typeof (room) !== "object") {
@@ -56,13 +58,13 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
                         console.log(res.payload, res.payload.data[0]);
                         dispatch(updateChatFunc({ ...res.payload.data[0], messages: [res.payload.data[0].messages, mssg.messages] }))
                             .then((res) => {
-                                if (res.payload.statusCode === 200) { setSended(false) }
+                                if (res.payload.statusCode === 200) { setConversation([...conversation, mssg.messages]); }
                             })
                     } else {
                         dispatch(createChatFunc(mssg))
                             .then((res) => {
                                 if (res.payload.statusCode === 200) {
-                                    setChatAlreadyExists(true)
+                                    setChatAlreadyExists(true);
                                 }
                             })
                     }
@@ -73,23 +75,39 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
     useEffect(() => {
         joinRoom();
         socket.on("receive_message", async (data) => {
-            if (typeof (room) !== "object") {
-                dispatch(getSingleChatFunc(room))
-                .then((res) => {
-                    if (res.payload.statusCode === 200) {
-                        setConversation(data.messages)
-                    }
-                })
-            }
+            setReceivedMessage(data.messages)
         })
     }, [socket]);
 
     useEffect(() => {
-        if (typeof (room) !== "object" && !chatAlreadyExists) {
+        receivedMessage && setConversation([...conversation, receivedMessage])
+    }, [receivedMessage]);
+
+    useEffect(() => {
+        console.log(scrollRef);
+        scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, [conversation])
+
+
+
+
+    /* useEffect(() => {
+        if (typeof (room) !== "object" && chatAlreadyExists) {
             dispatch(getSingleChatFunc(room))
                 .then((res) => {
                     if (res.payload.statusCode === 200) {
-                        setChatAlreadyExists(true)
+                    }
+                })
+        }
+    }, [sended]) */
+
+    useEffect(() => {
+        if (typeof (room) !== "object"/*  && !chatAlreadyExists */) {
+            dispatch(getSingleChatFunc(room))
+                .then((res) => {
+                    if (res.payload.statusCode === 200) {
+                        setChatAlreadyExists(true);
+                        setConversation(res.payload.data[0].messages.split(","))
                     }
                 })
         }
@@ -97,7 +115,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
     }, [room])
 
     return (
-        <div>
+        <div className='myVh100'>
             <div className='w-100 myMaxW1000 d-flex align-items-center my-1 gap-3 p-1 myCursor' >
                 <div className='d-flex align-items-center ms-5'>
                     {
@@ -145,13 +163,14 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
             </div>
             {
                 isMyAnnouncement && typeof (room) !== "object" ?
-                    <div className='bg-light pb-3 d-flex align-items-center flex-column'>
-                        <hr className='w-100' />
-                        <span className='text-light px-3 p-1 rounded-5 bg-dark'>User n° {room.split("$")[2]}</span>
+                    <div className='position-relative d-flex justify-content-center pt-1'>
+                        <div className='pb-3 d-flex align-items-center flex-column position-absolute'>
+                            <span className='text-light px-3 p-1 rounded-5 bg-dark'>User n° {room.split("$")[2]}</span>
+                        </div>
                     </div>
                     : null
             }
-            <div className='w-100 myBgWhite p-3'>
+            <div className='w-100 myBgWhite p-3 myOverflowY myVh70'>
                 {
                     typeof (room) === "object" ?
                         room.map((el) => {
@@ -159,55 +178,25 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
                         })
                         :
                         <div>
-                            {
-                                singleChat.length > 0 ?
-                                    <ul style={{ listStyle: "none" }}>
+                            <ul style={{ listStyle: "none" }}>
+                                {
+                                    conversation && conversation.map((el) => {
 
-                                        {
-                                            singleChat[0] && singleChat[0].messages.split(",").map((el) => {
-
-
-                                                return (
-                                                    <li >
-                                                        <div className={`${el.split("£")[0] == idOwn ? "bg-primary" : "bg-secondary"} rounded-4 p-2 px-4 m-2 text-light`}>
-                                                            <h5 className='fw-light'>db: {el.split("£")[1]}</h5>
-                                                            <div className='d-flex justify-content-between'>
-                                                                <p className='m-0 text-dark'> {el.split("£")[0]}</p>
-                                                                <p className='m-0'>{el.split("£")[2].split(" ")[4]}</p>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                )
-
-                                            })
-                                        }
-
-                                        {
-                                            conversation ? <li >
-                                                <div className={`${conversation.split("£")[0] == idOwn ? "bg-primary" : "bg-secondary"} rounded-4 p-2 px-4 m-2 text-light`}>
-                                                    <h5 className='fw-light'>conv: {conversation.split("£")[1]}</h5>
+                                        return (
+                                            <li ref={scrollRef}>
+                                                <div className={`${el.split("£")[0] == idOwn ? "bg-primary" : "bg-secondary"} rounded-4 p-2 px-4 m-2 text-light`}>
+                                                    <h5 className='fw-light'>{el.split("£")[1]}</h5>
                                                     <div className='d-flex justify-content-between'>
-                                                        <p className='m-0 text-dark'> {conversation.split("£")[0]}</p>
-                                                        <p className='m-0'>{conversation.split("£")[2].split(" ")[4]}</p>
+                                                        <p className='m-0 text-dark'> {el.split("£")[0]}</p>
+                                                        <p className='m-0'>{el.split("£")[2].split(" ")[4]}</p>
                                                     </div>
                                                 </div>
-                                            </li> : null
-                                        }
+                                            </li>
+                                        )
 
-                                    </ul>
-                                    :
-                                    <ul>
-                                        {conversation ? <li >
-                                            <div className={`${conversation.split("£")[0] == idOwn ? "bg-primary" : "bg-secondary"} rounded-4 p-2 px-4 m-2 text-light`}>
-                                                <h5 className='fw-light'>newconv: {conversation.split("£")[1]}</h5>
-                                                <div className='d-flex justify-content-between'>
-                                                    <p className='m-0 text-dark'> {conversation.split("£")[0]}</p>
-                                                    <p className='m-0'>{conversation.split("£")[2].split(" ")[4]}</p>
-                                                </div>
-                                            </div>
-                                        </li> : null}
-                                    </ul>
-                            }
+                                    })
+                                }
+                            </ul>
                         </div>
 
                 }
@@ -218,7 +207,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn }) => {
                     null
                     : <div className='mx-2 mt-3 d-flex gap-2 align-items-center'>
                         <input className='w-100 rounded-5 border p-1 px-3' type="text" value={message} onChange={(e) => { setMessage(e.target.value) }} />
-                        <i className="bi bi-arrow-right-circle-fill display-6 myChatColor myCursor" onClick={() => { sendMessage(); setMessage(""); setSended(true) }}></i>
+                        <i className="bi bi-arrow-right-circle-fill display-6 myChatColor myCursor" onClick={() => { sendMessage(); setMessage("") }}></i>
                     </div>
             }
         </div >

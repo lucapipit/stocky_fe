@@ -24,8 +24,17 @@ h6 {
 
 
 /* height */
-.myVh100 {
+.myMinVh100 {
     min-height: calc(100vh - 59px);
+}
+.myMaxVh100 {
+    max-height: calc(100vh - 59px);
+}
+.myVh100 {
+    height: calc(100vh - 61px);
+}
+.myVh70 {
+    height: calc(70vh);
 }
 
 .myMaxH300 {
@@ -95,6 +104,9 @@ h6 {
 
 .myMaxW1200 {
     max-width: 1200px !important;
+}
+.myMaxW1400 {
+    max-width: 1400px !important;
 }
 
 /* color */
