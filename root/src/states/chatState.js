@@ -4,7 +4,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
     isLoading: false,
     singleChat: [],
-    error: ""
+    error: "",
+    myChatState: false
 }
 
 export const getSingleChatFunc = createAsyncThunk(
@@ -62,7 +63,11 @@ export const updateChatFunc = createAsyncThunk(
 const chatSlice = createSlice({
     name: "chatSlice",
     initialState,
-    reducers: {},
+    reducers: {
+        goToMyChat: (state, action) => {
+            state.myChatState = {typeSubMenu: action.payload.typeSubMenu}
+        }
+    },
     extraReducers: (builder) => {
         //getSingleChatFunc
         builder.addCase(getSingleChatFunc.pending, (state) => {
@@ -103,5 +108,5 @@ const chatSlice = createSlice({
 
 })
 
-export const {} = chatSlice.actions;
+export const { goToMyChat } = chatSlice.actions;
 export default chatSlice.reducer

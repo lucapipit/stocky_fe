@@ -1,3 +1,13 @@
+/* orizontal scroll - Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 4px;
+    background: #222;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #a2a2a2;
+    border-radius: 10px;
+}
 
 /* CardPenRejAnnouncementReducedForm edit modal*/
 .announcementEditModal {

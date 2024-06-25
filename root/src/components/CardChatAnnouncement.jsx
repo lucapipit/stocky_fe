@@ -2,10 +2,13 @@ import { React, useEffect, useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
 
 const CardChatAnnouncement = ({ singleData, isLoading }) => {
+    const cardBody = {
+        borderBottom: "1px solid lightgray"
+    }
 
     return (
 
-        <div className='myMaxW700 mx-2 bg-light w-100 d-flex align-items-center mt-1 border gap-3 p-1 rounded-5 myCursor' >
+        <div className=' mx-2 w-100 d-flex align-items-center gap-3 p-1 myCursor' style={cardBody}>
             <div className='d-flex align-items-center'>
                 {
                     !singleData || isLoading ?

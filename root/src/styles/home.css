@@ -1,33 +1,11 @@
-.portale{
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-   
-    text-overflow: ellipsis;
-   
-} 
-.linkcreate{
-    text-decoration: none;
-    
-}
+.outletButton{
+    background-color: var(--yellowOrange);
+    border: none;
+   }
 
-
-.linkfree{
-    text-decoration: none;
-    
-}
-.nycd {
-    font-family: 'Montserrat', sans-serif;
-    font-weight:400;
-    text-align: center;
-    margin-bottom: 20px;
-    
-  
-    
-}
-.termbg{
-    background-image : url('https://png.pngtree.com/background/20210711/original/pngtree-original-line-style-elegant-dreamy-blue-background-blue-material-picture-image_1143636.jpg');
-    background-size: cover;
-
+.outletButton:hover{
+    background-color: var(--tiffany);
+    transition: .2s ease-in-out .1s;
 }
 
 

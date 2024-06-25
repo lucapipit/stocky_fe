@@ -9,6 +9,7 @@ import "./styles/custom.css";
 import "./styles/app.css";
 import "./styles/fonts.css";
 import "./styles/chat.css";
+import "./styles/home.css"
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

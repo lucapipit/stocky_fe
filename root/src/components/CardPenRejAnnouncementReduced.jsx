@@ -7,6 +7,7 @@ import { setIsPenRejModalEditing } from '../states/generalState';
 import productCategories from '../assets/JSON/productCategories.json';
 import "../styles/accountCardBody.css";
 import { generateScore } from '../states/annScoreState';
+import { goToMyChat } from '../states/chatState';
 
 
 
@@ -124,7 +125,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                     <div className='m-0 border w-100 rounded-5' style={{ height: "6px" }}>
                                                         <div className={`scoreBarLow rounded-5 h-100 ${score > 91 ? "scoreBarLegend" : score > 79 ? "scoreBarHigh" : score > 59 ? "scoreBarMedium" : null}`} style={{ width: `${score}%` }}></div>
                                                     </div>
-                                                    <h6 className='ms-2'>{score/10}</h6>
+                                                    <h6 className='ms-2'>{score / 10}</h6>
                                                 </div>
                                         }
                                         {
@@ -133,7 +134,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                 <div className='mb-2 d-flex flex-wrap justify-content-end gap-3 align-items-center'>
                                                     <h6 className='m-0'><i className="bi bi-eye-fill"></i> {singleData.views}</h6>
                                                     <h6 className='m-0 myFucsiaRed'><i className="bi bi-suit-heart-fill" ></i> {singleData.posClick}</h6>
-                                                    <h6 className='m-0'><i className="bi bi-chat-dots-fill text-secondary"></i> </h6>
+                                                    <h6 className='m-0'><i className="bi bi-chat-dots-fill text-secondary myCursor" onClick={() => dispatch(goToMyChat({ typeSubMenu: 2 }))}></i> </h6>
                                                 </div>
                                         }
                                     </div>

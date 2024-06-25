@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Logo from '../assets/zeus2.jpg'
+import Logo from '../assets/Graphics/mainLogo.png'
 import Container from 'react-bootstrap/Container';
 import '../styles/navbar.css'
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,11 +39,11 @@ const _Navbar = () => {
 
     return (
         <>
-            <div className='position-fixed w-100 border bg-light' expand="lg" style={{ zIndex: "9", height: "59px" }}>
+            <div className='position-fixed w-100 myBgDark' expand="lg" style={{ zIndex: "9", height: "59px"}}>
                 <Container >
                     <div className='d-flex align-items-center justify-content-between py-1' >
-                        <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} onClick={() => { dispatch(setIsHamMenuOpen(false)) }} /></Link> <i>Infodent Srl</i></div>
-                        <div className='d-flex align-items-center'>
+                        <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} onClick={() => { dispatch(setIsHamMenuOpen(false)) }} /></Link> <i>myStocker</i></div>
+                        <div className='d-flex align-items-center text-light'>
                             <div className='line-clampUserName'>{decodedTkn.email}</div>
                             <div className="myCursor"><i className={`bi ${decodedTkn.email ? "bi-person-circle" : "bi-grid-fill"} m-2`} onClick={() => dispatch(setIsHamMenuOpen(!isHamMenuOpen))} style={{ fontSize: "30px" }}></i></div>
                         </div>
@@ -56,7 +56,7 @@ const _Navbar = () => {
             {
                 isHamMenuOpen ?
 
-                    <div className='d-flex position-fixed justify-content-end hamMenu bg-light position-absolute w-100 mt-5 pt-2 top-0 ' style={{ overflowY: "scroll", height: "calc(100vh - 0px)" }} >
+                    <div className='d-flex position-fixed justify-content-end hamMenu myBgDark position-absolute w-100 mt-5 pt-2 top-0 ' style={{ overflowY: "scroll", height: "calc(100vh - 0px)" }} >
                         <div className=' w-100' style={{ minHeight: "calc(100vh - 59px)" }}>
 
                             <div className='pb-5'>

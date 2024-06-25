@@ -88,9 +88,9 @@ const _Store = () => {
 
       const myOutletData = outletData[counter];
       const cleanLikesIds = [];
-      [...myOutletData.likesArry.split(",")].map((el) => { if (+el !== dcdTkn.id && el !== "" && el !== undefined) { return cleanLikesIds.push(el) } });
+      myOutletData.likesArry && [...myOutletData.likesArry.split(",")].map((el) => { if (+el !== dcdTkn.id && el !== "" && el !== undefined) { return cleanLikesIds.push(el) } });
 
-      dispatch(updateAnnouncementFunc({ payload: { ...myOutletData, views: outletData[counter].views + 1, posClick: outletData[counter].posClick + 1, likesArry: cleanLikesIds }, token: localStorage.getItem("token") }))
+      dispatch(updateAnnouncementFunc({ payload: { ...myOutletData, views: outletData[counter].views + 1, posClick: outletData[counter].posClick + 1, likesArry: [...cleanLikesIds, dcdTkn.id] }, token: localStorage.getItem("token") }))
         .then((res) => {
           if (res.payload.statusCode === 200) {
 
@@ -216,10 +216,10 @@ const _Store = () => {
   return (
     <>
       <_Navbar />
-      <div className='myMinVh100 d-flex flex-column align-items-center pb-5' >
+      <div className='myMinVh100 d-flex flex-column align-items-center pb-5 mb-5' >
         {
           outletData ?
-            <div className='w-100 d-flex justify-content-center align-items-center bg-dark mb-3 py-1'>
+            <div className='position-fixed w-100 d-flex justify-content-center align-items-center myBgDark mb-3 py-1'>
               <div className='w-100 d-flex justify-content-between myMaxW700 '>
                 <i className="bi bi-trash3-fill myIconLg text-light myCursor ms-4" onClick={() => iDontCare()}></i>
                 <i className="bi bi-heart-fill myIconLg myFucsiaRed myCursor me-4" onClick={() => iLikeIt()}></i>
@@ -228,7 +228,7 @@ const _Store = () => {
             : null
         }
         {error ? <div className='mb-3 bg-danger text-light p-3 px-4'>{error}</div> : null}
-        <div className='d-flex justify-content-center mb-3'>
+        <div className='d-flex justify-content-center mt-5 pt-5 mb-3'>
           {
             outletData && outletData.map((el, index) => {
               return <div className={`border px-1 ${index === counter ? "bg-info" : index < counter ? "bg-dark" : "bg-secondary"} rounded-5`} style={{ height: "10px", margin: "0 1px" }} ></div>

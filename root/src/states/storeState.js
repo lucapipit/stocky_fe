@@ -278,7 +278,7 @@ const sliceStore = createSlice({
             state.isLoading = false;
             state.error = " server error"
         })
-        //announcementsById
+        //announcementsByIdFunc
         builder.addCase(getAnnouncementsByIdFunc.pending, (state) => {
             state.isLoading = true;
         })

@@ -27,21 +27,25 @@ const _Account = () => {
   const isLoading = useSelector((state) => state.myStore.isLoading);
   const loading = useSelector((state) => state.signin.loading);
   const outletData = useSelector((state) => state.myStore.outletData);
+  const myChatState = useSelector((state) => state.chat.myChatState);
   const [dcdTkn, setDcdTkn] = useState("");
   const [isResended, setIsResended] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [typeOfView, setTypeOfView] = useState(0);
   const [typeSubMenu, setTypeSubMenu] = useState(2);
+  const [isFavouritesChat, setIsFavouritesChat] = useState(true);
+  const [width, setWidth] = useState(window.innerWidth);
 
   const [openChat, setOpenChat] = useState(false);
   const [idChat, setIdChat] = useState(null);
 
   const [isEditingAnagraphic, setIsEditingAnagraphic] = useState(false);
 
+  const token = localStorage.getItem("token");
+
 
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
 
     if (token) {
       const tkn = jwtDecode(token, process.env.JWT_SECRET);
@@ -64,6 +68,7 @@ const _Account = () => {
     }
   }, [])
 
+
   const resendVerification = () => {
     dispatch(verifyMailFunc({ email: userData[0].email, companyName: userData[0].companyName, verifyCode: `${userData[0].id}-${userData[0].verifyCode}` }))
       .then((res) => {
@@ -81,6 +86,10 @@ const _Account = () => {
     }, "30000")
   }
 
+
+  useEffect(() => {
+    setTypeSubMenu(myChatState.typeSubMenu)
+  }, [myChatState])
 
   return (
     <div>
@@ -204,7 +213,7 @@ const _Account = () => {
 
             {
               typeSubMenu === 0 ?
-                <div>
+                <div>{/* FAVOURITES */}
                   <div className='mb-3 text-center'> <span className='myBgFucsiaRed text-light display-6 fw-light px-4 py-1 rounded-5'>My Favourites</span></div>
                   <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
                     {
@@ -215,7 +224,7 @@ const _Account = () => {
                   </div>
                 </div>
                 : typeSubMenu === 1 ?
-                  <div>
+                  <div> {/* ANNOUNCEMENT */}
                     {
                       allUserAnnouncements && allUserAnnouncements.length !== 0 ?
                         <div>
@@ -246,28 +255,127 @@ const _Account = () => {
                     }
                   </div>
                   :
-                  <div>
+                  <div>{/* CHAT */}
                     {!openChat ? <div className='mb-3 text-center'> <span className='myBgChat text-light display-6 fw-light px-4 py-1 rounded-5'>Chat</span></div> : null}
-                    <div className='d-flex align-items-center flex-column'>
-                      {
 
-                        outletData && outletData.map((el) => {
+                    <div className='d-flex justify-content-center gap-3 my-5'>
+                      <span className={`${isFavouritesChat ? "myBgFucsiaRed" : "bg-secondary"}  text-light myCursor p-1 px-3 rounded-5`} onClick={() => setIsFavouritesChat(true)}>Favourites</span>
+                      <span className={`${!isFavouritesChat ? "myBgPrimary" : "bg-secondary"}  text-light myCursor p-1 px-3 rounded-5`} onClick={() => setIsFavouritesChat(false)}>My Announcements</span>
+                    </div>
+                    <hr className='mb-0' />
 
-                          if (openChat && el.id === idChat) {
-                            return <div className=' position-relative bg-light myMaxW1200 border d-flex justify-content-center' >
-                              <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
-                              <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} />
-                            </div>
-                          } if (!openChat) {
-                            return <div className='w-100 d-flex justify-content-center' onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
-                              <CardChatAnnouncement singleData={el} isLoading={isLoading} />
-                            </div>
+                    {
+                      width < 1100 ? //CHAT MOBILE VERSION
+                        <div className='d-flex myVhChat'>
+                          {
+                            isFavouritesChat ?
+                              <div className='d-flex align-items-center flex-column w-100'>
+                                {
+                                  outletData && outletData.map((el) => {//FAVOURITE CHAT
+                                    if (openChat && el.id === idChat) {
+                                      return <div className=' position-relative bg-light border d-flex justify-content-center' >
+                                        <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
+                                        <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} width={width} />
+                                      </div>
+                                    } if (!openChat) {
+                                      return <div className='w-100 d-flex justify-content-center' onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                                        <CardChatAnnouncement singleData={el} isLoading={isLoading} />
+                                      </div>
+                                    }
+                                  })
+                                }
+                              </div>
+                              :
+                              <div className='d-flex align-items-center flex-column w-100'>
+                                {
+                                  allUserAnnouncements && allUserAnnouncements.map((el) => {//ANNOUNCEMENT CHAT
+                                    if (openChat && el.id === idChat) {
+                                      return <div className=' position-relative bg-light border d-flex justify-content-center' >
+                                        <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
+                                        <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} width={width} />
+                                      </div>
+                                    } if (!openChat) {
+                                      return <div className='w-100 d-flex justify-content-center' onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                                        <CardChatAnnouncement singleData={el} isLoading={isLoading} />
+                                      </div>
+                                    }
+                                  })
+                                }
+                              </div>
                           }
 
-                        })
+                        </div>
+                        : null
+                    }
 
-                      }
-                    </div>
+
+                    {
+                      width >= 1100 ? //CHAT DESKTOP VERSION
+                        <div>
+                          {
+                            isFavouritesChat ?
+                              <>
+                                <div className='d-flex myVhChat'>
+                                  <div className='d-flex align-items-center flex-column myOverflowY' style={{ minWidth: "400px", maxWidth: "700px" }}>
+                                    {
+                                      outletData && outletData.map((el) => {//FAVOURITE CHAT
+
+                                        return <div className={`w-100 d-flex justify-content-center ${idChat === el.id ? "myBgLightGray" : ""}`} onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                                          <CardChatAnnouncement singleData={el} isLoading={isLoading} />
+                                        </div>
+
+                                      })
+                                    }
+                                  </div>
+                                  <div className='w-100'>
+                                    {
+                                      outletData && outletData.map((el) => {
+                                        if (openChat && el.id === idChat) {
+                                          return <div className=' position-relative bg-light border d-flex justify-content-center' >
+                                            <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
+                                            <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} width={width} />
+                                          </div>
+                                        }
+                                      })
+                                    }
+                                  </div>
+                                </div>
+                              </>
+                              :
+                              <>
+                                <div className='d-flex myVhChat'>
+                                  <div className='d-flex align-items-center flex-column myOverflowY' style={{ minWidth: "400px", maxWidth: "700px" }}>
+                                    {
+                                      allUserAnnouncements && allUserAnnouncements.map((el) => {//ANNOUNCEMENT CHAT
+
+                                        return <div className={`w-100 d-flex justify-content-center ${idChat === el.id ? "myBgLightGray" : ""}`} onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                                          <CardChatAnnouncement singleData={el} isLoading={isLoading} />
+                                        </div>
+
+                                      })
+                                    }
+                                  </div>
+                                  <div className='w-100'>
+                                    {
+                                      allUserAnnouncements && allUserAnnouncements.map((el) => {
+                                        if (openChat && el.id === idChat) {
+                                          return <div className=' position-relative bg-light border d-flex justify-content-center' >
+                                            <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
+                                            <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} width={width} />
+                                          </div>
+                                        }
+                                      })
+                                    }
+                                  </div>
+                                </div>
+                              </>
+                          }
+                        </div>
+                        : null
+                    }
+
+
+
                   </div>
             }
 
