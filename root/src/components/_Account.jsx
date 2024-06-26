@@ -61,7 +61,7 @@ const _Account = () => {
         });
       dispatch(getUserOutletFunc({ idOwner: tkn.id, token: token }))
         .then((res) => {
-          if (res.payload.data.length > 0 && res.payload.data[0].outletLikes) {
+          if (res.payload.status !== 408 && res.payload.data.length > 0 && res.payload.data[0].outletLikes) {
             dispatch(getAnnouncementsByIdFunc({ idSet: res.payload.data[0].outletLikes, token: token }))
           }
         })

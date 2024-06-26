@@ -41,7 +41,7 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
                             <div className='d-flex justify-content-center'>
                                 {
                                     singleData[0].pics.split(",").map((el, index) => {
-                                        return <div className={`border px-2 ${index === picsNum ? "bg-info" : "bg-secondary"} rounded-5 myCursor`} style={{ height: "13px", margin: "0 1px" }} onClick={() => setPicsNum(index)}></div>
+                                        return <div key={`cardannouncement1-${index}`} className={`border px-2 ${index === picsNum ? "bg-info" : "bg-secondary"} rounded-5 myCursor`} style={{ height: "13px", margin: "0 1px" }} onClick={() => setPicsNum(index)}></div>
                                     })
                                 }
                             </div>
@@ -118,8 +118,8 @@ const CardAnnouncement = ({ singleData, isLoading }) => {
                             <div>
                                 <ul className='mt-3'>
                                     {
-                                        singleData[0].techDetail && singleData[0].techDetail.split(",").map((el) => {
-                                            return <li>{el.split("£")[1]}</li>
+                                        singleData[0].techDetail && singleData[0].techDetail.split(",").map((el, index) => {
+                                            return <li key={`cardannouncement2-${index}`}>{el.split("£")[1]}</li>
                                         })
                                     }
                                 </ul>

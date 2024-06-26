@@ -5,7 +5,8 @@ const initialState = {
     isLoading: false,
     singleChat: [],
     error: "",
-    myChatState: false
+    myChatState: false,
+    usersById: []
 }
 
 export const getSingleChatFunc = createAsyncThunk(
@@ -60,6 +61,25 @@ export const updateChatFunc = createAsyncThunk(
     }
 );
 
+export const allUsersByIdSetFunc = createAsyncThunk(
+    "allUsersByIdSetFunc",
+    async (input) => {
+        const {idSet, token} = input;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/allusersbyidset/${idSet}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            return await response.json()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+)
+
 const chatSlice = createSlice({
     name: "chatSlice",
     initialState,
@@ -100,6 +120,18 @@ const chatSlice = createSlice({
             state.isLoading = false
         });
         builder.addCase(updateChatFunc.rejected, (state) => {
+            state.isLoading = false;
+            state.error = "server error"
+        });
+        //allUsersByIdSetFunc
+        builder.addCase(allUsersByIdSetFunc.pending, (state) => {
+            state.isLoading = true
+        });
+        builder.addCase(allUsersByIdSetFunc.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.usersById = action.payload.data
+        });
+        builder.addCase(allUsersByIdSetFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = "server error"
         });

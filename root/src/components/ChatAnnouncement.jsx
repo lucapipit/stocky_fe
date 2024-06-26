@@ -2,8 +2,8 @@ import { React, useEffect, useRef, useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
-import { createChatFunc, updateChatFunc, getSingleChatFunc } from '../states/chatState';
-
+import { createChatFunc, updateChatFunc, getSingleChatFunc, allUsersByIdSetFunc } from '../states/chatState';
+import CardChatUser from './CardChatUser';
 const socket = io.connect("http://localhost:5051");
 
 
@@ -27,7 +27,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
             `${singleData.idOwner}$${singleData.id}$${idOwn}`
     );
     const [isMyAnnouncement, setIsMyOwnAnnouncement] = useState(typeof (room) === "object" ? true : false);
-    const singleChat = useSelector((state) => state.chat.singleChat);
+    const usersById = useSelector((state) => state.chat.usersById);
     const scrollRef = useRef();
 
     const dispatch = useDispatch();
@@ -40,7 +40,6 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
     }
     const sendMessage = async () => {
         const currentTime = new Date();
-
         const mssg = {
             idAnn: singleData.id,
             idOwner: singleData.idOwner,
@@ -50,9 +49,6 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
             ownerCheck: 0,
             userCheck: 0
         }
-
-
-
         socket.emit("send_message", mssg);
         if (typeof (room) !== "object") {
             dispatch(getSingleChatFunc(room))
@@ -97,7 +93,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
 
 
     useEffect(() => {
-        if (typeof (room) !== "object"/*  && !chatAlreadyExists */) {
+        if (typeof (room) !== "object") {
             dispatch(getSingleChatFunc(room))
                 .then((res) => {
                     if (res.payload.statusCode === 200) {
@@ -106,8 +102,13 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                     }
                 })
         }
-
     }, [room])
+
+    useEffect(() => {
+        if (typeof (room) === "object") {
+            dispatch(allUsersByIdSetFunc({ idSet: singleData.likesArry, token: localStorage.getItem("token") }))
+        }
+    }, [])
 
     return (
         <div className='myVhChat' style={{ width: `${width < 1100 ? "99vw" : "100%"}` }}>
@@ -160,7 +161,16 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                 isMyAnnouncement && typeof (room) !== "object" ?
                     <div className='position-relative d-flex justify-content-center pt-1'>
                         <div className='pb-3 d-flex align-items-center flex-column position-absolute'>
-                            <span className='text-light px-3 p-1 rounded-5 bg-dark'>User n° {room.split("$")[2]}</span>
+                            {
+                                usersById && usersById.map((el) => {
+                                    if (el.id == room.split("$")[2])
+                                        return (
+                                            <div className='bg-light pe-3' onClick={() => setRoom(`${singleData.idOwner}$${singleData.id}$${el.id}`)}>
+                                                <CardChatUser user={el} />
+                                            </div>
+                                        )
+                                })
+                            }
                         </div>
                     </div>
                     : null
@@ -168,8 +178,12 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
             <div className={`w-100 myBgWhite p-3 myOverflowY myVh70`}>
                 {
                     typeof (room) === "object" ?
-                        room.map((el) => {
-                            return <div className='border px-3 py-1 rounded-5 mt-1 bg-dark text-light myCursor' onClick={() => setRoom(el)}>{el.split("$")[2]}</div>
+                        usersById && usersById.map((el) => {
+                            return (
+                                <div className='border mt-1 myCursor' onClick={() => setRoom(`${singleData.idOwner}$${singleData.id}$${el.id}`)}>
+                                    <CardChatUser user={el} />
+                                </div>
+                            )
                         })
                         :
                         room === "nolikes" ?
@@ -178,7 +192,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                                 <h3 className='fw-light'>This announcement has no Likes yet!</h3>
                             </div>
                             :
-                            <div>
+                            <div className='pt-5 mt-3'>
                                 <ul style={{ listStyle: "none" }}>
                                     {
                                         conversation && conversation.map((el) => {

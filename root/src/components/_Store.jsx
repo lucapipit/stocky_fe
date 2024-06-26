@@ -149,7 +149,7 @@ const _Store = () => {
       const tkn = jwtDecode(token, process.env.JWT_SECRET);
       setDcdTkn(tkn)
     }
-  })
+  }, [])
 
 
   useEffect(() => { // step 1
@@ -231,7 +231,7 @@ const _Store = () => {
         <div className='d-flex justify-content-center mt-5 pt-5 mb-3'>
           {
             outletData && outletData.map((el, index) => {
-              return <div className={`border px-1 ${index === counter ? "bg-info" : index < counter ? "bg-dark" : "bg-secondary"} rounded-5`} style={{ height: "10px", margin: "0 1px" }} ></div>
+              return <div key={`store${index}`} className={`border px-1 ${index === counter ? "bg-info" : index < counter ? "bg-dark" : "bg-secondary"} rounded-5`} style={{ height: "10px", margin: "0 1px" }} ></div>
             })
           }
         </div>
