@@ -4,6 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { createChatFunc, updateChatFunc, getSingleChatFunc, allUsersByIdSetFunc } from '../states/chatState';
 import CardChatUser from './CardChatUser';
+import escapeString from '../functions/escapeString';
+import commaReplacer from '../functions/commaReplacer';
+import commaInserter from '../functions/commaInserter';
+
+
 const socket = io.connect("http://localhost:5051");
 
 
@@ -14,8 +19,6 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
     const [message, setMessage] = useState("");
     const [receivedMessage, setReceivedMessage] = useState("");
     const [sendededMessage, setSendedMessage] = useState("");
-    const [chatAlreadyExists, setChatAlreadyExists] = useState(false);
-    const [sended, setSended] = useState(false);
     const [room, setRoom] = useState(//capisce se l'utente loggato è proprietario dell'annuncio e crea una room per ogni utente che ha messo like
         idOwn === singleData.idOwner ?
             singleData.likesArry ?
@@ -32,12 +35,21 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
 
     const dispatch = useDispatch();
 
+    const initialRoomSet = (idOwn === singleData.idOwner ? singleData.likesArry ? singleData.likesArry.split(",").map((el) => { return `${singleData.idOwner}$${singleData.id}$${el}` }) : "nolikes" : `${singleData.idOwner}$${singleData.id}$${idOwn}`)
 
-    const joinRoom = () => {
-        if (room !== "") {
+
+    const joinRoom = async () => {
+        if (typeof (room) !== "object" && room !== "") {
             socket.emit("join_room", room)
         }
-    }
+    };
+
+    const leaveRoom = async () => {
+        if (typeof (room) !== "object" && room !== "") {
+            socket.emit("leave_room", room)
+        }
+    };
+
     const sendMessage = async () => {
         const currentTime = new Date();
         const mssg = {
@@ -53,17 +65,17 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
         if (typeof (room) !== "object") {
             dispatch(getSingleChatFunc(room))
                 .then((res) => {
+                    const isChecked = isMyAnnouncement ? { ownerCheck: 1, userCheck: 0 } : { ownerCheck: 0, userCheck: 1 }
                     if (res.payload.statusCode === 200) {
-                        dispatch(updateChatFunc({ ...res.payload.data[0], messages: [res.payload.data[0].messages, mssg.messages] }))
+                        dispatch(updateChatFunc({ ...res.payload.data[0], messages: [escapeString(res.payload.data[0].messages), escapeString(commaReplacer(mssg.messages))], ...isChecked }))
                             .then((res) => {
                                 if (res.payload.statusCode === 200) { setSendedMessage(mssg.messages); }
                             })
                     } else {
-                        dispatch(createChatFunc(mssg))
+                        dispatch(createChatFunc({ ...mssg, messages: escapeString(commaReplacer(mssg.messages)), ...isChecked }))
                             .then((res) => {
                                 if (res.payload.statusCode === 200) {
                                     setSendedMessage(mssg.messages);
-                                    setChatAlreadyExists(true);
                                 }
                             })
                     }
@@ -72,14 +84,23 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
     }
 
     useEffect(() => {
-        joinRoom();
-        socket.on("receive_message", async (data) => {
-            setReceivedMessage(data.messages)
-        })
-    }, [socket]);
+        return () => {
+            leaveRoom(room)
+        };
+    }, [room])
 
     useEffect(() => {
-        receivedMessage && setConversation([...conversation, receivedMessage])
+        joinRoom();
+        socket.on("receive_message", async (data) => {
+            console.log(data.messages);
+            setReceivedMessage(data.messages)
+        })
+    }, [socket, room]);
+
+    useEffect(() => {
+        const isChecked = isMyAnnouncement ? { ownerCheck: 1 } : { userCheck: 1 }
+        receivedMessage && setConversation([...conversation, receivedMessage]);
+        receivedMessage && dispatch(updateChatFunc(isChecked))
     }, [receivedMessage]);
 
     useEffect(() => {
@@ -91,13 +112,11 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
     }, [conversation])
 
 
-
     useEffect(() => {
         if (typeof (room) !== "object") {
             dispatch(getSingleChatFunc(room))
                 .then((res) => {
                     if (res.payload.statusCode === 200) {
-                        setChatAlreadyExists(true);
                         setConversation(res.payload.data[0].messages.split(","))
                     }
                 })
@@ -165,8 +184,11 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                                 usersById && usersById.map((el) => {
                                     if (el.id == room.split("$")[2])
                                         return (
-                                            <div className='bg-light pe-3' onClick={() => setRoom(`${singleData.idOwner}$${singleData.id}$${el.id}`)}>
-                                                <CardChatUser user={el} />
+                                            <div className='d-flex gap-2 align-items-center myCursor' onClick={() => setRoom(initialRoomSet)}>
+                                                <i className="bi bi-chevron-left display-6"></i>
+                                                <div className='bg-light pe-3' onClick={() => setRoom(`${singleData.idOwner}$${singleData.id}$${el.id}`)}>
+                                                    <CardChatUser user={el} />
+                                                </div>
                                             </div>
                                         )
                                 })
@@ -175,12 +197,13 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                     </div>
                     : null
             }
+
             <div className={`w-100 myBgWhite p-3 myOverflowY myVh70`}>
                 {
                     typeof (room) === "object" ?
                         usersById && usersById.map((el) => {
                             return (
-                                <div className='border mt-1 myCursor' onClick={() => setRoom(`${singleData.idOwner}$${singleData.id}$${el.id}`)}>
+                                <div className='border bg-light mt-1 myCursor' onClick={() => setRoom(`${singleData.idOwner}$${singleData.id}$${el.id}`)}>
                                     <CardChatUser user={el} />
                                 </div>
                             )
@@ -193,15 +216,15 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                             </div>
                             :
                             <div className='pt-5 mt-3'>
-                                <ul style={{ listStyle: "none" }}>
+                                <ul className='p-0' style={{ listStyle: "none" }}>
                                     {
                                         conversation && conversation.map((el) => {
 
                                             return (
-                                                <li ref={scrollRef}>
-                                                    <div className={`${el.split("£")[0] == idOwn ? "bg-primary" : "bg-secondary"} rounded-4 p-2 px-4 m-2 text-light`}>
-                                                        <h5 className='fw-light'>{el.split("£")[1]}</h5>
-                                                        <div className='d-flex justify-content-between'>
+                                                <li className={`d-flex justify-content-${el.split("£")[0] == idOwn ? "start" : "end"}`} ref={scrollRef}>
+                                                    <div className={`${el.split("£")[0] == idOwn ? "bg-primary" : "bg-secondary"} rounded-4 p-3 px-4 m-2 text-light`}>
+                                                        <h5 className='fw-light'>{commaInserter(el.split("£")[1])}</h5>
+                                                        <div className='d-flex justify-content-between gap-4'>
                                                             <p className='m-0 text-dark'> {el.split("£")[0]}</p>
                                                             <p className='m-0'>{el.split("£")[2].split(" ")[4]}</p>
                                                         </div>
@@ -222,7 +245,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                     null
                     : <div className='mx-2 mt-3 d-flex gap-2 align-items-center'>
                         <input className='w-100 rounded-5 border p-1 px-3' type="text" value={message} onChange={(e) => { setMessage(e.target.value) }} />
-                        <i className="bi bi-arrow-right-circle-fill display-6 myChatColor myCursor" onClick={() => { sendMessage(); setMessage("") }}></i>
+                        {message ? <i className="bi bi-arrow-right-circle-fill display-6 myChatColor myCursor" onClick={() => { sendMessage(); setMessage("") }}></i> : null}
                     </div>
             }
         </div >

@@ -68,6 +68,10 @@ h6 {
 }
 
 /* max width */
+.myMaxW65 {
+    max-width: 65px !important;
+}
+
 .myMaxW80 {
     max-width: 80px !important;
 }

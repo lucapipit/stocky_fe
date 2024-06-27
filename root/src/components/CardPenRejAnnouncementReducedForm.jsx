@@ -6,7 +6,7 @@ import { deleteFileFunc } from '../states/uploadFileState';
 import { setIsPenRejModalEditing } from '../states/generalState';
 import Resizer from "react-image-file-resizer";
 import Spinner from 'react-bootstrap/Spinner';
-import { escapeString } from '../functions/general';
+import { escapeString } from '../functions/escapeString';
 import productCategories from '../assets/JSON/productCategories.json';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { setCategoriesProduct, delCategoriesProduct, clearCategoriesProduct } from '../states/generalState'

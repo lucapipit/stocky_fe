@@ -4,7 +4,7 @@ const CardChatUser = ({ user }) => {
     
     return (
         <div className='d-flex gap-2'>
-            <div className='myMaxW100 p-2 bg-dark display-6' >
+            <div className='myMaxW65 d-flex justify-content-center p-2 bg-dark display-6' >
                 <div className={`${user.manufacturer ? "text-info" : "text-success"} py-2 px-2`} >
                     <div className='fw-bold'>{user.manufacturer ? "M" : "D"}</div>
                 </div>

@@ -6,7 +6,8 @@ const initialState = {
     singleChat: [],
     error: "",
     myChatState: false,
-    usersById: []
+    usersById: [],
+    allChatsNotify: []
 }
 
 export const getSingleChatFunc = createAsyncThunk(
@@ -22,6 +23,21 @@ export const getSingleChatFunc = createAsyncThunk(
         }
     }
 );
+
+export const getAllChatsNotifyFunc = createAsyncThunk(
+    "getAllChatsNotifyFunc",
+    async (input) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/getallchatsnotify/${input}`, {
+                method: "GET"
+            });
+            return await response.json()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+);
+
 
 export const createChatFunc = createAsyncThunk(
     "createChatFunc",
@@ -98,6 +114,18 @@ const chatSlice = createSlice({
             state.singleChat = action.payload.data
         });
         builder.addCase(getSingleChatFunc.rejected, (state) => {
+            state.isLoading = false;
+            state.error = "server error"
+        });
+        //getAllChatsNotifyFunc
+        builder.addCase(getAllChatsNotifyFunc.pending, (state) => {
+            state.isLoading = true
+        });
+        builder.addCase(getAllChatsNotifyFunc.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.allChatsNotify = action.payload.data
+        });
+        builder.addCase(getAllChatsNotifyFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = "server error"
         });
