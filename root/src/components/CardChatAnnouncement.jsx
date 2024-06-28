@@ -2,33 +2,35 @@ import { React, useEffect, useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { useSelector } from 'react-redux';
 
+
 const CardChatAnnouncement = ({ idOwn, singleData, isLoading }) => {
     const cardBody = {
         borderBottom: "1px solid lightgray"
     }
+    
     const [notify, setNotify] = useState(false);
     const allChatsNotify = useSelector((state) => state.chat.allChatsNotify);
+    const notifyCount = useSelector((state) => state.chat.notifyCount);
     const [isMyAnnouncement, setIsMyAnnouncement] = useState(idOwn === singleData.idOwner ? true : false)
 
     useEffect(() => {
+        
         allChatsNotify && allChatsNotify.map((el) => {
             if(isMyAnnouncement){
                 if (el.idAnn === singleData.id && !el.ownerCheck) {
-                    console.log(isMyAnnouncement, "idAnn: " + el.idAnn, "idOwn: " + idOwn, el.ownerCheck);
                     setNotify(true)
                 }
             }else{
                 if (el.idAnn === singleData.id && !el.userCheck) {
-                    console.log(isMyAnnouncement, "idAnn: " + el.idAnn, "idOwn: " + idOwn, el.userCheck);
                     setNotify(true)
                 }
             }
         })
-    }, [allChatsNotify])
+    }, [allChatsNotify, notifyCount])
 
     return (
 
-        <div className=' mx-2 w-100 d-flex align-items-center gap-3 p-1 myCursor' style={cardBody}>
+        <div className={`px-3 w-100 d-flex align-items-center gap-3 p-1 myCursor ${notify ? "myBgChatNotify":"myBgChatNotifyInherit"}`} style={cardBody}>
             <div className='d-flex align-items-center'>
                 {
                     !singleData || isLoading ?

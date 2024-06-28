@@ -249,7 +249,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                         <hr />
                                                         <div className='d-flex gap-2 flex-wrap myFontSize12px'>
                                                             <span className='px-3 py-1 text-dark'>Created at: <i className='fw-bold'>{singleData.dataIns.split("T")[0]}</i></span>
-                                                            <span className='px-3 py-1 text-dark'><i class="bi bi-pencil-fill me-2"></i> <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
+                                                            <span className='px-3 py-1 text-dark'><i className="bi bi-pencil-fill me-2"></i> <i className='fw-bold'>{singleData.dataMod.split("T")[0]}</i></span>
                                                             {singleData.dataApproved ? <span className='px-3 py-1 text-dark'><i className="bi bi-check-circle-fill me-2 text-success"></i> <i className='fw-bold'>{singleData.dataApproved.split("T")[0]}</i></span> : null}
                                                             {singleData.dataRejected ? <span className='px-3 py-1 text-dark'><i className="bi bi-ban me-2 text-danger"></i> <i className='fw-bold'>{singleData.dataRejected.split("T")[0]}</i></span> : null}
                                                         </div>

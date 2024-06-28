@@ -216,7 +216,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                     <div className='d-flex justify-content-center flex-wrap gap-5'>
 
                         <div className='position-absolute top-0 end-0 display-6 p-4 pt-4 myCursor'>
-                            <i class="bi bi-x-lg" onClick={() => { document.body.style.overflow = ''; dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId"); dispatch(clearCategoriesProduct()) }}></i>
+                            <i className="bi bi-x-lg" onClick={() => { document.body.style.overflow = ''; dispatch(setIsPenRejModalEditing(!isPenRejModalEditing)); localStorage.removeItem("editId"); dispatch(clearCategoriesProduct()) }}></i>
                         </div>
 
                         <div className='position-relative'>

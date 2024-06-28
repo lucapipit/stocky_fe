@@ -1,9 +1,20 @@
-import React from 'react'
+import {React, useEffect, useState} from 'react';
+import { useSelector } from 'react-redux';
 
-const CardChatUser = ({ user }) => {
-    
+const CardChatUser = ({ user, bgNotify }) => {
+    const allChatsNotify = useSelector((state) => state.chat.allChatsNotify);
+    const notifyCount = useSelector((state) => state.chat.notifyCount);
+    const [notify, setNotify] = useState(false);
+    useEffect(() => {
+        allChatsNotify && allChatsNotify.map((el) => {
+            if (el.idUser === user.id && !el.ownerCheck) {
+                setNotify(true)
+            }
+        })
+    }, [allChatsNotify, notifyCount])
+
     return (
-        <div className='d-flex gap-2'>
+        <div className={`d-flex gap-2 ${ notify && bgNotify ? "myBgChatNotify":""}`}>
             <div className='myMaxW65 d-flex justify-content-center p-2 bg-dark display-6' >
                 <div className={`${user.manufacturer ? "text-info" : "text-success"} py-2 px-2`} >
                     <div className='fw-bold'>{user.manufacturer ? "M" : "D"}</div>

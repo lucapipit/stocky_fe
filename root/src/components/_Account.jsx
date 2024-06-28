@@ -16,7 +16,7 @@ import { getUserOutletFunc } from '../states/outletStore';
 import CardFavouritesAnnouncement from './CardFavouritesAnnouncement';
 import CardChatAnnouncement from './CardChatAnnouncement';
 import ChatAnnouncement from './ChatAnnouncement';
-import { getAllChatsNotifyFunc } from '../states/chatState';
+import { getAllChatsNotifyByIdOwnerUserFunc, areThereNotify } from '../states/chatState';
 
 
 const _Account = () => {
@@ -36,10 +36,8 @@ const _Account = () => {
   const [typeSubMenu, setTypeSubMenu] = useState(0);
   const [isFavouritesChat, setIsFavouritesChat] = useState(true);
   const [width, setWidth] = useState(window.innerWidth);
-
   const [openChat, setOpenChat] = useState(false);
   const [idChat, setIdChat] = useState(null);
-
   const [isEditingAnagraphic, setIsEditingAnagraphic] = useState(false);
   const chatRef = useRef()
 
@@ -53,6 +51,12 @@ const _Account = () => {
       const tkn = jwtDecode(token, process.env.JWT_SECRET);
       setDcdTkn(tkn)
       dispatch(getSingleUserFunc({ id: tkn.id, token: token }));
+      dispatch(getAllChatsNotifyByIdOwnerUserFunc({ idOwnerUser: tkn.id, token: token }))
+        .then((res) => {
+          if (res.payload.statusCode === 200 && res.payload.data.length > 0) {
+            dispatch(areThereNotify({chats: res.payload.data, idOwner: tkn.id}))
+          }
+        })
       dispatch(getAllAnnouncementsByIdOwnerFunc({ idOwner: tkn.id, token: token }))
         .then((res) => {
           if (res.payload.statusCode === 408) {
@@ -63,9 +67,8 @@ const _Account = () => {
         });
       dispatch(getUserOutletFunc({ idOwner: tkn.id, token: token }))
         .then((res) => {
-          if (res.payload.status !== 408 && res.payload.data.length > 0 && res.payload.data[0].outletLikes) {
+          if (res.payload.statusCode !== 408 && res.payload.data.length > 0 && res.payload.data[0].outletLikes) {
             dispatch(getAnnouncementsByIdFunc({ idSet: res.payload.data[0].outletLikes, token: token }));
-            dispatch(getAllChatsNotifyFunc(res.payload.data[0].outletLikes))
           }
         })
     }
@@ -94,7 +97,7 @@ const _Account = () => {
   }, [myChatState]);
 
   useEffect(() => {
-    if(openChat || typeSubMenu === 2){
+    if (openChat || typeSubMenu === 2) {
       chatRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [openChat, typeSubMenu])
@@ -158,7 +161,7 @@ const _Account = () => {
                           loading ?
                             <i>Sending <Spinner className='ms-1' animation="grow" size="sm" /></i>
                             : isResended && !errorMessage ?
-                              <i class="bi bi-send-check-fill text-success"> Resended</i>
+                              <i className="bi bi-send-check-fill text-success"> Resended</i>
                               :
                               !isResended && !errorMessage ?
                                 <i className="bi bi-send-fill"> Resend</i>
@@ -202,16 +205,16 @@ const _Account = () => {
               }
               <div className='d-flex justify-content-center align-items-start gap-5 mt-5 pb-4'>
                 <div className='d-flex flex-column align-items-center position-relative'>
-                  <i class={`bi bi-heart-fill myFucsiaRed display-6 myCursor`} onClick={() => setTypeSubMenu(0)}></i>
-                  {typeSubMenu === 0 ? <i class="bi bi-caret-up-fill display-5 myFucsiaRed position-absolute favourites-announcementArrow" ></i> : null}
+                  <i className={`bi bi-heart-fill myFucsiaRed display-6 myCursor`} onClick={() => setTypeSubMenu(0)}></i>
+                  {typeSubMenu === 0 ? <i className="bi bi-caret-up-fill display-5 myFucsiaRed position-absolute favourites-announcementArrow" ></i> : null}
                 </div>
                 <div className='d-flex flex-column align-items-center position-relative'>
-                  <i class={`bi bi-chat-heart-fill display-6 myChatColor myCursor`} onClick={() => setTypeSubMenu(2)}></i>
-                  {typeSubMenu === 2 ? <i class="bi bi-caret-up-fill display-5 myChatColor position-absolute favourites-announcementArrow" ></i> : null}
+                  <i className={`bi bi-chat-heart-fill display-6 myChatColor myCursor`} onClick={() => setTypeSubMenu(2)}></i>
+                  {typeSubMenu === 2 ? <i className="bi bi-caret-up-fill display-5 myChatColor position-absolute favourites-announcementArrow" ></i> : null}
                 </div>
                 <div className='d-flex flex-column align-items-center position-relative'>
-                  <i class={`bi bi-megaphone-fill display-6 myPrimaryColor myCursor`} onClick={() => setTypeSubMenu(1)}></i>
-                  {typeSubMenu === 1 ? <i class="bi bi-caret-up-fill display-5 myPrimaryColor position-absolute favourites-announcementArrow" ></i> : null}
+                  <i className={`bi bi-megaphone-fill display-6 myPrimaryColor myCursor`} onClick={() => setTypeSubMenu(1)}></i>
+                  {typeSubMenu === 1 ? <i className="bi bi-caret-up-fill display-5 myPrimaryColor position-absolute favourites-announcementArrow" ></i> : null}
                 </div>
               </div>
 

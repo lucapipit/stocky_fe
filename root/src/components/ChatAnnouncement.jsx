@@ -7,7 +7,8 @@ import CardChatUser from './CardChatUser';
 import escapeString from '../functions/escapeString';
 import commaReplacer from '../functions/commaReplacer';
 import commaInserter from '../functions/commaInserter';
-
+import { getAllChatsNotifyByIdOwnerUserFunc, areThereNotify } from '../states/chatState';
+import { jwtDecode } from 'jwt-decode';
 
 const socket = io.connect("http://localhost:5051");
 
@@ -30,13 +31,14 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
             `${singleData.idOwner}$${singleData.id}$${idOwn}`
     );
     const [isMyAnnouncement, setIsMyOwnAnnouncement] = useState(typeof (room) === "object" ? true : false);
-    const usersById = useSelector((state) => state.chat.usersById);
-    const scrollRef = useRef();
 
     const dispatch = useDispatch();
-
+    const usersById = useSelector((state) => state.chat.usersById);
+    const scrollRef = useRef();
     const initialRoomSet = (idOwn === singleData.idOwner ? singleData.likesArry ? singleData.likesArry.split(",").map((el) => { return `${singleData.idOwner}$${singleData.id}$${el}` }) : "nolikes" : `${singleData.idOwner}$${singleData.id}$${idOwn}`)
-
+    //token decode
+    const token = localStorage.getItem("token");
+    const tkn = jwtDecode(token, process.env.JWT_SECRET);
 
     const joinRoom = async () => {
         if (typeof (room) !== "object" && room !== "") {
@@ -63,16 +65,16 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
         }
         socket.emit("send_message", mssg);
         if (typeof (room) !== "object") {
-            dispatch(getSingleChatFunc(room))
+            dispatch(getSingleChatFunc({ room: room, token: localStorage.getItem("token") }))
                 .then((res) => {
                     const isChecked = isMyAnnouncement ? { ownerCheck: 1, userCheck: 0 } : { ownerCheck: 0, userCheck: 1 }
                     if (res.payload.statusCode === 200) {
-                        dispatch(updateChatFunc({ ...res.payload.data[0], messages: [escapeString(res.payload.data[0].messages), escapeString(commaReplacer(mssg.messages))], ...isChecked }))
+                        dispatch(updateChatFunc({ payload: { ...res.payload.data[0], messages: [escapeString(res.payload.data[0].messages), escapeString(commaReplacer(mssg.messages))], ...isChecked }, token: localStorage.getItem("token") }))
                             .then((res) => {
                                 if (res.payload.statusCode === 200) { setSendedMessage(mssg.messages); }
                             })
                     } else {
-                        dispatch(createChatFunc({ ...mssg, messages: escapeString(commaReplacer(mssg.messages)), ...isChecked }))
+                        dispatch(createChatFunc({ payload: { ...mssg, messages: escapeString(commaReplacer(mssg.messages)), ...isChecked }, token: localStorage.getItem("token") }))
                             .then((res) => {
                                 if (res.payload.statusCode === 200) {
                                     setSendedMessage(mssg.messages);
@@ -92,16 +94,32 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
     useEffect(() => {
         joinRoom();
         socket.on("receive_message", async (data) => {
-            console.log(data.messages);
             setReceivedMessage(data.messages)
         })
     }, [socket, room]);
 
     useEffect(() => {
-        const isChecked = isMyAnnouncement ? { ownerCheck: 1 } : { userCheck: 1 }
         receivedMessage && setConversation([...conversation, receivedMessage]);
-        receivedMessage && dispatch(updateChatFunc(isChecked))
     }, [receivedMessage]);
+
+    useEffect(() => {
+        const isChecked = isMyAnnouncement ? { ownerCheck: 1, roomCode: room } : { userCheck: 1, roomCode: room }
+        receivedMessage && dispatch(updateChatFunc({ payload: isChecked, token: localStorage.getItem("token") }));
+
+        if (typeof (room) !== "object") {
+            dispatch(updateChatFunc({ payload: isChecked, token: localStorage.getItem("token") }))
+                .then((res) => {
+                    if (res.payload.statusCode === 200) {
+                        dispatch(getAllChatsNotifyByIdOwnerUserFunc({ idOwnerUser: tkn.id, token: token }))
+                            .then((res) => {
+                                if (res.payload.statusCode === 200 && res.payload.data.length > 0) {
+                                    dispatch(areThereNotify({ chats: res.payload.data, idOwner: tkn.id }))
+                                }
+                            })
+                    }
+                })
+        }
+    }, [receivedMessage, room])
 
     useEffect(() => {
         sendededMessage && setConversation([...conversation, sendededMessage])
@@ -114,7 +132,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
 
     useEffect(() => {
         if (typeof (room) !== "object") {
-            dispatch(getSingleChatFunc(room))
+            dispatch(getSingleChatFunc({ room: room, token: localStorage.getItem("token") }))
                 .then((res) => {
                     if (res.payload.statusCode === 200) {
                         setConversation(res.payload.data[0].messages.split(","))
@@ -187,7 +205,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                                             <div className='d-flex gap-2 align-items-center myCursor' onClick={() => setRoom(initialRoomSet)}>
                                                 <i className="bi bi-chevron-left display-6"></i>
                                                 <div className='bg-light pe-3' onClick={() => setRoom(`${singleData.idOwner}$${singleData.id}$${el.id}`)}>
-                                                    <CardChatUser user={el} />
+                                                    <CardChatUser user={el} bgNotify={false} />
                                                 </div>
                                             </div>
                                         )
@@ -204,14 +222,14 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                         usersById && usersById.map((el) => {
                             return (
                                 <div className='border bg-light mt-1 myCursor' onClick={() => setRoom(`${singleData.idOwner}$${singleData.id}$${el.id}`)}>
-                                    <CardChatUser user={el} />
+                                    <CardChatUser user={el} bgNotify={true}/>
                                 </div>
                             )
                         })
                         :
                         room === "nolikes" ?
                             <div className='d-flex align-items-center justify-content-center flex-column display-3 h-100'>
-                                <i class="bi bi-heartbreak-fill myFucsiaRed"></i>
+                                <i className="bi bi-heartbreak-fill myFucsiaRed"></i>
                                 <h3 className='fw-light'>This announcement has no Likes yet!</h3>
                             </div>
                             :

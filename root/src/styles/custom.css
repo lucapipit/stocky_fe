@@ -1,7 +1,8 @@
-:root{
+:root {
     --bluPetrol: #2a606c;
     --fucsiaRed: #E52C5D;
-    --chatColor: #90d800; 
+    --chatColor: #90d800;
+    --chatNotifyColor: #eaffc0;
     --yellowOrange: #f0bd35;
     --tiffany: #14a7ad;
     --lightGray: #d2d2d2;
@@ -30,15 +31,19 @@ h6 {
 .myMinVh100 {
     min-height: calc(100vh - 59px);
 }
+
 .myMaxVh100 {
     max-height: calc(100vh - 59px);
 }
+
 .myVh100 {
     height: calc(100vh - 61px);
 }
+
 .myVhChat {
     height: calc(86vh - 61px);
 }
+
 .myVh70 {
     height: calc(57vh);
 }
@@ -115,6 +120,7 @@ h6 {
 .myMaxW1200 {
     max-width: 1200px !important;
 }
+
 .myMaxW1400 {
     max-width: 1400px !important;
 }
@@ -123,18 +129,23 @@ h6 {
 .myPrimaryColor {
     color: var(--bluPetrol);
 }
+
 .myLightGrayColor {
     color: #dfdfdf;
 }
-.myFucsiaRed{
+
+.myFucsiaRed {
     color: var(--fucsiaRed);
 }
-.myChatColor{
+
+.myChatColor {
     color: var(--chatColor);
 }
-.myYellowColor{
+
+.myYellowColor {
     color: var(--yellowOrange);
 }
+
 /* background color */
 
 .myBgWhite {
@@ -149,25 +160,38 @@ h6 {
     background-color: #d21b4c;
 }
 
-.myBgDark{
+.myBgDark {
     background-color: #222;
 }
-.myBgLightGray{
+
+.myBgLightGray {
     background-color: var(--lightGray);
 }
-.myBgYellow{
+
+.myBgYellow {
     background-color: var(--yellowOrange);
 }
 
-.myBgPrimary{
+.myBgPrimary {
     background-color: var(--bluPetrol);
 }
-.myBgFucsiaRed{
+
+.myBgFucsiaRed {
     background-color: var(--fucsiaRed);
 }
-.myBgChat{
+
+.myBgChat {
     background-color: var(--chatColor);
 }
+
+.myBgChatNotify {
+    background-color: var(--chatNotifyColor);
+}
+
+.myBgChatNotifyInherit {
+    background-color: inherit;
+}
+
 .myMainGradient {
     background: linear-gradient(to bottom, #333, var(--bluPetrol));
 }
@@ -224,7 +248,7 @@ h6 {
     -webkit-box-orient: vertical;
     width: 100px;
     overflow: hidden;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     font-style: italic;
     font-weight: 200;
 }
@@ -290,4 +314,3 @@ h6 {
 .myOverFlowXHidden {
     overflow-x: hidden;
 }
-

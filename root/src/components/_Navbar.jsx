@@ -15,6 +15,8 @@ import { clearScore } from '../states/annScoreState';
 const _Navbar = () => {
     const isHamMenuOpen = useSelector((state) => state.general.isHamMenuOpen);
     const isLogged = useSelector((state) => state.login.isLogged);
+    const notifyStatus = useSelector((state) => state.chat.notifyStatus);
+    const notifyCount = useSelector((state) => state.chat.notifyCount);
     const dispatch = useDispatch();
     const [decodedTkn, setDecodedTkn] = useState("");
 
@@ -39,10 +41,13 @@ const _Navbar = () => {
 
     return (
         <>
-            <div className='position-fixed w-100 myBgDark' expand="lg" style={{ zIndex: "9", height: "59px"}}>
+            <div className='position-fixed w-100 myBgDark' expand="lg" style={{ zIndex: "9", height: "59px" }}>
                 <Container >
                     <div className='d-flex align-items-center justify-content-between py-1' >
                         <div className='logo text-light myCursor'><Link to={"/"}><img className='m-2' src={Logo} onClick={() => { dispatch(setIsHamMenuOpen(false)) }} /></Link> <i>myStocker</i></div>
+                        <div>
+                            {notifyCount && notifyCount > 0 ? <><i className="myChatColor me-1" >{notifyCount}</i><i className="bi bi-chat-dots-fill myChatColor" ></i></> : null}
+                        </div>
                         <div className='d-flex align-items-center text-light'>
                             <div className='line-clampUserName'>{decodedTkn.email}</div>
                             <div className="myCursor"><i className={`bi ${decodedTkn.email ? "bi-person-circle" : "bi-grid-fill"} m-2`} onClick={() => dispatch(setIsHamMenuOpen(!isHamMenuOpen))} style={{ fontSize: "30px" }}></i></div>

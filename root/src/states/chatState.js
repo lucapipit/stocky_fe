@@ -7,15 +7,21 @@ const initialState = {
     error: "",
     myChatState: false,
     usersById: [],
-    allChatsNotify: []
+    allChatsNotify: [],
+    notifyStatus: false,
+    notifyCount: 0
 }
 
 export const getSingleChatFunc = createAsyncThunk(
     "getSingleChatFunc",
     async (input) => {
+        const { room, token } = input;
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/getsinglechat/${input}`, {
-                method: "GET"
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/getsinglechat/${room}`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             return await response.json()
         } catch (error) {
@@ -24,12 +30,17 @@ export const getSingleChatFunc = createAsyncThunk(
     }
 );
 
-export const getAllChatsNotifyFunc = createAsyncThunk(
-    "getAllChatsNotifyFunc",
+export const getAllChatsNotifyByIdOwnerUserFunc = createAsyncThunk(
+    "getAllChatsNotifyByIdOwnerUserFunc",
     async (input) => {
+        const { idOwnerUser, token } = input;
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/getallchatsnotify/${input}`, {
-                method: "GET"
+            const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/getallchatsnotifybyidowneruser/${idOwnerUser}`, {
+
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             return await response.json()
         } catch (error) {
@@ -37,19 +48,19 @@ export const getAllChatsNotifyFunc = createAsyncThunk(
         }
     }
 );
-
 
 export const createChatFunc = createAsyncThunk(
     "createChatFunc",
     async (input) => {
+        const { payload, token } = input;
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/createchat`, {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'/* ,
-                    'Authorization': `Bearer ${token}` */
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(input)
+                body: JSON.stringify(payload)
             })
             return await response.json()
         } catch (error) {
@@ -61,14 +72,15 @@ export const createChatFunc = createAsyncThunk(
 export const updateChatFunc = createAsyncThunk(
     "updateChatFunc",
     async (input) => {
+        const { payload, token } = input;
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/updatechat`, {
                 method: "PATCH",
                 headers: {
-                    'Content-Type': 'application/json'/* ,
-                    'Authorization': `Bearer ${token}` */
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(input)
+                body: JSON.stringify(payload)
             })
             return await response.json()
         } catch (error) {
@@ -80,7 +92,7 @@ export const updateChatFunc = createAsyncThunk(
 export const allUsersByIdSetFunc = createAsyncThunk(
     "allUsersByIdSetFunc",
     async (input) => {
-        const {idSet, token} = input;
+        const { idSet, token } = input;
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_ADDRESS}/allusersbyidset/${idSet}`, {
                 method: "GET",
@@ -101,7 +113,29 @@ const chatSlice = createSlice({
     initialState,
     reducers: {
         goToMyChat: (state, action) => {
-            state.myChatState = {typeSubMenu: action.payload.typeSubMenu}
+            state.myChatState = { typeSubMenu: action.payload.typeSubMenu }
+        },
+        areThereNotify: (state, action) => {
+            const {chats, idOwner} = action.payload;
+            state.notifyCount = 0;
+            chats && chats.map((el) => {
+                if (el.idOwner == idOwner) {
+                    
+                    if (!el.ownerCheck) {
+                        state.notifyStatus = true;
+                        state.notifyCount = state.notifyCount + 1
+                    }
+                } else {
+                    if (!el.userCheck) {
+                        state.notifyStatus = true;
+                        state.notifyCount = state.notifyCount + 1
+                    }
+                }
+            });
+        },
+        updateNotifyStatus: (state, action) => {
+            console.log("funziono");
+            state.notifyStatus = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -117,15 +151,15 @@ const chatSlice = createSlice({
             state.isLoading = false;
             state.error = "server error"
         });
-        //getAllChatsNotifyFunc
-        builder.addCase(getAllChatsNotifyFunc.pending, (state) => {
+        //getAllChatsNotifyByIdOwnerUserFunc
+        builder.addCase(getAllChatsNotifyByIdOwnerUserFunc.pending, (state) => {
             state.isLoading = true
         });
-        builder.addCase(getAllChatsNotifyFunc.fulfilled, (state, action) => {
+        builder.addCase(getAllChatsNotifyByIdOwnerUserFunc.fulfilled, (state, action) => {
             state.isLoading = false;
             state.allChatsNotify = action.payload.data
         });
-        builder.addCase(getAllChatsNotifyFunc.rejected, (state) => {
+        builder.addCase(getAllChatsNotifyByIdOwnerUserFunc.rejected, (state) => {
             state.isLoading = false;
             state.error = "server error"
         });
@@ -168,5 +202,5 @@ const chatSlice = createSlice({
 
 })
 
-export const { goToMyChat } = chatSlice.actions;
+export const { goToMyChat, updateNotifyStatus, areThereNotify } = chatSlice.actions;
 export default chatSlice.reducer
