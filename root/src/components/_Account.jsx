@@ -54,7 +54,7 @@ const _Account = () => {
       dispatch(getAllChatsNotifyByIdOwnerUserFunc({ idOwnerUser: tkn.id, token: token }))
         .then((res) => {
           if (res.payload.statusCode === 200 && res.payload.data.length > 0) {
-            dispatch(areThereNotify({chats: res.payload.data, idOwner: tkn.id}))
+            dispatch(areThereNotify({ chats: res.payload.data, idOwner: tkn.id }))
           }
         })
       dispatch(getAllAnnouncementsByIdOwnerFunc({ idOwner: tkn.id, token: token }))
@@ -228,7 +228,7 @@ const _Account = () => {
                   <div className='mb-3 text-center'> <span className='myBgFucsiaRed text-light display-6 fw-light px-4 py-1 rounded-5'>My Favourites</span></div>
                   <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
                     {
-                      outletData && outletData.map((el) => {
+                      outletData && outletData.map((el, index) => {
                         return <CardFavouritesAnnouncement singleData={el} isLoading={isLoading} />
                       })
                     }
@@ -252,7 +252,7 @@ const _Account = () => {
 
                           <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
                             {
-                              allUserAnnouncements && allUserAnnouncements.map((el) => {
+                              allUserAnnouncements && allUserAnnouncements.map((el, index) => {
                                 if (typeOfView === 0) {
                                   return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
                                 } else {
@@ -282,14 +282,14 @@ const _Account = () => {
                             isFavouritesChat ?
                               <div className='d-flex align-items-center flex-column w-100'>
                                 {
-                                  outletData && outletData.map((el) => {//FAVOURITE CHAT
+                                  outletData && outletData.map((el, index) => {//FAVOURITE CHAT
                                     if (openChat && el.id === idChat) {
-                                      return <div className=' position-relative bg-light border d-flex justify-content-center' >
+                                      return <div key={`account3-${index}`} className=' position-relative bg-light border d-flex justify-content-center' >
                                         <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
                                         <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} width={width} />
                                       </div>
                                     } if (!openChat) {
-                                      return <div className='w-100 d-flex justify-content-center' onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                                      return <div key={`account3-${index}`} className='w-100 d-flex justify-content-center' onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
                                         <CardChatAnnouncement idOwn={dcdTkn.id} singleData={el} isLoading={isLoading} />
                                       </div>
                                     }
@@ -299,14 +299,14 @@ const _Account = () => {
                               :
                               <div className='d-flex align-items-center flex-column w-100'>
                                 {
-                                  allUserAnnouncements && allUserAnnouncements.map((el) => {//ANNOUNCEMENT CHAT
+                                  allUserAnnouncements && allUserAnnouncements.map((el, index) => {//ANNOUNCEMENT CHAT
                                     if (openChat && el.id === idChat) {
-                                      return <div className=' position-relative bg-light border d-flex justify-content-center' >
+                                      return <div key={`account4-${index}`} className='position-relative bg-light border d-flex justify-content-center' >
                                         <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
                                         <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} width={width} />
                                       </div>
                                     } if (!openChat) {
-                                      return <div className='w-100 d-flex justify-content-center' onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                                      return <div key={`account4-${index}`} className='w-100 d-flex justify-content-center' onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
                                         <CardChatAnnouncement idOwn={dcdTkn.id} singleData={el} isLoading={isLoading} />
                                       </div>
                                     }
@@ -329,9 +329,9 @@ const _Account = () => {
                                 <div className='d-flex myVhChat'>
                                   <div className='d-flex align-items-center flex-column myOverflowY' style={{ minWidth: "400px", maxWidth: "700px" }}>
                                     {
-                                      outletData && outletData.map((el) => {//FAVOURITE CHAT
+                                      outletData && outletData.map((el, index) => {//FAVOURITE CHAT
 
-                                        return <div className={`w-100 d-flex justify-content-center ${idChat === el.id ? "myBgLightGray" : ""}`} onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                                        return <div key={`account5-${index}`} className={`w-100 d-flex justify-content-center ${idChat === el.id ? "myBgChatSelected" : ""}`} onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
                                           <CardChatAnnouncement idOwn={dcdTkn.id} singleData={el} isLoading={isLoading} />
                                         </div>
 
@@ -340,9 +340,9 @@ const _Account = () => {
                                   </div>
                                   <div className='w-100'>
                                     {
-                                      outletData && outletData.map((el) => {
+                                      outletData && outletData.map((el, index) => {
                                         if (openChat && el.id === idChat) {
-                                          return <div className=' position-relative bg-light border d-flex justify-content-center' >
+                                          return <div key={`account6-${index}`} className=' position-relative bg-light border d-flex justify-content-center' >
                                             <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
                                             <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} width={width} />
                                           </div>
@@ -357,9 +357,9 @@ const _Account = () => {
                                 <div className='d-flex myVhChat'>
                                   <div className='d-flex align-items-center flex-column myOverflowY' style={{ minWidth: "400px", maxWidth: "700px" }}>
                                     {
-                                      allUserAnnouncements && allUserAnnouncements.map((el) => {//ANNOUNCEMENT CHAT
+                                      allUserAnnouncements && allUserAnnouncements.map((el, index) => {//ANNOUNCEMENT CHAT
 
-                                        return <div className={`w-100 d-flex justify-content-center ${idChat === el.id ? "myBgLightGray" : ""}`} onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
+                                        return <div key={`account7-${index}`} className={`w-100 d-flex justify-content-center ${idChat === el.id ? "myBgChatSelected" : ""}`} onClick={() => { setOpenChat(true); setIdChat(el.id) }}>
                                           <CardChatAnnouncement idOwn={dcdTkn.id} singleData={el} isLoading={isLoading} />
                                         </div>
 
@@ -368,9 +368,9 @@ const _Account = () => {
                                   </div>
                                   <div className='w-100'>
                                     {
-                                      allUserAnnouncements && allUserAnnouncements.map((el) => {
+                                      allUserAnnouncements && allUserAnnouncements.map((el, index) => {
                                         if (openChat && el.id === idChat) {
-                                          return <div className=' position-relative bg-light border d-flex justify-content-center' >
+                                          return <div key={`account8-${index}`} className='position-relative bg-light border d-flex justify-content-center' >
                                             <i className="bi bi-chevron-left position-absolute start-0 ms-2 mt-4 pt-2 mx-1 myCursor display-6" onClick={() => { setOpenChat(false); setIdChat(null) }}></i>
                                             <ChatAnnouncement singleData={el} isLoading={isLoading} idOwn={dcdTkn.id} width={width} />
                                           </div>

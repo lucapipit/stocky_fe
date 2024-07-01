@@ -188,9 +188,14 @@ h6 {
     background-color: var(--chatNotifyColor);
 }
 
-.myBgChatNotifyInherit {
-    background-color: inherit;
+.myBgChatSelected {
+    background-color: var(--lightGray);
 }
+
+.myBgChatSelected>.notifySelected {
+    background-color: var(--lightGray) !important;
+}
+
 
 .myMainGradient {
     background: linear-gradient(to bottom, #333, var(--bluPetrol));
