@@ -113,7 +113,7 @@ const chatSlice = createSlice({
     initialState,
     reducers: {
         goToMyChat: (state, action) => {
-            state.myChatState = { typeSubMenu: action.payload.typeSubMenu }
+            state.myChatState = action.payload
         },
         areThereNotify: (state, action) => {
             const {chats, idOwner} = action.payload;

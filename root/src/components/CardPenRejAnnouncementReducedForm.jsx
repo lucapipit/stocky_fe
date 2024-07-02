@@ -208,7 +208,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
 
     return (
-        <>
+        <div>
             <div className='d-flex justify-content-center mt-5'>
 
                 <Form className='text-light d-flex flex-wrap justify-content-center' encType='multipart/form-data'>
@@ -237,7 +237,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
 
                             <div>
 
-                                <img className='myMaxH500' src={`http://localhost:5050/uploads/${file[imgSelectionCounter]}`} alt="" />
+                                <img className='myMaxH500' src={`http://localhost:5050/uploads/${file[imgSelectionCounter]}`} style={{maxWidth: "100%"}} alt="" />
 
                                 <div className='w-100'>
 
@@ -381,7 +381,7 @@ const CardPenRejAnnouncementReducedForm = ({ singleData }) => {
                 }
             </div>
 
-        </>
+        </div>
     )
 }
 

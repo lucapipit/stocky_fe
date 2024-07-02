@@ -93,7 +93,12 @@ const _Account = () => {
   };
 
   useEffect(() => {
-    setTypeSubMenu(myChatState.typeSubMenu)
+    if (myChatState) {
+      setTypeSubMenu(myChatState.typeSubMenu);
+      setIsFavouritesChat(myChatState.isFavouriteChat);
+      setIdChat(myChatState.idChat);
+      setOpenChat(myChatState.openChat)
+    }
   }, [myChatState]);
 
   useEffect(() => {
@@ -113,37 +118,55 @@ const _Account = () => {
 
 
             <div>
+
               <h1 className='fw-light text-center pt-5'><i className="bi bi-person-circle"></i> Account</h1>
+              {/* accout card */}
+              <div className='w-100 d-flex justify-content-center'>
 
-              <div className='d-flex align-items-center justify-content-center my-5'>
-                <div className='border rounded-5 p-5 myMainGradient text-light shadow'>
+                <div className='d-flex align-items-center justify-content-center my-5 myMaxW632'>
+                  <div className=' rounded-5 p-5 myDarkGradient shadow'>
 
-                  <div className='position-relative'>
-                    <div className='position-absolute bg-dark border activeUserIcon d-flex align-items-center justify-content-center'>
-                      {
-                        userData[0].accountActive ?
-                          <i className="bi bi-person-check-fill text-info"></i>
-                          : <i className="bi bi-person-fill-exclamation text-danger"></i>
-                      }
+                    <div className='position-relative text-center'>
+                      <div className='position-absolute activeUserIcon d-flex justify-content-center align-items-center w-100'>{/*layer per ottener il check bianco */}
+                        <h6 className='bg-light text-light mt-3'>
+                          oo
+                        </h6>
+                      </div>
+                      <div className='position-absolute activeUserIcon d-flex justify-content-center align-items-center w-100 gap-1'>
+                        <i className="bi bi-patch-check-fill text-info"></i>
+                      </div>
+
                     </div>
-                  </div>
 
-                  {
-                    isEditingAnagraphic ?
-                      <AccountEditAnagraphic userData={userData[0]} />
-                      : <h2>{userData[0].companyName}</h2>
-                  }
-                  <hr />
-                  <div className={userData[0].manufacturer ? "text-info" : "text-success"}><i className="bi bi-person-vcard-fill me-2"></i>{userData[0].manufacturer ? "Manufacturer" : "Dealer"}</div>
-                  <p className='mt-3'><i className="bi bi-envelope-at-fill me-2"></i><i>{userData[0].email}</i></p>
-                  <div className='my-3'>
-                    <p><i className="bi bi-geo-alt-fill me-2"></i>{`${userData[0].address[0].toUpperCase()}${userData[0].address.slice(1)}, ${userData[0].streetNumber} (${userData[0].zipCode}) - ${userData[0].city} (${userData[0].state}) - ${userData[0].country} `}</p>
-                  </div>
-                  <p><i className="bi bi-telephone-fill me-2"></i>{userData[0].phone}</p>
+                    {
+                      isEditingAnagraphic ?
+                        <AccountEditAnagraphic userData={userData[0]} />
+                        : <h2 className='me-2'><i className="bi bi-lightning-charge-fill myYellowColor"></i> {userData[0].companyName}</h2>
+                    }
+                    <hr />
+                    <div className={userData[0].manufacturer ? "text-info" : "text-success"}><h1 className='fw-bold'>{userData[0].manufacturer ? "M" : "D"}</h1></div>
+                    <div className='mb-3'>
+                      <div className='d-flex align-items-center gap-2'>
+                        <p className='mt-3'><i className="bi bi-envelope-at-fill me-2"></i><i>{userData[0].email}</i></p>
+                        {
+                          userData[0].accountActive ?
+                            <i className="bi bi-check-lg text-info"></i>
+                            : <i className="bi bi-x-lg myFucsiaRed"></i>
+                        }
+                      </div>
+                      <p><i className="bi bi-geo-alt-fill me-2"></i>{`${userData[0].address[0].toUpperCase()}${userData[0].address.slice(1)}, ${userData[0].streetNumber} (${userData[0].zipCode}) - ${userData[0].city} (${userData[0].state}) - ${userData[0].country} `}</p>
+                    </div>
+                    <p><i className="bi bi-telephone-fill me-2"></i>{userData[0].phone}</p>
 
-                  <i className='bi bi-pencil-fill text-light myCursor' onClick={() => setIsEditingAnagraphic(!isEditingAnagraphic)}></i>
+                    <i className='bi bi-pencil-fill myCursor' onClick={() => setIsEditingAnagraphic(!isEditingAnagraphic)}></i>
+                  </div>
                 </div>
 
+              </div>
+              <div className='d-flex justify-content-center'>
+                <button className='text-center mb-5 btn btn-dark p-2 px-4 rounded-5'>
+                  <h4 className='fw-light text-light'><i className="bi bi-lightning-charge-fill myYellowColor"></i> upgrade Premium</h4>
+                </button>
               </div>
 
               {
@@ -213,8 +236,8 @@ const _Account = () => {
                   {typeSubMenu === 2 ? <i className="bi bi-caret-up-fill display-5 myChatColor position-absolute favourites-announcementArrow" ></i> : null}
                 </div>
                 <div className='d-flex flex-column align-items-center position-relative'>
-                  <i className={`bi bi-megaphone-fill display-6 myPrimaryColor myCursor`} onClick={() => setTypeSubMenu(1)}></i>
-                  {typeSubMenu === 1 ? <i className="bi bi-caret-up-fill display-5 myPrimaryColor position-absolute favourites-announcementArrow" ></i> : null}
+                  <i className={`bi bi-megaphone-fill display-6 myPetrolColor myCursor`} onClick={() => setTypeSubMenu(1)}></i>
+                  {typeSubMenu === 1 ? <i className="bi bi-caret-up-fill display-5 myPetrolColor position-absolute favourites-announcementArrow" ></i> : null}
                 </div>
               </div>
 
@@ -229,7 +252,7 @@ const _Account = () => {
                   <div className='d-flex flex-wrap justify-content-center align-items-center my-5 px-1'>
                     {
                       outletData && outletData.map((el, index) => {
-                        return <CardFavouritesAnnouncement singleData={el} isLoading={isLoading} />
+                        return <CardFavouritesAnnouncement idOwn={dcdTkn.id} key={`account1-${index}`} singleData={el} isLoading={isLoading} />
                       })
                     }
                   </div>
@@ -254,9 +277,9 @@ const _Account = () => {
                             {
                               allUserAnnouncements && allUserAnnouncements.map((el, index) => {
                                 if (typeOfView === 0) {
-                                  return <CardPenRejAnnouncementReduced singleData={el} isLoading={isLoading} />
+                                  return <CardPenRejAnnouncementReduced idOwn={dcdTkn.id} key={`account2-${index}`} singleData={el} isLoading={isLoading} />
                                 } else {
-                                  return <CardPenRejAnnouncementLine singleData={el} isLoading={isLoading} />
+                                  return <CardPenRejAnnouncementLine idOwn={dcdTkn.id} key={`account2-${index}`} singleData={el} isLoading={isLoading} />
                                 }
                               })
                             }

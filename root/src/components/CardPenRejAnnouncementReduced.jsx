@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useRef, useState } from 'react';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
@@ -8,28 +8,37 @@ import productCategories from '../assets/JSON/productCategories.json';
 import "../styles/accountCardBody.css";
 import { generateScore } from '../states/annScoreState';
 import { goToMyChat } from '../states/chatState';
+import notificationAssigner from '../functions/notificationAssigner';
 
 
 
-const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
+const CardPenRejAnnouncementReduced = ({ key, idOwn, singleData, isLoading }) => {
 
     const dispatch = useDispatch();
+    const formRef = useRef();
 
 
     const [minimize, setMinimize] = useState(true);
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
-    const [category, setCategory] = useState(singleData.category);
+    const [notify, setNotify] = useState(false);
     const [score, setScore] = useState(0);
 
     //loading states
     const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
     const isUpdating = useSelector((state) => state.myStore.isLoading);
-
     //open and keep edit modal open state. 
     const isPenRejModalEditing = useSelector((state) => state.general.isPenRejModalEditing);
-
     //announcement score
     const finalScore = useSelector((state) => state.annScore.finalScore);
+    //chat
+    const allChatsNotify = useSelector((state) => state.chat.allChatsNotify);
+    const notifyCount = useSelector((state) => state.chat.notifyCount);
+
+    useEffect(() => {
+        if (notificationAssigner({ allChatsNotify, idOwn, singleData })) {
+            setNotify(true)
+        }
+    }, [allChatsNotify, notifyCount])
 
     useEffect(() => {
         dispatch(generateScore(singleData))
@@ -39,30 +48,40 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
         finalScore && finalScore.map((el) => { if (singleData.id === el.id) { setScore(el.score) } })
     }, [finalScore])
 
+    useEffect(() => {
+        if (isPenRejModalEditing.value) {
+          formRef.current?.scrollIntoView({ behavior: "instant", block: "start" });
+        }
+      }, [isPenRejModalEditing.value])
+
     return (
-        <>
+        <div key={key}>
+
 
             {
                 isPenRejModalEditing.value && isPenRejModalEditing.id === singleData.id || localStorage.getItem("editId") == singleData.id ?
 
+                    <div className='d-flex justify-content-center'>
 
-                    <div className='position-fixed mt-5 myZindex2 d-flex justify-content-center top-0'>
-                        {
-                            isDeletingPics || isUpdating ?
-                                <div className='position-absolute myZindex2 myBgTransparentHigh rounded-3 w-100 h-100 border d-flex align-items-center justify-content-center '>
-                                    {/* My Loading Overlay */}
-                                    {isLoading ? <Spinner animation="grow" /> : null}
-                                </div>
-                                : null
-                        }
+                        <div className='mt-5 myZindex2 d-flex justify-content-center' >
+                            {
+                                isDeletingPics || isUpdating ?
+                                    <div className=' myZindex2 myBgTransparentHigh rounded-3 border d-flex align-items-center justify-content-center '>
+                                        {/* My Loading Overlay */}
+                                        {isLoading ? <Spinner animation="grow" /> : null}
+                                    </div>
+                                    : null
+                            }
 
-                        <div className='p-5 myMainGradient text-center myOverflowY' style={{ height: "100vh" }}>
-                            <CardPenRejAnnouncementReducedForm singleData={singleData} />
+                            <div ref={formRef} className='p-5 myDarkGradient position-absolute text-center myOverflowY text-light' style={{ height: "calc(100vh - 59px)", width: "100%", left: "0px" }}>
+                                
+                                <CardPenRejAnnouncementReducedForm singleData={singleData} />
+                            </div>
+
                         </div>
-
                     </div>
 
-                    : <div className="m-1 border myMaxW632" >
+                    : <div className={`m-1 border ${notify ? "myBgChatNotify" : ""} myMaxW632`} >
 
                         <div style={{ borderLeft: `3px solid ${singleData.status === 3 ? "red" : singleData.status === 0 ? "lightgray" : "yellowgreen"}` }}>
 
@@ -99,7 +118,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                         <h6 className='fw-light bg-dark text-light px-2 rounded-5'>{singleData.quantity} items</h6>
                                                     </div>
                                                     <div className='d-flex align-items-center brandName'>
-                                                        <p className='m-0 fw-bold myPrimaryColor'>{singleData.brandName}</p>
+                                                        <p className='m-0 fw-bold myPetrolColor'>{singleData.brandName}</p>
                                                     </div>
                                                 </div>
                                         }
@@ -111,7 +130,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                         <h3 className='fw-normal'>{singleData.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h3>
                                                         <p className='fw-light m-0'>00$</p>
                                                     </div>
-                                                    <div className='d-flex align-items-top rounded-5 myBgWhite'>
+                                                    <div className='d-flex align-items-top rounded-5'>
                                                         <h3 className='fw-normal'>{(Math.floor((singleData.price) / (singleData.quantity))).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h3>
                                                         <p className='fw-light m-0 me-1'>{(Math.round((singleData.price) / (singleData.quantity) * 100) / 100).toString().split(".")[1]}</p>
                                                         <p className='fw-light m-0'>$/item</p>
@@ -122,7 +141,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                             !singleData || isLoading ?
                                                 null :
                                                 <div className='w-100 d-flex align-items-center mb-2'>
-                                                    <div className='m-0 border w-100 rounded-5' style={{ height: "6px" }}>
+                                                    <div className='m-0 border w-100 rounded-5 myBgWhite' style={{ height: "6px" }}>
                                                         <div className={`scoreBarLow rounded-5 h-100 ${score > 91 ? "scoreBarLegend" : score > 79 ? "scoreBarHigh" : score > 59 ? "scoreBarMedium" : null}`} style={{ width: `${score}%` }}></div>
                                                     </div>
                                                     <h6 className='ms-2'>{score / 10}</h6>
@@ -134,7 +153,9 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                                                 <div className='mb-2 d-flex flex-wrap justify-content-end gap-3 align-items-center'>
                                                     <h6 className='m-0'><i className="bi bi-eye-fill"></i> {singleData.views}</h6>
                                                     <h6 className='m-0 myFucsiaRed'><i className="bi bi-suit-heart-fill" ></i> {singleData.posClick}</h6>
-                                                    <h6 className='m-0'><i className="bi bi-chat-dots-fill text-secondary myCursor" onClick={() => dispatch(goToMyChat({ typeSubMenu: 2 }))}></i> </h6>
+                                                    <h6 className='m-0'>
+                                                        <i className={`bi bi-chat-dots-fill ${notify ? "myChatColor" : "text-secondary"} myCursor`} onClick={() => dispatch(goToMyChat({ idChat: singleData.id, typeSubMenu: 2, isFavouriteChat: false, openChat: true }))}></i>
+                                                    </h6>
                                                 </div>
                                         }
                                     </div>
@@ -271,8 +292,7 @@ const CardPenRejAnnouncementReduced = ({ singleData, isLoading }) => {
                         </div>
                     </div >
             }
-
-        </>
+        </div>
 
     )
 }

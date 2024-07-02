@@ -3,10 +3,12 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import { useDispatch, useSelector } from 'react-redux';
 import "../styles/accountCardBody.css";
 import { generateScore } from '../states/annScoreState';
+import { goToMyChat } from '../states/chatState';
+import notificationAssigner from '../functions/notificationAssigner';
 
 
 
-const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
+const CardFavouritesAnnouncement = ({ key, idOwn, singleData, isLoading }) => {
 
     const dispatch = useDispatch();
 
@@ -14,16 +16,24 @@ const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
     const [minimize, setMinimize] = useState(true);
     const [imgSelectionCounter, setImgSelectionCounter] = useState(0);
     const [score, setScore] = useState(0);
+    const [notify, setNotify] = useState(false);
 
     //loading states
     const isDeletingPics = useSelector((state) => state.uploadFile.isDeletingPics);
     const isUpdating = useSelector((state) => state.myStore.isLoading);
-
     //open and keep edit modal open state. 
     const isPenRejModalEditing = useSelector((state) => state.general.isPenRejModalEditing);
-
     //announcement score
     const finalScore = useSelector((state) => state.annScore.finalScore);
+    //chat
+    const allChatsNotify = useSelector((state) => state.chat.allChatsNotify);
+    const notifyCount = useSelector((state) => state.chat.notifyCount);
+
+    useEffect(() => {
+        if (notificationAssigner({ allChatsNotify, idOwn, singleData })) {
+            setNotify(true)
+        }
+    }, [allChatsNotify, notifyCount])
 
     useEffect(() => {
         dispatch(generateScore(singleData))
@@ -34,9 +44,9 @@ const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
     }, [finalScore])
 
     return (
-        <>
+        <div key={key}>
 
-            <div className="m-1 border myMaxW632 pe-3" >
+            <div className={`m-1 border ${notify?"myBgChatNotify":""} myMaxW632 pe-3`} >
 
                 <div>
 
@@ -73,7 +83,7 @@ const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
                                                 <h6 className='fw-light bg-dark text-light px-2 rounded-5'>{singleData.quantity} items</h6>
                                             </div>
                                             <div className='d-flex align-items-center brandName'>
-                                                <p className='m-0 fw-bold myPrimaryColor'>{singleData.brandName}</p>
+                                                <p className='m-0 fw-bold myPetrolColor'>{singleData.brandName}</p>
                                             </div>
                                         </div>
                                 }
@@ -85,7 +95,7 @@ const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
                                                 <h3 className='fw-normal'>{singleData.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h3>
                                                 <p className='fw-light m-0'>00$</p>
                                             </div>
-                                            <div className='d-flex align-items-top rounded-5 myBgWhite'>
+                                            <div className='d-flex align-items-top rounded-5 '>
                                                 <h3 className='fw-normal'>{(Math.floor((singleData.price) / (singleData.quantity))).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</h3>
                                                 <p className='fw-light m-0 me-1'>{(Math.round((singleData.price) / (singleData.quantity) * 100) / 100).toString().split(".")[1]}</p>
                                                 <p className='fw-light m-0'>$/item</p>
@@ -96,7 +106,7 @@ const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
                                     !singleData || isLoading ?
                                         null :
                                         <div className='w-100 d-flex align-items-center mb-2'>
-                                            <div className='m-0 border w-100 rounded-5' style={{ height: "6px" }}>
+                                            <div className='m-0 border w-100 rounded-5 myBgWhite' style={{ height: "6px" }}>
                                                 <div className={`scoreBarLow rounded-5 h-100 ${score > 91 ? "scoreBarLegend" : score > 79 ? "scoreBarHigh" : score > 59 ? "scoreBarMedium" : null}`} style={{ width: `${score}%` }}></div>
                                             </div>
                                             <h6 className='ms-2'>{score / 10}</h6>
@@ -108,7 +118,9 @@ const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
                                         <div className='mb-2 d-flex flex-wrap justify-content-end gap-3 align-items-center'>
                                             <h6 className='m-0'><i className="bi bi-eye-fill"></i> {singleData.views}</h6>
                                             <h6 className='m-0 myFucsiaRed'><i className="bi bi-suit-heart-fill" ></i> {singleData.posClick}</h6>
-                                            <h6 className='m-0'><i className="bi bi-chat-dots-fill myChatColor"></i> </h6>
+                                            <h6 className='m-0 myCursor' onClick={() => { dispatch(goToMyChat({ idChat: singleData.id, typeSubMenu: 2, isFavouriteChat: true, openChat: true })) }}>
+                                                <i className={`bi bi-chat-dots-fill ${notify ? "myChatColor" : "text-secondary"}`}></i>
+                                            </h6>
                                         </div>
                                 }
                             </div>
@@ -193,7 +205,7 @@ const CardFavouritesAnnouncement = ({ singleData, isLoading }) => {
                 </div>
             </div >
 
-        </>
+        </div>
 
     )
 }

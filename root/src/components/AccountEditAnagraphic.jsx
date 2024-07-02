@@ -98,7 +98,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                             value={companyName}
                         />
                     </InputGroup>
-                    {companyName ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                    {companyName ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                 </div>
                 <div className="mb-3 d-flex gap-2 align-items-center">
                     <InputGroup >
@@ -111,7 +111,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                             value={email}
                         />
                     </InputGroup>
-                    {isEmailValid ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                    {isEmailValid ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                 </div>
                 <div className='d-flex flex-wrap justify-content-center gap-3'>
                     <Link to={`/changepssw/${userData.email}/${userData.id}`}><a className='myCursor link-light'>change password</a></Link>
@@ -134,7 +134,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                                 }
                             </DropdownButton>
                         </InputGroup>
-                        {country ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                        {country ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                     </div>
 
                     <div className="mb-3">
@@ -150,7 +150,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                                     value={city}
                                 />
                             </InputGroup>
-                            {isCityValid && city ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                            {isCityValid && city ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                         </div>
                         {
                             allCitiesFiltered.length !== 0 ?
@@ -179,7 +179,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                                 value={state}
                             />
                         </InputGroup>
-                        {state ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                        {state ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                     </div>
 
                     <div className="mb-3 d-flex gap-2 align-items-center">
@@ -194,7 +194,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                                 value={address}
                             />
                         </InputGroup>
-                        {address ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                        {address ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                     </div>
 
                     <div className="mb-3 d-flex gap-2 align-items-center">
@@ -209,7 +209,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                                 value={streetNumber}
                             />
                         </InputGroup>
-                        {streetNumber ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                        {streetNumber ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                     </div>
 
                     <div className="mb-3 d-flex gap-2 align-items-center">
@@ -224,7 +224,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                                 value={zipCode}
                             />
                         </InputGroup>
-                        {zipCode ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                        {zipCode ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                     </div>
 
                     <div className="mb-3 d-flex gap-2 align-items-center">
@@ -247,7 +247,7 @@ const AccountEditAnagraphic = ({ userData }) => {
                                 value={phone}
                             />
                         </InputGroup>
-                        {phone.length > 5 ? <i className="bi bi-check-circle-fill ms-2 text-success"></i> : null}
+                        {phone.length > 5 ? <i className="bi bi-check-circle-fill ms-2 text-info"></i> : null}
                     </div>
 
                     <div className='d-flex justify-content-center'>

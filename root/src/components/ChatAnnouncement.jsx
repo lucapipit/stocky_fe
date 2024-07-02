@@ -174,7 +174,7 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                                     <h6 className='fw-light bg-dark text-light px-2 rounded-5'>{singleData.quantity} items</h6>
                                 </div>
                                 <div className='d-flex align-items-center brandName'>
-                                    <p className='m-0 fw-bold myPrimaryColor'>{singleData.brandName}</p>
+                                    <p className='m-0 fw-bold myPetrolColor'>{singleData.brandName}</p>
                                 </div>
                             </div>
                     }
@@ -243,9 +243,8 @@ const ChatAnnouncement = ({ singleData, isLoading, idOwn, width }) => {
                                                 <li key={`chatannouncement3-${index}`} className={`d-flex justify-content-${el.split("£")[0] == idOwn ? "start" : "end"}`} ref={scrollRef}>
                                                     <div className={`${el.split("£")[0] == idOwn ? "bg-primary" : "bg-secondary"} rounded-4 p-3 px-4 m-2 text-light`}>
                                                         <h5 className='fw-light'>{commaInserter(el.split("£")[1])}</h5>
-                                                        <div className='d-flex justify-content-between gap-4'>
-                                                            <p className='m-0 text-dark'> {el.split("£")[0]}</p>
-                                                            <p className='m-0'>{el.split("£")[2].split(" ")[4]}</p>
+                                                        <div className='d-flex justify-content-end gap-4'>
+                                                            <p className='m-0 mt-1 myLightGrayColor'>{el.split("£")[2].split(" ")[4].split(":")[0]}:{el.split("£")[2].split(" ")[4].split(":")[1]}</p>
                                                         </div>
                                                     </div>
                                                 </li>

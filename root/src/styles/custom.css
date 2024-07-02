@@ -6,6 +6,8 @@
     --yellowOrange: #f0bd35;
     --tiffany: #14a7ad;
     --lightGray: #d2d2d2;
+    --dark222: #222;
+    --dark111: #111;
 }
 
 
@@ -126,7 +128,7 @@ h6 {
 }
 
 /* color */
-.myPrimaryColor {
+.myPetrolColor {
     color: var(--bluPetrol);
 }
 
@@ -146,6 +148,10 @@ h6 {
     color: var(--yellowOrange);
 }
 
+.myAquaColor {
+    color: var(--tiffany);
+}
+
 /* background color */
 
 .myBgWhite {
@@ -153,7 +159,7 @@ h6 {
 }
 
 .myBgAcqua {
-    background-color: #14a7ad;
+    background-color: var(--tiffany);
 }
 
 .myBgRed {
@@ -161,7 +167,11 @@ h6 {
 }
 
 .myBgDark {
-    background-color: #222;
+    background-color: var(--dark222);
+}
+
+.myBgBlack {
+    background-color: var(--dark111);
 }
 
 .myBgLightGray {
@@ -196,10 +206,6 @@ h6 {
     background-color: var(--lightGray) !important;
 }
 
-
-.myMainGradient {
-    background: linear-gradient(to bottom, #333, var(--bluPetrol));
-}
 
 .myBgTransparentHigh {
     background: #cfcfcfb8;
@@ -279,6 +285,21 @@ h6 {
 }
 
 /* myGradients */
+.myDarkGradient {
+    background: linear-gradient(to bottom, var(--dark222), #111);
+    color: #fff;
+}
+
+.myGrayGradient {
+    background: linear-gradient(to bottom, #6e6e6e, #afafaf);
+    color: #111;
+}
+
+.myPremiumGradient {
+    background: linear-gradient(to bottom, var(--dark222), var(--yellowOrange));
+    color: #fff;
+}
+
 .myGradientFreely {
     background: linear-gradient(to top, #d08a6e 40%, #f2a080);
 }

@@ -56,7 +56,7 @@ const CategoriesPreferences = ({ userData }) => {
     return (
         <div>
 
-            <Form.Group className="mb-3 pb-5 bg-dark text-light">
+            <Form.Group className="mb-3 pb-5 myBgDark text-light">
                 <div className='d-flex flex-wrap justify-content-center w-100 pt-5 pb-3'>
                     <div>
                         <h1 className={`d-flex justify-content-center ${isEditing ? "mb-5" : null}`}>Areas of interests</h1>

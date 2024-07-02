@@ -204,7 +204,6 @@ span {
 /* edit pencil */
 .editPencil {
     right: 0px;
-    background-color: #fff;
     padding: 10px;
     z-index: 1;
 }
